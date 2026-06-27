@@ -1,0 +1,196 @@
+#-----------------------------------------------------------
+# Vivado v2025.1 (64-bit)
+# SW Build 6140274 on Thu May 22 00:12:29 MDT 2025
+# IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
+# SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
+# Start of session at: Sat Jun 27 08:09:40 2026
+# Process ID         : 46976
+# Current directory  : C:/Users/sgzmd/Desktop/Project
+# Command line       : vivado.exe -gui_launcher_event rodinguilauncherevent11592 C:\Users\sgzmd\Desktop\Project\Project.xpr
+# Log file           : C:/Users/sgzmd/Desktop/Project/vivado.log
+# Journal file       : C:/Users/sgzmd/Desktop/Project\vivado.jou
+# Running On         : MOSS550W
+# Platform           : Windows Server 2016 or Windows 10
+# Operating System   : 26200
+# Processor Detail   : Intel(R) Core(TM) i9-14900HX
+# CPU Frequency      : 2419 MHz
+# CPU Physical cores : 24
+# CPU Logical cores  : 32
+# Host memory        : 34070 MB
+# Swap memory        : 9663 MB
+# Total Virtual      : 43733 MB
+# Available Virtual  : 19484 MB
+#-----------------------------------------------------------
+start_gui
+open_project C:/Users/sgzmd/Desktop/Project/Project.xpr
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu208ld:part0:2.0 available at D:/FPGA/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\zcu208ld\production\2.0\board.xml as part xczu58dr-fsvg1517-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu216ld:part0:2.0 available at D:/FPGA/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\zcu216ld\production\2.0\board.xml as part xczu59dr-ffvf1760-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu670ld:part0:1.0 available at D:/FPGA/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\zcu670ld\1.0\board.xml as part xczu57dr-fsve1156-2-i specified in board_part file is either invalid or not available
+Scanning sources...
+Finished scanning sources
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu208ld:part0:2.0 available at D:/FPGA/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\zcu208ld\production\2.0\board.xml as part xczu58dr-fsvg1517-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu216ld:part0:2.0 available at D:/FPGA/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\zcu216ld\production\2.0\board.xml as part xczu59dr-ffvf1760-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu670ld:part0:1.0 available at D:/FPGA/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\zcu670ld\1.0\board.xml as part xczu57dr-fsve1156-2-i specified in board_part file is either invalid or not available
+WARNING: [Project 1-5713] Board part '' set for the project  is not found. BoardPart property will be unset. Please select board from latest repo build 
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'D:/FPGA/2025.1/Vivado/data/ip'.
+WARNING: [IP_Flow 19-2162] IP 'blk_mem_gen_0' is locked:
+* IP definition 'Block Memory Generator (8.4)' for IP 'blk_mem_gen_0' (customized with software release 2022.2) has a different revision in the IP Catalog.
+WARNING: [IP_Flow 19-2162] IP 'blk_mem_gen_sin' is locked:
+* IP definition 'Block Memory Generator (8.4)' for IP 'blk_mem_gen_sin' (customized with software release 2022.2) has a different revision in the IP Catalog.
+WARNING: [IP_Flow 19-2162] IP 'blk_mem_gen_triangle' is locked:
+* IP definition 'Block Memory Generator (8.4)' for IP 'blk_mem_gen_triangle' (customized with software release 2022.2) has a different revision in the IP Catalog.
+update_compile_order -fileset sources_1
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+[Sat Jun 27 08:10:01 2026] Launched synth_1...
+Run output will be captured here: C:/Users/sgzmd/Desktop/Project/Project.runs/synth_1/runme.log
+[Sat Jun 27 08:10:01 2026] Launched impl_1...
+Run output will be captured here: C:/Users/sgzmd/Desktop/Project/Project.runs/impl_1/runme.log
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+[Sat Jun 27 08:13:50 2026] Launched synth_1...
+Run output will be captured here: C:/Users/sgzmd/Desktop/Project/Project.runs/synth_1/runme.log
+[Sat Jun 27 08:13:50 2026] Launched impl_1...
+Run output will be captured here: C:/Users/sgzmd/Desktop/Project/Project.runs/impl_1/runme.log
+upgrade_ip -srcset blk_mem_gen_0 -vlnv xilinx.com:ip:blk_mem_gen:8.4 [get_ips  blk_mem_gen_0] -log ip_upgrade.log
+Upgrading 'blk_mem_gen_0'
+INFO: [Project 1-386] Moving file 'C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci' from fileset 'blk_mem_gen_0' to fileset 'sources_1'.
+INFO: [IP_Flow 19-3422] Upgraded blk_mem_gen_0 (Block Memory Generator 8.4) from revision 5 to revision 11
+INFO: [IP_Flow 19-1686] Generating 'Instantiation Template' target for IP 'blk_mem_gen_0'...
+INFO: [Coretcl 2-1525] Wrote upgrade log to 'C:/Users/sgzmd/Desktop/Project/ip_upgrade.log'.
+export_ip_user_files -of_objects [get_ips blk_mem_gen_0] -no_script -sync -force -quiet
+update_compile_order -fileset sources_1
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'blk_mem_gen_0'...
+[Sat Jun 27 08:14:54 2026] Launched blk_mem_gen_0_synth_1, synth_1...
+Run output will be captured here:
+blk_mem_gen_0_synth_1: C:/Users/sgzmd/Desktop/Project/Project.runs/blk_mem_gen_0_synth_1/runme.log
+synth_1: C:/Users/sgzmd/Desktop/Project/Project.runs/synth_1/runme.log
+[Sat Jun 27 08:14:54 2026] Launched impl_1...
+Run output will be captured here: C:/Users/sgzmd/Desktop/Project/Project.runs/impl_1/runme.log
+source Project.runs/synth_1/Top_Project.tcl
+# set TIME_start [clock seconds] 
+# namespace eval ::optrace {
+#   variable script "C:/Users/sgzmd/Desktop/Project/Project.runs/synth_1/Top_Project.tcl"
+#   variable category "vivado_synth"
+# }
+# if {![info exists ::dispatch::connected]} {
+#   namespace eval ::dispatch {
+#     variable connected false
+#     if {[llength [array get env XILINX_CD_CONNECT_ID]] > 0} {
+#       set result "true"
+#       if {[catch {
+#         if {[lsearch -exact [package names] DispatchTcl] < 0} {
+#           set result [load librdi_cd_clienttcl[info sharedlibextension]] 
+#         }
+#         if {$result eq "false"} {
+#           puts "WARNING: Could not load dispatch client library"
+#         }
+#         set connect_id [ ::dispatch::init_client -mode EXISTING_SERVER ]
+#         if { $connect_id eq "" } {
+#           puts "WARNING: Could not initialize dispatch client"
+#         } else {
+#           puts "INFO: Dispatch client connection id - $connect_id"
+#           set connected true
+#         }
+#       } catch_res]} {
+#         puts "WARNING: failed to connect to dispatch server - $catch_res"
+#       }
+#     }
+#   }
+# }
+# if {$::dispatch::connected} {
+#   # Remove the dummy proc if it exists.
+#   if { [expr {[llength [info procs ::OPTRACE]] > 0}] } {
+#     rename ::OPTRACE ""
+#   }
+#   proc ::OPTRACE { task action {tags {} } } {
+#     ::vitis_log::op_trace "$task" $action -tags $tags -script $::optrace::script -category $::optrace::category
+#   }
+#   # dispatch is generic. We specifically want to attach logging.
+#   ::vitis_log::connect_client
+# } else {
+#   # Add dummy proc if it doesn't exist.
+#   if { [expr {[llength [info procs ::OPTRACE]] == 0}] } {
+#     proc ::OPTRACE {{arg1 \"\" } {arg2 \"\"} {arg3 \"\" } {arg4 \"\"} {arg5 \"\" } {arg6 \"\"}} {
+#         # Do nothing
+#     }
+#   }
+# }
+# OPTRACE "synth_1" START { ROLLUP_AUTO }
+# set_param chipscope.maxJobs 8
+# set_param general.usePosixSpawnForFork 1
+# OPTRACE "Creating in-memory project" START { }
+# create_project -in_memory -part xc7a35tcsg324-1
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'D:/FPGA/2025.1/Vivado/data/ip'.
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu208ld:part0:2.0 available at D:/FPGA/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\zcu208ld\production\2.0\board.xml as part xczu58dr-fsvg1517-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu216ld:part0:2.0 available at D:/FPGA/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\zcu216ld\production\2.0\board.xml as part xczu59dr-ffvf1760-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu670ld:part0:1.0 available at D:/FPGA/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\zcu670ld\1.0\board.xml as part xczu57dr-fsve1156-2-i specified in board_part file is either invalid or not available
+# set_param project.singleFileAddWarning.threshold 0
+# set_param project.compositeFile.enableAutoGeneration 0
+# set_param synth.vivado.isSynthRun true
+# set_msg_config -source 4 -id {IP_Flow 19-2162} -severity warning -new_severity info
+# set_property webtalk.parent_dir C:/Users/sgzmd/Desktop/Project/Project.cache/wt [current_project]
+# set_property parent.project_path C:/Users/sgzmd/Desktop/Project/Project.xpr [current_project]
+# set_property XPM_LIBRARIES {XPM_CDC XPM_MEMORY} [current_project]
+# set_property default_lib xil_defaultlib [current_project]
+# set_property target_language Verilog [current_project]
+# set_property ip_output_repo c:/Users/sgzmd/Desktop/Project/Project.cache/ip [current_project]
+# set_property ip_cache_permissions {read write} [current_project]
+# OPTRACE "Creating in-memory project" END { }
+# OPTRACE "Adding files" START { }
+# add_files C:/Users/sgzmd/Desktop/Project/source/sine_wave_8bit_1024.coe
+# add_files C:/Users/sgzmd/Desktop/Project/source/triangle_wave_8bit_1024.coe
+# read_verilog -library xil_defaultlib {
+#   C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/Oscilloscope_Acq.v
+#   C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/Wave_Data_Mapper.v
+#   C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/Top_Project.v
+# }
+# read_ip -quiet C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/ip/clk_wiz_0/clk_wiz_0.xci
+# set_property used_in_implementation false [get_files -all c:/Users/sgzmd/Desktop/Project/Project.gen/sources_1/ip/clk_wiz_0/clk_wiz_0_board.xdc]
+# set_property used_in_implementation false [get_files -all c:/Users/sgzmd/Desktop/Project/Project.gen/sources_1/ip/clk_wiz_0/clk_wiz_0.xdc]
+# set_property used_in_implementation false [get_files -all c:/Users/sgzmd/Desktop/Project/Project.gen/sources_1/ip/clk_wiz_0/clk_wiz_0_ooc.xdc]
+# read_ip -quiet C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.xci
+# set_property used_in_implementation false [get_files -all c:/Users/sgzmd/Desktop/Project/Project.gen/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0_ooc.xdc]
+# OPTRACE "Adding files" END { }
+# foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
+#   set_property used_in_implementation false $dcp
+# }
+# read_xdc C:/Users/sgzmd/Desktop/Project/Project.srcs/constrs_1/new/all.xdc
+# set_property used_in_implementation false [get_files C:/Users/sgzmd/Desktop/Project/Project.srcs/constrs_1/new/all.xdc]
+# set_param ips.enableIPCacheLiteLoad 1
+# read_checkpoint -auto_incremental -incremental C:/Users/sgzmd/Desktop/Project/Project.srcs/utils_1/imports/synth_1/Top_Project.dcp
+Command: read_checkpoint -auto_incremental -incremental C:/Users/sgzmd/Desktop/Project/Project.srcs/utils_1/imports/synth_1/Top_Project.dcp
+INFO: [Vivado 12-5825] Read reference checkpoint from C:/Users/sgzmd/Desktop/Project/Project.srcs/utils_1/imports/synth_1/Top_Project.dcp for incremental synthesis
+INFO: [Vivado 12-7989] Please ensure there are no constraint changes
+# close [open __synthesis_is_running__ w]
+# OPTRACE "synth_design" START { }
+# synth_design -top Top_Project -part xc7a35tcsg324-1
+Command: synth_design -top Top_Project -part xc7a35tcsg324-1
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7a35t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a35t'
+INFO: [Device 21-403] Loading part xc7a35tcsg324-1
+INFO: [Common 17-83] Releasing license: Synthesis
+3 Infos, 0 Warnings, 0 Critical Warnings and 1 Errors encountered.
+synth_design failed
+ERROR: [Runs 36-527] DCP does not exist: c:/Users/sgzmd/Desktop/Project/Project.gen/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.dcp
+close_project
+reset_run synth_1
+reset_run blk_mem_gen_0_synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+[Sat Jun 27 08:18:41 2026] Launched blk_mem_gen_0_synth_1, synth_1...
+Run output will be captured here:
+blk_mem_gen_0_synth_1: C:/Users/sgzmd/Desktop/Project/Project.runs/blk_mem_gen_0_synth_1/runme.log
+synth_1: C:/Users/sgzmd/Desktop/Project/Project.runs/synth_1/runme.log
+[Sat Jun 27 08:18:41 2026] Launched impl_1...
+Run output will be captured here: C:/Users/sgzmd/Desktop/Project/Project.runs/impl_1/runme.log
+reset_run synth_1
+launch_runs synth_1 -jobs 16
+[Sat Jun 27 08:19:56 2026] Launched synth_1...
+Run output will be captured here: C:/Users/sgzmd/Desktop/Project/Project.runs/synth_1/runme.log

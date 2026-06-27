@@ -1,0 +1,58 @@
+#-----------------------------------------------------------
+# Vivado v2025.1 (64-bit)
+# SW Build 6140274 on Thu May 22 00:12:29 MDT 2025
+# IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
+# SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
+# Start of session at: Sat Jun 27 08:04:28 2026
+# Process ID         : 34944
+# Current directory  : C:/Users/sgzmd/Desktop/Project
+# Command line       : vivado.exe -gui_launcher_event rodinguilauncherevent21044 C:\Users\sgzmd\Desktop\Project\Project.xpr
+# Log file           : C:/Users/sgzmd/Desktop/Project/vivado.log
+# Journal file       : C:/Users/sgzmd/Desktop/Project\vivado.jou
+# Running On         : MOSS550W
+# Platform           : Windows Server 2016 or Windows 10
+# Operating System   : 26200
+# Processor Detail   : Intel(R) Core(TM) i9-14900HX
+# CPU Frequency      : 2419 MHz
+# CPU Physical cores : 24
+# CPU Logical cores  : 32
+# Host memory        : 34070 MB
+# Swap memory        : 9663 MB
+# Total Virtual      : 43733 MB
+# Available Virtual  : 17573 MB
+#-----------------------------------------------------------
+start_gui
+open_project C:/Users/sgzmd/Desktop/Project/Project.xpr
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu208ld:part0:2.0 available at D:/FPGA/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\zcu208ld\production\2.0\board.xml as part xczu58dr-fsvg1517-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu216ld:part0:2.0 available at D:/FPGA/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\zcu216ld\production\2.0\board.xml as part xczu59dr-ffvf1760-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu670ld:part0:1.0 available at D:/FPGA/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\zcu670ld\1.0\board.xml as part xczu57dr-fsve1156-2-i specified in board_part file is either invalid or not available
+Scanning sources...
+Finished scanning sources
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu208ld:part0:2.0 available at D:/FPGA/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\zcu208ld\production\2.0\board.xml as part xczu58dr-fsvg1517-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu216ld:part0:2.0 available at D:/FPGA/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\zcu216ld\production\2.0\board.xml as part xczu59dr-ffvf1760-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu670ld:part0:1.0 available at D:/FPGA/2025.1/data/xhub/boards\XilinxBoardStore\boards\Xilinx\zcu670ld\1.0\board.xml as part xczu57dr-fsve1156-2-i specified in board_part file is either invalid or not available
+WARNING: [Project 1-5713] Board part '' set for the project  is not found. BoardPart property will be unset. Please select board from latest repo build 
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'D:/FPGA/2025.1/Vivado/data/ip'.
+WARNING: [IP_Flow 19-2162] IP 'blk_mem_gen_0' is locked:
+* IP definition 'Block Memory Generator (8.4)' for IP 'blk_mem_gen_0' (customized with software release 2022.2) has a different revision in the IP Catalog.
+WARNING: [IP_Flow 19-2162] IP 'blk_mem_gen_sin' is locked:
+* IP definition 'Block Memory Generator (8.4)' for IP 'blk_mem_gen_sin' (customized with software release 2022.2) has a different revision in the IP Catalog.
+WARNING: [IP_Flow 19-2162] IP 'blk_mem_gen_triangle' is locked:
+* IP definition 'Block Memory Generator (8.4)' for IP 'blk_mem_gen_triangle' (customized with software release 2022.2) has a different revision in the IP Catalog.
+update_compile_order -fileset sources_1
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+[Sat Jun 27 08:05:38 2026] Launched synth_1...
+Run output will be captured here: C:/Users/sgzmd/Desktop/Project/Project.runs/synth_1/runme.log
+[Sat Jun 27 08:05:38 2026] Launched impl_1...
+Run output will be captured here: C:/Users/sgzmd/Desktop/Project/Project.runs/impl_1/runme.log
+reload_project
+invalid command name "reload_project"
+reset_run synth_1
+launch_runs impl_1 -to_step write_bitstream -jobs 16
+[Sat Jun 27 08:07:09 2026] Launched synth_1...
+Run output will be captured here: C:/Users/sgzmd/Desktop/Project/Project.runs/synth_1/runme.log
+[Sat Jun 27 08:07:09 2026] Launched impl_1...
+Run output will be captured here: C:/Users/sgzmd/Desktop/Project/Project.runs/impl_1/runme.log

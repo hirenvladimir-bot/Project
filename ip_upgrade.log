@@ -1,0 +1,100 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2025.1 (win64) Build 6140274 Thu May 22 00:12:29 MDT 2025
+| Date         : Sat Jun 27 08:23:58 2026
+| Host         : MOSS550W running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7a35tcsg324-1
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'blk_mem_gen_triangle'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of blk_mem_gen_triangle (xilinx.com:ip:blk_mem_gen:8.4) from (Rev. 5) to (Rev. 11)
+
+
+
+
+
+
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2025.1 (win64) Build 6140274 Thu May 22 00:12:29 MDT 2025
+| Date         : Sat Jun 27 08:23:55 2026
+| Host         : MOSS550W running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7a35tcsg324-1
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'blk_mem_gen_sin'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of blk_mem_gen_sin (xilinx.com:ip:blk_mem_gen:8.4) from (Rev. 5) to (Rev. 11)
+
+
+
+
+
+
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2025.1 (win64) Build 6140274 Thu May 22 00:12:29 MDT 2025
+| Date         : Sat Jun 27 08:14:43 2026
+| Host         : MOSS550W running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7a35tcsg324-1
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'blk_mem_gen_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of blk_mem_gen_0 (xilinx.com:ip:blk_mem_gen:8.4) from (Rev. 5) to (Rev. 11)
+
+
+
+
+
+
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2025.1 (win64) Build 6140274 Thu May 22 00:12:29 MDT 2025
+| Date         : Sat Jun 27 03:56:18 2026
+| Host         : MOSS550W running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7a35tcsg324-1
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'clk_wiz_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of clk_wiz_0 (xilinx.com:ip:clk_wiz:6.0) from (Rev. 11) to (Rev. 16)
+
+
+
+
+
+
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2025.1 (win64) Build 6140274 Thu May 22 00:12:29 MDT 2025
+| Date         : Sat Jun 27 03:55:52 2026
+| Host         : MOSS550W running 64-bit major release  (build 9200)
+| Command      : upgrade_ip
+| Device       : xc7a35tcsg324-1
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Upgrade Log for IP 'xadc_wiz_0'
+
+1. Summary
+----------
+
+SUCCESS in the upgrade of xadc_wiz_0 (xilinx.com:ip:xadc_wiz:3.3) from (Rev. 8) to (Rev. 12)
+
