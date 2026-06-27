@@ -1,0 +1,46 @@
+#-----------------------------------------------------------
+# Vivado v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Mon Jun 22 21:23:37 2026
+# Process ID: 45596
+# Current directory: D:/FPGAProject/TASK/Project
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent49644 D:\FPGAProject\TASK\Project\Project.xpr
+# Log file: D:/FPGAProject/TASK/Project/vivado.log
+# Journal file: D:/FPGAProject/TASK/Project\vivado.jou
+# Running On: siyunyumo, OS: Windows, CPU Frequency: 2419 MHz, CPU Physical cores: 24, Host memory: 34070 MB
+#-----------------------------------------------------------
+start_gui
+open_project D:/FPGAProject/TASK/Project/Project.xpr
+update_compile_order -fileset sources_1
+set_property -dict [list \
+  CONFIG.CHANNEL_ENABLE_VAUXP0_VAUXN0 {false} \
+  CONFIG.CHANNEL_ENABLE_VAUXP10_VAUXN10 {true} \
+  CONFIG.CHANNEL_ENABLE_VAUXP2_VAUXN2 {true} \
+  CONFIG.CHANNEL_ENABLE_VAUXP8_VAUXN8 {false} \
+] [get_ips xadc_wiz_0]
+generate_target all [get_files  D:/FPGAProject/TASK/Project/Project.srcs/sources_1/ip/xadc_wiz_0/xadc_wiz_0.xci]
+catch { config_ip_cache -export [get_ips -all xadc_wiz_0] }
+export_ip_user_files -of_objects [get_files D:/FPGAProject/TASK/Project/Project.srcs/sources_1/ip/xadc_wiz_0/xadc_wiz_0.xci] -no_script -sync -force -quiet
+reset_run xadc_wiz_0_synth_1
+launch_runs xadc_wiz_0_synth_1 -jobs 4
+wait_on_run xadc_wiz_0_synth_1
+export_simulation -of_objects [get_files D:/FPGAProject/TASK/Project/Project.srcs/sources_1/ip/xadc_wiz_0/xadc_wiz_0.xci] -directory D:/FPGAProject/TASK/Project/Project.ip_user_files/sim_scripts -ip_user_files_dir D:/FPGAProject/TASK/Project/Project.ip_user_files -ipstatic_source_dir D:/FPGAProject/TASK/Project/Project.ip_user_files/ipstatic -lib_map_path [list {modelsim=D:/FPGAProject/TASK/Project/Project.cache/compile_simlib/modelsim} {questa=D:/FPGAProject/TASK/Project/Project.cache/compile_simlib/questa} {riviera=D:/FPGAProject/TASK/Project/Project.cache/compile_simlib/riviera} {activehdl=D:/FPGAProject/TASK/Project/Project.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
+close [ open D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Top.v w ]
+add_files D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Top.v
+update_compile_order -fileset sources_1
+close [ open D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/TopCtr.v w ]
+add_files D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/TopCtr.v
+update_compile_order -fileset sources_1
+export_ip_user_files -of_objects  [get_files D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/TopCtr.v] -no_script -reset -force -quiet
+remove_files  D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/TopCtr.v
+remove_files  D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/TopCtr.v
+close [ open D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Top_Project.v w ]
+add_files D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Top_Project.v
+update_compile_order -fileset sources_1
+export_ip_user_files -of_objects  [get_files D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Top.v] -no_script -reset -force -quiet
+remove_files  D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Top.v
+update_compile_order -fileset sources_1
+close [ open D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Oscilloscope_Acq.v w ]
+add_files D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Oscilloscope_Acq.v
+update_compile_order -fileset sources_1

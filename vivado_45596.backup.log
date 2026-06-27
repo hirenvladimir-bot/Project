@@ -1,0 +1,84 @@
+#-----------------------------------------------------------
+# Vivado v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Mon Jun 22 21:23:37 2026
+# Process ID: 45596
+# Current directory: D:/FPGAProject/TASK/Project
+# Command line: vivado.exe -gui_launcher_event rodinguilauncherevent49644 D:\FPGAProject\TASK\Project\Project.xpr
+# Log file: D:/FPGAProject/TASK/Project/vivado.log
+# Journal file: D:/FPGAProject/TASK/Project\vivado.jou
+# Running On: siyunyumo, OS: Windows, CPU Frequency: 2419 MHz, CPU Physical cores: 24, Host memory: 34070 MB
+#-----------------------------------------------------------
+start_gui
+open_project D:/FPGAProject/TASK/Project/Project.xpr
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vek280_es:part0:1.0 available at D:/Software/FPGA/Vivado/2022.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vek280/es/1.0/board.xml as part xcve2802-vsvh1760-2lp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vhk158_es:part0:1.0 available at D:/Software/FPGA/Vivado/2022.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vhk158/es/1.0/board.xml as part xcvh1582-vsva3697-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk120_es:part0:1.2 available at D:/Software/FPGA/Vivado/2022.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk120/es/1.2/board.xml as part xcvp1202-vsva2785-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk120_es_revb:part0:1.0 available at D:/Software/FPGA/Vivado/2022.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk120_revb/es/1.0/board.xml as part xcvp1202-vsva2785-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:vpk180_es:part0:1.0 available at D:/Software/FPGA/Vivado/2022.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/vpk180/es/1.0/board.xml as part xcvp1802-lsvc4072-2mp-e-s-es1 specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu208ld:part0:2.0 available at D:/Software/FPGA/Vivado/2022.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu208ld/production/2.0/board.xml as part xczu58dr-fsvg1517-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu216ld:part0:2.0 available at D:/Software/FPGA/Vivado/2022.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu216ld/production/2.0/board.xml as part xczu59dr-ffvf1760-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu670:part0:2.0 available at D:/Software/FPGA/Vivado/2022.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu670/2.0/board.xml as part xczu67dr-fsve1156-2-i specified in board_part file is either invalid or not available
+WARNING: [Board 49-26] cannot add Board Part xilinx.com:zcu670ld:part0:1.0 available at D:/Software/FPGA/Vivado/2022.2/data/xhub/boards/XilinxBoardStore/boards/Xilinx/zcu670ld/1.0/board.xml as part xczu57dr-fsve1156-2-i specified in board_part file is either invalid or not available
+Scanning sources...
+Finished scanning sources
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'D:/Software/FPGA/Vivado/2022.2/data/ip'.
+open_project: Time (s): cpu = 00:00:11 ; elapsed = 00:00:05 . Memory (MB): peak = 2303.301 ; gain = 339.793
+update_compile_order -fileset sources_1
+INFO: [Device 21-403] Loading part xc7a35tcsg324-1
+set_property -dict [list \
+  CONFIG.CHANNEL_ENABLE_VAUXP0_VAUXN0 {false} \
+  CONFIG.CHANNEL_ENABLE_VAUXP10_VAUXN10 {true} \
+  CONFIG.CHANNEL_ENABLE_VAUXP2_VAUXN2 {true} \
+  CONFIG.CHANNEL_ENABLE_VAUXP8_VAUXN8 {false} \
+] [get_ips xadc_wiz_0]
+generate_target all [get_files  D:/FPGAProject/TASK/Project/Project.srcs/sources_1/ip/xadc_wiz_0/xadc_wiz_0.xci]
+INFO: [IP_Flow 19-1686] Generating 'Instantiation Template' target for IP 'xadc_wiz_0'...
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'xadc_wiz_0'...
+INFO: [IP_Flow 19-1686] Generating 'Simulation' target for IP 'xadc_wiz_0'...
+INFO: [IP_Flow 19-1686] Generating 'Miscellaneous' target for IP 'xadc_wiz_0'...
+INFO: [IP_Flow 19-1686] Generating 'Change Log' target for IP 'xadc_wiz_0'...
+catch { config_ip_cache -export [get_ips -all xadc_wiz_0] }
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: xadc_wiz_0
+export_ip_user_files -of_objects [get_files D:/FPGAProject/TASK/Project/Project.srcs/sources_1/ip/xadc_wiz_0/xadc_wiz_0.xci] -no_script -sync -force -quiet
+reset_run xadc_wiz_0_synth_1
+launch_runs xadc_wiz_0_synth_1 -jobs 4
+INFO: [IP_Flow 19-6924] IPCACHE: Running cache check for IP inst: xadc_wiz_0
+[Mon Jun 22 22:40:43 2026] Launched xadc_wiz_0_synth_1...
+Run output will be captured here: D:/FPGAProject/TASK/Project/Project.runs/xadc_wiz_0_synth_1/runme.log
+export_simulation -of_objects [get_files D:/FPGAProject/TASK/Project/Project.srcs/sources_1/ip/xadc_wiz_0/xadc_wiz_0.xci] -directory D:/FPGAProject/TASK/Project/Project.ip_user_files/sim_scripts -ip_user_files_dir D:/FPGAProject/TASK/Project/Project.ip_user_files -ipstatic_source_dir D:/FPGAProject/TASK/Project/Project.ip_user_files/ipstatic -lib_map_path [list {modelsim=D:/FPGAProject/TASK/Project/Project.cache/compile_simlib/modelsim} {questa=D:/FPGAProject/TASK/Project/Project.cache/compile_simlib/questa} {riviera=D:/FPGAProject/TASK/Project/Project.cache/compile_simlib/riviera} {activehdl=D:/FPGAProject/TASK/Project/Project.cache/compile_simlib/activehdl}] -use_ip_compiled_libs -force -quiet
+close [ open D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Top.v w ]
+add_files D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Top.v
+update_compile_order -fileset sources_1
+close [ open D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/TopCtr.v w ]
+add_files D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/TopCtr.v
+update_compile_order -fileset sources_1
+ERROR: [Vivado 12-106] *** Exception: java.lang.IllegalStateException: cannot open system clipboard (See D:/FPGAProject/TASK/Project/vivado_pid45596.debug)
+export_ip_user_files -of_objects  [get_files D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/TopCtr.v] -no_script -reset -force -quiet
+remove_files  D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/TopCtr.v
+remove_files  D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/TopCtr.v
+WARNING: [Vivado 12-818] No files matched 'D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/TopCtr.v'
+close [ open D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Top_Project.v w ]
+add_files D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Top_Project.v
+update_compile_order -fileset sources_1
+export_ip_user_files -of_objects  [get_files D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Top.v] -no_script -reset -force -quiet
+remove_files  D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Top.v
+update_compile_order -fileset sources_1
+close [ open D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Oscilloscope_Acq.v w ]
+add_files D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Oscilloscope_Acq.v
+update_compile_order -fileset sources_1
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+WARNING: [IP_Flow 19-4067] Ignoring invalid widget type specified checkbox.Providing a default widget
+exit
+INFO: [Common 17-206] Exiting Vivado at Tue Jun 23 00:08:36 2026...

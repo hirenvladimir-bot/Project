@@ -1,0 +1,536 @@
+#-----------------------------------------------------------
+# Vivado v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Fri Jun 26 02:47:45 2026
+# Process ID: 56952
+# Current directory: D:/FPGAProject/TASK/Project
+# Command line: vivado.exe -mode batch -source codex_verify_xadc_fix.tcl
+# Log file: D:/FPGAProject/TASK/Project/vivado.log
+# Journal file: D:/FPGAProject/TASK/Project\vivado.jou
+# Running On: siyunyumo, OS: Windows, CPU Frequency: 2419 MHz, CPU Physical cores: 24, Host memory: 34070 MB
+#-----------------------------------------------------------
+source codex_verify_xadc_fix.tcl
+# open_project Project.xpr
+Scanning sources...
+Finished scanning sources
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository 'D:/Software/FPGA/Vivado/2022.2/data/ip'.
+# set_property source_mgmt_mode None [current_project]
+# set_property top Top_Project [get_filesets sources_1]
+# update_compile_order -fileset sources_1
+# synth_design -top Top_Project -part xc7a35tcsg324-1
+Command: synth_design -top Top_Project -part xc7a35tcsg324-1
+Starting synth_design
+Attempting to get a license for feature 'Synthesis' and/or device 'xc7a35t'
+INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a35t'
+INFO: [Device 21-403] Loading part xc7a35tcsg324-1
+INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
+INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
+INFO: [Synth 8-7075] Helper process launched with PID 38424
+INFO: [Synth 8-11241] undeclared symbol 'REGCCE', assumed default net type 'wire' [D:/Software/FPGA/Vivado/2022.2/data/verilog/src/unimacro/BRAM_SINGLE_MACRO.v:2170]
+---------------------------------------------------------------------------------
+Starting RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:04 . Memory (MB): peak = 2220.387 ; gain = 407.762
+---------------------------------------------------------------------------------
+INFO: [Synth 8-6157] synthesizing module 'Top_Project' [D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Top_Project.v:3]
+INFO: [Synth 8-6157] synthesizing module 'clk_wiz_0' [D:/FPGAProject/TASK/Project/.Xil/Vivado-56952-siyunyumo/realtime/clk_wiz_0_stub.v:5]
+INFO: [Synth 8-6155] done synthesizing module 'clk_wiz_0' (0#1) [D:/FPGAProject/TASK/Project/.Xil/Vivado-56952-siyunyumo/realtime/clk_wiz_0_stub.v:5]
+INFO: [Synth 8-6157] synthesizing module 'Global_Ctrl' [D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Global_Ctrl.v:3]
+INFO: [Synth 8-6157] synthesizing module 'Key_Debounce' [D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Global_Ctrl.v:309]
+INFO: [Synth 8-6155] done synthesizing module 'Key_Debounce' (0#1) [D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Global_Ctrl.v:309]
+INFO: [Synth 8-6155] done synthesizing module 'Global_Ctrl' (0#1) [D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Global_Ctrl.v:3]
+INFO: [Synth 8-6157] synthesizing module 'Signal_Generator' [D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Signal_Generator.v:3]
+INFO: [Synth 8-6157] synthesizing module 'blk_mem_gen_sin' [D:/FPGAProject/TASK/Project/.Xil/Vivado-56952-siyunyumo/realtime/blk_mem_gen_sin_stub.v:5]
+INFO: [Synth 8-6155] done synthesizing module 'blk_mem_gen_sin' (0#1) [D:/FPGAProject/TASK/Project/.Xil/Vivado-56952-siyunyumo/realtime/blk_mem_gen_sin_stub.v:5]
+INFO: [Synth 8-6157] synthesizing module 'blk_mem_gen_triangle' [D:/FPGAProject/TASK/Project/.Xil/Vivado-56952-siyunyumo/realtime/blk_mem_gen_triangle_stub.v:5]
+INFO: [Synth 8-6155] done synthesizing module 'blk_mem_gen_triangle' (0#1) [D:/FPGAProject/TASK/Project/.Xil/Vivado-56952-siyunyumo/realtime/blk_mem_gen_triangle_stub.v:5]
+INFO: [Synth 8-6155] done synthesizing module 'Signal_Generator' (0#1) [D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Signal_Generator.v:3]
+INFO: [Synth 8-6157] synthesizing module 'Oscilloscope_Acq' [D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Oscilloscope_Acq.v:reset_run synth_1
+INFO: [Project 1-1161] Replacing file D:/FPGAProject/TASK/Project/Project.srcs/utils_1/imports/synth_1/Top_Project.dcp with file D:/FPGAProject/TASK/Project/Project.runs/synth_1/Top_Project.dcp
+launch_runs impl_1 -to_step write_bitstream -jobs 4
+[Fri Jun 26 02:49:04 2026] Launched synth_1...
+Run output will be captured here: D:/FPGAProject/TASK/Project/Project.runs/synth_1/runme.log
+[Fri Jun 26 02:49:04 2026] Launched impl_1...
+Run output will be captured here: D:/FPGAProject/TASK/Project/Project.runs/impl_1/runme.log
+open_hw_manager
+exit
+INFO: [Common 17-206] Exiting Vivado at Fri Jun 26 02:52:26 2026...
+	Parameter INIT_4F bound to: 16'b0000000000000000 
+	Parameter INIT_50 bound to: 16'b1011010111101101 
+	Parameter INIT_51 bound to: 16'b0101011111100100 
+	Parameter INIT_52 bound to: 16'b1010000101000111 
+	Parameter INIT_53 bound to: 16'b1100101000110011 
+	Parameter INIT_54 bound to: 16'b1010100100111010 
+	Parameter INIT_55 bound to: 16'b0101001011000110 
+	Parameter INIT_56 bound to: 16'b1001010101010101 
+	Parameter INIT_57 bound to: 16'b1010111001001110 
+	Parameter INIT_58 bound to: 16'b0101100110011001 
+	Parameter INIT_5C bound to: 16'b0101000100010001 
+	Parameter SIM_DEVICE bound to: 7SERIES - type: string 
+	Parameter SIM_MONITOR_FILE bound to: design.txt - type: string 
+INFO: [Synth 8-6155] done synthesizing module 'XADC' (0#1) [D:/Software/FPGA/Vivado/2022.2/scripts/rt/data/unisim_comp.v:136349]
+INFO: [Synth 8-6157] synthesizing module 'blk_mem_gen_0' [D:/FPGAProject/TASK/Project/.Xil/Vivado-56952-siyunyumo/realtime/blk_mem_gen_0_stub.v:5]
+INFO: [Synth 8-6155] done synthesizing module 'blk_mem_gen_0' (0#1) [D:/FPGAProject/TASK/Project/.Xil/Vivado-56952-siyunyumo/realtime/blk_mem_gen_0_stub.v:5]
+INFO: [Synth 8-6155] done synthesizing module 'Oscilloscope_Acq' (0#1) [D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Oscilloscope_Acq.v:3]
+INFO: [Synth 8-6157] synthesizing module 'Wave_Data_Mapper' [D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Wave_Data_Mapper.v:3]
+INFO: [Synth 8-6155] done synthesizing module 'Wave_Data_Mapper' (0#1) [D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Wave_Data_Mapper.v:3]
+INFO: [Synth 8-6157] synthesizing module 'VGA_Driver' [D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/VGA_Driver.v:3]
+INFO: [Synth 8-6155] done synthesizing module 'VGA_Driver' (0#1) [D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/VGA_Driver.v:3]
+INFO: [Synth 8-6155] done synthesizing module 'Top_Project' (0#1) [D:/FPGAProject/TASK/Project/Project.srcs/sources_1/new/Top_Project.v:3]
+WARNING: [Synth 8-3917] design Top_Project has port dac_ile driven by constant 1
+WARNING: [Synth 8-3917] design Top_Project has port dac_cs_n driven by constant 0
+WARNING: [Synth 8-3917] design Top_Project has port dac_wr2_n driven by constant 0
+WARNING: [Synth 8-3917] design Top_Project has port dac_xfer_n driven by constant 0
+WARNING: [Synth 8-7129] Port bram_dout[14] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port bram_dout[13] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port bram_dout[12] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port bram_dout[2] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port bram_dout[1] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port bram_dout[0] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vcount[9] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vcount[8] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vcount[7] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vcount[6] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vcount[5] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vcount[4] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vcount[3] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vcount[2] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vcount[1] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vcount[0] in module Wave_Data_Mapper is either unconnected or has no load
+---------------------------------------------------------------------------------
+Finished RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 2324.824 ; gain = 512.199
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 2342.754 ; gain = 530.129
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 2342.754 ; gain = 530.129
+---------------------------------------------------------------------------------
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.011 . Memory (MB): peak = 2354.777 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 1 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-570] Preparing netlist for logic optimization
+
+Processing XDC Constraints
+Initializing timing engine
+Parsing XDC File [d:/FPGAProject/TASK/Project/Project.gen/sources_1/ip/clk_wiz_0/clk_wiz_0/clk_wiz_0_in_context.xdc] for cell 'u_clk_gen'
+Finished Parsing XDC File [d:/FPGAProject/TASK/Project/Project.gen/sources_1/ip/clk_wiz_0/clk_wiz_0/clk_wiz_0_in_context.xdc] for cell 'u_clk_gen'
+Parsing XDC File [d:/FPGAProject/TASK/Project/Project.gen/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0/blk_mem_gen_0_in_context.xdc] for cell 'u_osc_acq/u_vga_bram'
+Finished Parsing XDC File [d:/FPGAProject/TASK/Project/Project.gen/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0/blk_mem_gen_0_in_context.xdc] for cell 'u_osc_acq/u_vga_bram'
+Parsing XDC File [d:/FPGAProject/TASK/Project/Project.gen/sources_1/ip/blk_mem_gen_sin/blk_mem_gen_sin/blk_mem_gen_sin_in_context.xdc] for cell 'u_sig_gen/u_rom_sine'
+Finished Parsing XDC File [d:/FPGAProject/TASK/Project/Project.gen/sources_1/ip/blk_mem_gen_sin/blk_mem_gen_sin/blk_mem_gen_sin_in_context.xdc] for cell 'u_sig_gen/u_rom_sine'
+Parsing XDC File [d:/FPGAProject/TASK/Project/Project.gen/sources_1/ip/blk_mem_gen_triangle/blk_mem_gen_triangle/blk_mem_gen_triangle_in_context.xdc] for cell 'u_sig_gen/u_rom_triangle'
+Finished Parsing XDC File [d:/FPGAProject/TASK/Project/Project.gen/sources_1/ip/blk_mem_gen_triangle/blk_mem_gen_triangle/blk_mem_gen_triangle_in_context.xdc] for cell 'u_sig_gen/u_rom_triangle'
+Parsing XDC File [D:/FPGAProject/TASK/Project/Project.srcs/constrs_1/new/all.xdc]
+Finished Parsing XDC File [D:/FPGAProject/TASK/Project/Project.srcs/constrs_1/new/all.xdc]
+INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [D:/FPGAProject/TASK/Project/Project.srcs/constrs_1/new/all.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/Top_Project_propImpl.xdc].
+Resolution: To avoid this warning, move constraints listed in [.Xil/Top_Project_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+Completed Processing XDC Constraints
+
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 2455.492 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.005 . Memory (MB): peak = 2455.492 ; gain = 0.000
+WARNING: [Timing 38-316] Clock period '20.000' specified during out-of-context synthesis of instance 'u_osc_acq/u_vga_bram' at clock pin 'clka' is different from the actual clock period '10.000', this can lead to different synthesis results.
+WARNING: [Timing 38-316] Clock period '20.000' specified during out-of-context synthesis of instance 'u_sig_gen/u_rom_sine' at clock pin 'clka' is different from the actual clock period '10.000', this can lead to different synthesis results.
+WARNING: [Timing 38-316] Clock period '20.000' specified during out-of-context synthesis of instance 'u_sig_gen/u_rom_triangle' at clock pin 'clka' is different from the actual clock period '10.000', this can lead to different synthesis results.
+INFO: [Synth 8-11241] undeclared symbol 'REGCCE', assumed default net type 'wire' [D:/Software/FPGA/Vivado/2022.2/data/verilog/src/unimacro/BRAM_SINGLE_MACRO.v:2170]
+---------------------------------------------------------------------------------
+Finished Constraint Validation : Time (s): cpu = 00:00:10 ; elapsed = 00:00:12 . Memory (MB): peak = 2455.492 ; gain = 642.867
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Loading Part and Timing Information
+---------------------------------------------------------------------------------
+Loading part: xc7a35tcsg324-1
+---------------------------------------------------------------------------------
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:10 ; elapsed = 00:00:12 . Memory (MB): peak = 2455.492 ; gain = 642.867
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying 'set_property' XDC Constraints
+---------------------------------------------------------------------------------
+Applied set_property IO_BUFFER_TYPE = NONE for sys_clk. (constraint file  d:/FPGAProject/TASK/Project/Project.gen/sources_1/ip/clk_wiz_0/clk_wiz_0/clk_wiz_0_in_context.xdc, line 4).
+Applied set_property CLOCK_BUFFER_TYPE = NONE for sys_clk. (constraint file  d:/FPGAProject/TASK/Project/Project.gen/sources_1/ip/clk_wiz_0/clk_wiz_0/clk_wiz_0_in_context.xdc, line 5).
+---------------------------------------------------------------------------------
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:11 ; elapsed = 00:00:12 . Memory (MB): peak = 2455.492 ; gain = 642.867
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:11 ; elapsed = 00:00:13 . Memory (MB): peak = 2455.492 ; gain = 642.867
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start RTL Component Statistics 
+---------------------------------------------------------------------------------
+Detailed RTL Component Info : 
++---Adders : 
+	   2 Input   32 Bit       Adders := 1     
+	   2 Input   21 Bit       Adders := 5     
+	   2 Input   11 Bit       Adders := 4     
+	   2 Input   10 Bit       Adders := 15    
+	   2 Input    9 Bit       Adders := 4     
+	   2 Input    4 Bit       Adders := 16    
+	   2 Input    2 Bit       Adders := 2     
++---Registers : 
+	               32 Bit    Registers := 1     
+	               21 Bit    Registers := 5     
+	               12 Bit    Registers := 3     
+	               10 Bit    Registers := 8     
+	                8 Bit    Registers := 3     
+	                7 Bit    Registers := 1     
+	                4 Bit    Registers := 11    
+	                2 Bit    Registers := 4     
+	                1 Bit    Registers := 36    
++---Muxes : 
+	   2 Input   21 Bit        Muxes := 10    
+	   2 Input   14 Bit        Muxes := 1     
+	   2 Input   10 Bit        Muxes := 3     
+	   2 Input    8 Bit        Muxes := 3     
+	   4 Input    8 Bit        Muxes := 1     
+	   2 Input    5 Bit        Muxes := 1     
+	   2 Input    4 Bit        Muxes := 46    
+	   4 Input    4 Bit        Muxes := 16    
+	   6 Input    4 Bit        Muxes := 3     
+	   3 Input    3 Bit        Muxes := 1     
+	   2 Input    2 Bit        Muxes := 18    
+	   4 Input    2 Bit        Muxes := 9     
+	   3 Input    2 Bit        Muxes := 1     
+	   2 Input    1 Bit        Muxes := 42    
+	   4 Input    1 Bit        Muxes := 30    
+---------------------------------------------------------------------------------
+Finished RTL Component Statistics 
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Part Resource Summary
+---------------------------------------------------------------------------------
+Part Resources:
+DSPs: 90 (col length:60)
+BRAMs: 100 (col length: RAMB18 60 RAMB36 30)
+---------------------------------------------------------------------------------
+Finished Part Resource Summary
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Cross Boundary and Area Optimization
+---------------------------------------------------------------------------------
+WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
+DSP Report: Generating DSP hz_to_fcw0_return0, operation Mode is: (C:0x1388)+(A:0x68db9)*B.
+DSP Report: operator hz_to_fcw0_return0 is absorbed into DSP hz_to_fcw0_return0.
+DSP Report: operator hz_to_fcw0_return1 is absorbed into DSP hz_to_fcw0_return0.
+WARNING: [Synth 8-3917] design Top_Project has port dac_ile driven by constant 1
+WARNING: [Synth 8-3917] design Top_Project has port dac_cs_n driven by constant 0
+WARNING: [Synth 8-3917] design Top_Project has port dac_wr2_n driven by constant 0
+WARNING: [Synth 8-3917] design Top_Project has port dac_xfer_n driven by constant 0
+WARNING: [Synth 8-7129] Port bram_dout[14] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port bram_dout[13] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port bram_dout[12] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port bram_dout[2] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port bram_dout[1] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port bram_dout[0] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vcount[9] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vcount[8] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vcount[7] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vcount[6] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vcount[5] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vcount[4] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vcount[3] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vcount[2] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vcount[1] in module Wave_Data_Mapper is either unconnected or has no load
+WARNING: [Synth 8-7129] Port vcount[0] in module Wave_Data_Mapper is either unconnected or has no load
+---------------------------------------------------------------------------------
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:17 ; elapsed = 00:00:19 . Memory (MB): peak = 2455.492 ; gain = 642.867
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+
+DSP: Preliminary Mapping Report (see note below. The ' indicates corresponding REG is set)
++------------+--------------------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|Module Name | DSP Mapping              | A Size | B Size | C Size | D Size | P Size | AREG | BREG | CREG | DREG | ADREG | MREG | PREG | 
++------------+--------------------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|Global_Ctrl | (C:0x1388)+(A:0x68db9)*B | 19     | 14     | 13     | -      | 33     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
++------------+--------------------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+
+Note: The table above is a preliminary report that shows the DSPs inferred at the current stage of the synthesis flow. Some DSP may be reimplemented as non DSP primitives later in the synthesis flow. Multiple instantiated DSPs are reported only once.
+---------------------------------------------------------------------------------
+Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Applying XDC Timing Constraints
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:23 ; elapsed = 00:00:25 . Memory (MB): peak = 2455.492 ; gain = 642.867
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Timing Optimization
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Timing Optimization : Time (s): cpu = 00:00:25 ; elapsed = 00:00:27 . Memory (MB): peak = 2455.492 ; gain = 642.867
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Technology Mapping
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Technology Mapping : Time (s): cpu = 00:00:25 ; elapsed = 00:00:28 . Memory (MB): peak = 2455.492 ; gain = 642.867
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Flattening Before IO Insertion
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Final Netlist Cleanup
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished IO Insertion : Time (s): cpu = 00:00:28 ; elapsed = 00:00:31 . Memory (MB): peak = 2455.492 ; gain = 642.867
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Instances
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:28 ; elapsed = 00:00:31 . Memory (MB): peak = 2455.492 ; gain = 642.867
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Rebuilding User Hierarchy
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:28 ; elapsed = 00:00:31 . Memory (MB): peak = 2455.492 ; gain = 642.867
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Ports
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:28 ; elapsed = 00:00:31 . Memory (MB): peak = 2455.492 ; gain = 642.867
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Handling Custom Attributes
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:28 ; elapsed = 00:00:31 . Memory (MB): peak = 2455.492 ; gain = 642.867
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Renaming Generated Nets
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:28 ; elapsed = 00:00:31 . Memory (MB): peak = 2455.492 ; gain = 642.867
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Start Writing Synthesis Report
+---------------------------------------------------------------------------------
+
+DSP Final Report (the ' indicates corresponding REG is set)
++------------+-------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|Module Name | DSP Mapping | A Size | B Size | C Size | D Size | P Size | AREG | BREG | CREG | DREG | ADREG | MREG | PREG | 
++------------+-------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+|Global_Ctrl | C+A*B       | 19     | 14     | 13     | -      | 33     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
++------------+-------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
+
+
+Report BlackBoxes: 
++------+---------------------+----------+
+|      |BlackBox name        |Instances |
++------+---------------------+----------+
+|1     |clk_wiz_0            |         1|
+|2     |blk_mem_gen_0        |         1|
+|3     |blk_mem_gen_sin      |         1|
+|4     |blk_mem_gen_triangle |         1|
++------+---------------------+----------+
+
+Report Cell Usage: 
++------+---------------------+------+
+|      |Cell                 |Count |
++------+---------------------+------+
+|1     |blk_mem_gen          |     1|
+|2     |blk_mem_gen_sin      |     1|
+|3     |blk_mem_gen_triangle |     1|
+|4     |clk_wiz              |     1|
+|5     |CARRY4               |   209|
+|6     |DSP48E1              |     1|
+|7     |LUT1                 |    53|
+|8     |LUT2                 |   289|
+|9     |LUT3                 |   333|
+|10    |LUT4                 |   307|
+|11    |LUT5                 |   210|
+|12    |LUT6                 |   479|
+|13    |XADC                 |     1|
+|14    |FDCE                 |   344|
+|15    |FDPE                 |    25|
+|16    |IBUF                 |    14|
+|17    |OBUF                 |    35|
++------+---------------------+------+
+---------------------------------------------------------------------------------
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:28 ; elapsed = 00:00:31 . Memory (MB): peak = 2455.492 ; gain = 642.867
+---------------------------------------------------------------------------------
+Synthesis finished with 0 errors, 0 critical warnings and 21 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:23 ; elapsed = 00:00:29 . Memory (MB): peak = 2455.492 ; gain = 530.129
+Synthesis Optimization Complete : Time (s): cpu = 00:00:29 ; elapsed = 00:00:31 . Memory (MB): peak = 2455.492 ; gain = 642.867
+INFO: [Project 1-571] Translating synthesized netlist
+INFO: [Project 1-454] Reading design checkpoint 'd:/FPGAProject/TASK/Project/Project.gen/sources_1/ip/clk_wiz_0/clk_wiz_0.dcp' for cell 'u_clk_gen'
+INFO: [Project 1-454] Reading design checkpoint 'd:/FPGAProject/TASK/Project/Project.gen/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0.dcp' for cell 'u_osc_acq/u_vga_bram'
+INFO: [Project 1-454] Reading design checkpoint 'd:/FPGAProject/TASK/Project/Project.gen/sources_1/ip/blk_mem_gen_sin/blk_mem_gen_sin.dcp' for cell 'u_sig_gen/u_rom_sine'
+INFO: [Project 1-454] Reading design checkpoint 'd:/FPGAProject/TASK/Project/Project.gen/sources_1/ip/blk_mem_gen_triangle/blk_mem_gen_triangle.dcp' for cell 'u_sig_gen/u_rom_triangle'
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.017 . Memory (MB): peak = 2455.492 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 215 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+INFO: [Project 1-479] Netlist was created with Vivado 2022.2
+INFO: [Project 1-570] Preparing netlist for logic optimization
+Parsing XDC File [d:/FPGAProject/TASK/Project/Project.gen/sources_1/ip/clk_wiz_0/clk_wiz_0_board.xdc] for cell 'u_clk_gen/inst'
+Finished Parsing XDC File [d:/FPGAProject/TASK/Project/Project.gen/sources_1/ip/clk_wiz_0/clk_wiz_0_board.xdc] for cell 'u_clk_gen/inst'
+Parsing XDC File [d:/FPGAProject/TASK/Project/Project.gen/sources_1/ip/clk_wiz_0/clk_wiz_0.xdc] for cell 'u_clk_gen/inst'
+INFO: [Timing 38-35] Done setting XDC timing constraints. [d:/FPGAProject/TASK/Project/Project.gen/sources_1/ip/clk_wiz_0/clk_wiz_0.xdc:57]
+INFO: [Timing 38-2] Deriving generated clocks [d:/FPGAProject/TASK/Project/Project.gen/sources_1/ip/clk_wiz_0/clk_wiz_0.xdc:57]
+Finished Parsing XDC File [d:/FPGAProject/TASK/Project/Project.gen/sources_1/ip/clk_wiz_0/clk_wiz_0.xdc] for cell 'u_clk_gen/inst'
+Parsing XDC File [D:/FPGAProject/TASK/Project/Project.srcs/constrs_1/new/all.xdc]
+Finished Parsing XDC File [D:/FPGAProject/TASK/Project/Project.srcs/constrs_1/new/all.xdc]
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 2823.723 ; gain = 0.000
+INFO: [Project 1-111] Unisim Transformation Summary:
+No Unisim elements were transformed.
+
+Synth Design complete, checksum: 49bd957
+INFO: [Common 17-83] Releasing license: Synthesis
+50 Infos, 44 Warnings, 0 Critical Warnings and 0 Errors encountered.
+synth_design completed successfully
+synth_design: Time (s): cpu = 00:00:34 ; elapsed = 00:00:38 . Memory (MB): peak = 2823.723 ; gain = 1394.105
+# opt_design
+Command: opt_design
+Attempting to get a license for feature 'Implementation' and/or device 'xc7a35t'
+INFO: [Common 17-349] Got license for feature 'Implementation' and/or device 'xc7a35t'
+Running DRC as a precondition to command opt_design
+
+Starting DRC Task
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Project 1-461] DRC finished with 0 Errors
+INFO: [Project 1-462] Please refer to the DRC report (report_drc) for more information.
+
+Time (s): cpu = 00:00:02 ; elapsed = 00:00:00.819 . Memory (MB): peak = 2823.723 ; gain = 0.000
+
+Starting Cache Timing Information Task
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+INFO: [Timing 38-2] Deriving generated clocks
+Ending Cache Timing Information Task | Checksum: fda36c2a
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.067 . Memory (MB): peak = 2823.723 ; gain = 0.000
+
+Starting Logic Optimization Task
+
+Phase 1 Retarget
+INFO: [Opt 31-1287] Pulled Inverter u_global_ctrl/amp_ctrl[2]_i_107 into driver instance u_global_ctrl/amp_ctrl[2]_i_60, which resulted in an inversion of 9 pins
+INFO: [Opt 31-1287] Pulled Inverter u_global_ctrl/amp_ctrl[2]_i_108 into driver instance u_global_ctrl/amp_ctrl[2]_i_99, which resulted in an inversion of 9 pins
+INFO: [Opt 31-1287] Pulled Inverter u_global_ctrl/amp_ctrl[2]_i_131 into driver instance u_global_ctrl/amp_ctrl[7]_i_37, which resulted in an inversion of 9 pins
+INFO: [Opt 31-1287] Pulled Inverter u_global_ctrl/amp_ctrl[2]_i_82 into driver instance u_global_ctrl/amp_ctrl[7]_i_38, which resulted in an inversion of 7 pins
+INFO: [Opt 31-138] Pushed 1 inverter(s) to 1 load pin(s).
+INFO: [Opt 31-49] Retargeted 0 cell(s).
+Phase 1 Retarget | Checksum: 1171736a9
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.091 . Memory (MB): peak = 2910.785 ; gain = 0.000
+INFO: [Opt 31-389] Phase Retarget created 0 cells and removed 6 cells
+INFO: [Opt 31-1021] In phase Retarget, 1 netlist objects are constrained preventing optimization. Please run opt_design with -debug_log to get more detail. 
+
+Phase 2 Constant propagation
+INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
+Phase 2 Constant propagation | Checksum: dff5758e
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.103 . Memory (MB): peak = 2910.785 ; gain = 0.000
+INFO: [Opt 31-389] Phase Constant propagation created 0 cells and removed 0 cells
+
+Phase 3 Sweep
+Phase 3 Sweep | Checksum: 113d03ac7
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.124 . Memory (MB): peak = 2910.785 ; gain = 0.000
+INFO: [Opt 31-389] Phase Sweep created 2 cells and removed 0 cells
+
+Phase 4 BUFG optimization
+Phase 4 BUFG optimization | Checksum: 113d03ac7
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.164 . Memory (MB): peak = 2910.785 ; gain = 0.000
+INFO: [Opt 31-662] Phase BUFG optimization created 0 cells of which 0 are BUFGs and removed 0 cells.
+
+Phase 5 Shift Register Optimization
+INFO: [Opt 31-1064] SRL Remap converted 0 SRLs to 0 registers and converted 0 registers of register chains to 0 SRLs
+Phase 5 Shift Register Optimization | Checksum: 113d03ac7
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.167 . Memory (MB): peak = 2910.785 ; gain = 0.000
+INFO: [Opt 31-389] Phase Shift Register Optimization created 0 cells and removed 0 cells
+
+Phase 6 Post Processing Netlist
+Phase 6 Post Processing Netlist | Checksum: e0058bd9
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.176 . Memory (MB): peak = 2910.785 ; gain = 0.000
+INFO: [Opt 31-389] Phase Post Processing Netlist created 0 cells and removed 0 cells
+Opt_design Change Summary
+=========================
+
+
+-------------------------------------------------------------------------------------------------------------------------
+|  Phase                        |  #Cells created  |  #Cells Removed  |  #Constrained objects preventing optimizations  |
+-------------------------------------------------------------------------------------------------------------------------
+|  Retarget                     |               0  |               6  |                                              1  |
+|  Constant propagation         |               0  |               0  |                                              0  |
+|  Sweep                        |               2  |               0  |                                              0  |
+|  BUFG optimization            |               0  |               0  |                                              0  |
+|  Shift Register Optimization  |               0  |               0  |                                              0  |
+|  Post Processing Netlist      |               0  |               0  |                                              0  |
+-------------------------------------------------------------------------------------------------------------------------
+
+
+
+Starting Connectivity Check Task
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.003 . Memory (MB): peak = 2910.785 ; gain = 0.000
+Ending Logic Optimization Task | Checksum: d6da52f7
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.239 . Memory (MB): peak = 2910.785 ; gain = 0.000
+
+Starting Power Optimization Task
+INFO: [Pwropt 34-132] Skipping clock gating for clocks with a period < 2.00 ns.
+INFO: [Timing 38-35] Done setting XDC timing constraints.
+INFO: [Pwropt 34-9] Applying IDT optimizations ...
+INFO: [Pwropt 34-10] Applying ODC optimizations ...
+Running Vector-less Activity Propagation...
+
+Finished Running Vector-less Activity Propagation
+
+
+Starting PowerOpt Patch Enables Task
+INFO: [Pwropt 34-162] WRITE_MODE attribute of 0 BRAM(s) out of a total of 3 has been updated to save power. Run report_power_opt to get a complete listing of the BRAMs updated.
+INFO: [Pwropt 34-201] Structural ODC has moved 1 WE to EN ports
+Number of BRAM Ports augmented: 1 newly gated: 1 Total Ports: 6
+Ending PowerOpt Patch Enables Task | Checksum: 10d679c77
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.015 . Memory (MB): peak = 3009.043 ; gain = 0.000
+Ending Power Optimization Task | Checksum: 10d679c77
+
+Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.779 . Memory (MB): peak = 3009.043 ; gain = 98.258
+
+Starting Final Cleanup Task
+Ending Final Cleanup Task | Checksum: 10d679c77
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 3009.043 ; gain = 0.000
+
+Starting Netlist Obfuscation Task
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 3009.043 ; gain = 0.000
+Ending Netlist Obfuscation Task | Checksum: 12959d60b
+
+Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 3009.043 ; gain = 0.000
+INFO: [Common 17-83] Releasing license: Implementation
+28 Infos, 0 Warnings, 0 Critical Warnings and 0 Errors encountered.
+opt_design completed successfully
+# report_drc -file codex_xadc_fix_drc.rpt
+Command: report_drc -file codex_xadc_fix_drc.rpt
+INFO: [IP_Flow 19-1839] IP Catalog is up to date.
+INFO: [DRC 23-27] Running DRC with 2 threads
+INFO: [Vivado_Tcl 2-168] The results of DRC are in file D:/FPGAProject/TASK/Project/codex_xadc_fix_drc.rpt.
+report_drc completed successfully
+# puts "XADC_FIX_OPT_DESIGN_OK"
+XADC_FIX_OPT_DESIGN_OK
+# exit 0
+INFO: [Common 17-206] Exiting Vivado at Fri Jun 26 02:48:40 2026...
