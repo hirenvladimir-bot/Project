@@ -37,26 +37,38 @@ module Oscilloscope_Acq (
     reg [6:0] xadc_daddr;
     reg       xadc_den;
     reg       channel_sel;   // latched at EOC: which channel was JUST converted
+    reg       cap_valid;     // 1=next DRDY data is clean, 0=skip (mux settling)
 
     // XADC always samples VAUX2 (ADDR_CH1). The external analog switch
     // controlled by adc_mux_sel routes either CH1 or CH2 into VAUX2.
-    // adc_mux_sel toggles at EOC (end of conversion) so the external mux
-    // has maximum time to settle before the next conversion's sampling instant.
-    // channel_sel records the pre-toggle value to identify which channel's
-    // data arrives at the next DRDY.
+    //
+    // Mux settling optimization:
+    //   adc_mux_sel toggles at EOC. External analog mux needs ~200-400ns to
+    //   settle. The XADC starts its next conversion immediately after EOC,
+    //   so the first sample after toggle is dirty (mux was transitioning).
+    //   We skip every other DRDY to guarantee clean settled data.
+    //
+    //   cap_valid cadence: 1 → capture CH1 → 0 → skip dirty → 1 → capture CH2 → ...
+    //   channel_sel is latched only on cap_valid EOC edges (clean conversions).
     always @(posedge clk_100m or negedge rst_n) begin
         if (!rst_n) begin
             xadc_daddr  <= ADDR_CH1;
             xadc_den    <= 1'b0;
             adc_mux_sel <= 1'b0;
             channel_sel <= 1'b0;
+            cap_valid   <= 1'b1;   // first conversion after reset is clean
         end else if (xadc_eoc) begin
             xadc_den    <= 1'b1;
-            channel_sel <= adc_mux_sel;       // latch which channel was just sampled
-            adc_mux_sel <= ~adc_mux_sel;      // toggle external mux NOW, before next conv
+            if (cap_valid) begin
+                // Just finished a clean conversion. Toggle mux for next channel.
+                channel_sel <= adc_mux_sel;       // latch which channel was sampled
+                adc_mux_sel <= ~adc_mux_sel;      // toggle external mux NOW
+            end
+            // On dirty cycles: don't toggle, don't latch — mux is settling
         end else if (xadc_drdy) begin
             xadc_den    <= 1'b0;
             xadc_daddr  <= ADDR_CH1;          // fixed — single-channel ADC scheme
+            cap_valid   <= ~cap_valid;         // alternate: clean → dirty → clean → ...
         end else begin
             xadc_den <= 1'b0;
         end
@@ -137,8 +149,10 @@ module Oscilloscope_Acq (
     reg [11:0] ch2_data_reg;
     reg        data_pair_ready;
 
-    // channel_sel is latched at EOC (pre-toggle adc_mux_sel), so it correctly
-    // identifies which channel produced the conversion data now arriving at DRDY.
+    // channel_sel is latched at clean EOC edges (pre-toggle adc_mux_sel).
+    // cap_valid indicates whether the current DRDY data is clean (1) or dirty (0).
+    // Both are set in the control block on the previous EOC; this block sees the
+    // stable values at DRDY time.
     always @(posedge clk_100m or negedge rst_n) begin
         if (!rst_n) begin
             ch1_data_reg <= 12'd0;
@@ -146,7 +160,7 @@ module Oscilloscope_Acq (
             data_pair_ready <= 1'b0;
         end else begin
             data_pair_ready <= 1'b0;
-            if (xadc_drdy) begin
+            if (xadc_drdy && cap_valid) begin    // only capture clean (settled) samples
                 if (!channel_sel) begin          // CH1 data
                     ch1_data_reg <= xadc_do[15:4];
                 end else begin                   // CH2 data

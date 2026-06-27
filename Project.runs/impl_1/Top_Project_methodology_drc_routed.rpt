@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2025.1 (win64) Build 6140274 Thu May 22 00:12:29 MDT 2025
-| Date         : Sat Jun 27 13:51:39 2026
+| Date         : Sat Jun 27 14:07:00 2026
 | Host         : MOSS550W running 64-bit major release  (build 9200)
 | Command      : report_methodology -file Top_Project_methodology_drc_routed.rpt -pb Top_Project_methodology_drc_routed.pb -rpx Top_Project_methodology_drc_routed.rpx
 | Design       : Top_Project
@@ -694,12 +694,12 @@ Related violations: <none>
 
 LUTAR-1#1 Warning
 LUT drives async reset alert  
-LUT cell u_liss/trail_y[99][9]_i_2, with 2 or more inputs, drives asynchronous preset/clear pin(s) frequency_hz_reg[15]_i_117/CLR, frequency_hz_reg[15]_i_117__0/CLR,
+LUT cell u_liss/pair_valid_i_2, with 2 or more inputs, drives asynchronous preset/clear pin(s) frequency_hz_reg[15]_i_117/CLR, frequency_hz_reg[15]_i_117__0/CLR,
 frequency_hz_reg[3]_i_38/CLR, frequency_hz_reg[3]_i_38__0/CLR,
-metrics_char_reg[1]_i_71/CLR, metrics_char_reg[3]_i_172/CLR,
+metrics_char_reg[0]_i_74/CLR, metrics_char_reg[3]_i_242/CLR,
 period_x100us_reg[13]_i_15/CLR, period_x100us_reg[13]_i_15__0/CLR,
 period_x100us_reg[15]_i_23/CLR, period_x100us_reg[15]_i_23__0/CLR,
-period_x100us_reg[15]_i_23_replica/CLR, period_x100us_reg[4]_i_26/CLR,
+period_x100us_reg[15]_i_23__0_replica/CLR, period_x100us_reg[4]_i_26/CLR,
 period_x100us_reg[4]_i_26__0/CLR, period_x100us_reg[9]_i_20/CLR,
 period_x100us_reg[9]_i_20__0/CLR (the first 15 of 609 listed). The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
 Related violations: <none>
@@ -711,17 +711,17 @@ dac_rate_cnt_reg[3]/CLR, dac_rate_cnt_reg[4]/CLR, dac_update_trig_reg/CLR,
 u_vga/v_cnt_reg[2]/CLR, u_vga/v_cnt_reg[3]/CLR, u_vga/v_cnt_reg[4]/CLR,
 u_vga/v_cnt_reg[5]/CLR, u_vga/v_cnt_reg[6]/CLR, u_vga/v_cnt_reg[7]/CLR,
 u_vga/v_cnt_reg[8]/CLR, u_vga/v_cnt_reg[9]/CLR, u_vga/vsync_reg/PRE
- (the first 15 of 695 listed). The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+ (the first 15 of 707 listed). The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
 Related violations: <none>
 
 TIMING-16#1 Warning
 Large setup violation  
-There is a large setup violation of -2.224 ns between period_x100us_reg[15]_i_23__0/C (clocked by clk_out2_clk_wiz_0_1) and u_analyzer_ch2/period_x100us_reg[0]/D (clocked by clk_out2_clk_wiz_0). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -1.748 ns between period_x100us_reg[15]_i_23/C (clocked by clk_out2_clk_wiz_0_1) and u_analyzer_ch1/period_x100us_reg[0]/D (clocked by clk_out2_clk_wiz_0). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-16#2 Warning
 Large setup violation  
-There is a large setup violation of -2.485 ns between period_x100us_reg[15]_i_23/C (clocked by clk_out2_clk_wiz_0) and u_analyzer_ch1/period_x100us_reg[0]/D (clocked by clk_out2_clk_wiz_0_1). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -2.660 ns between period_x100us_reg[15]_i_23__0_replica/C (clocked by clk_out2_clk_wiz_0) and u_analyzer_ch2/period_x100us_reg[0]/D (clocked by clk_out2_clk_wiz_0_1). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 TIMING-18#1 Warning

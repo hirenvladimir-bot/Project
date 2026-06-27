@@ -578,10 +578,10 @@ module waveform_display
                     vga_r = 4'h1; vga_g = 4'h1; vga_b = 4'h0;
                 end
                 if (char_cell_y == 3'd2) begin
-                    vga_r = 4'h0; vga_g = 4'h1; vga_b = 4'h2;
+                    vga_r = 4'h0; vga_g = 4'h0; vga_b = 4'h2;   // CH2 label bg: dark blue
                 end
                 if (char_cell_y == 3'd3) begin
-                    vga_r = 4'h0; vga_g = 4'h1; vga_b = 4'h1;
+                    vga_r = 4'h0; vga_g = 4'h0; vga_b = 4'h1;   // CH2 data bg: dark blue
                 end
                 if (char_cell_y == 3'd4) begin
                     vga_r = 4'h1; vga_g = 4'h0; vga_b = 4'h1;
@@ -597,9 +597,9 @@ module waveform_display
                 end
                 if (char_pixel_on) begin
                     if (char_cell_y <= 3'd1) begin
-                        vga_r = 4'hF; vga_g = 4'hF; vga_b = 4'h0;
+                        vga_r = 4'hF; vga_g = 4'hF; vga_b = 4'h0;   // CH1 text: yellow
                     end else if (char_cell_y <= 3'd3) begin
-                        vga_r = 4'h0; vga_g = 4'hF; vga_b = 4'hF;
+                        vga_r = 4'h0; vga_g = 4'h0; vga_b = 4'hF;   // CH2 text: blue
                     end else if (char_cell_y == 3'd4) begin
                         vga_r = 4'hF; vga_g = 4'h8; vga_b = 4'hF;
                     end else begin
@@ -630,16 +630,16 @@ module waveform_display
                     vga_r = 4'hF; vga_g = 4'hF; vga_b = 4'h0;
                 end
                 if (hit_ch2) begin
-                    vga_r = 4'h0; vga_g = 4'h6; vga_b = 4'hF;
+                    vga_r = 4'h0; vga_g = 4'h0; vga_b = 4'hF;   // pure blue
                 end
                 if (hit_ch1 && hit_ch2) begin
-                    vga_r = 4'hF; vga_g = 4'hF; vga_b = 4'hF;
+                    vga_r = 4'hF; vga_g = 4'hF; vga_b = 4'hF;   // white overlap
                 end
                 if ((clip_ch1_high || clip_ch1_low) && !hit_ch2) begin
-                    vga_r = 4'hF; vga_g = 4'h2; vga_b = 4'h0;
+                    vga_r = 4'hF; vga_g = 4'h6; vga_b = 4'h0;   // orange (CH1 clip)
                 end
                 if ((clip_ch2_high || clip_ch2_low) && !hit_ch1) begin
-                    vga_r = 4'hF; vga_g = 4'h2; vga_b = 4'h4;
+                    vga_r = 4'h0; vga_g = 4'h0; vga_b = 4'hF;   // blue (CH2 clip)
                 end
             end
         end
