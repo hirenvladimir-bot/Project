@@ -8,7 +8,7 @@
   **** SW Build 6140274 on Thu May 22 00:12:29 MDT 2025
   **** IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
   **** SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
-  **** Start of session at: Sat Jun 27 11:32:29 2026
+  **** Start of session at: Sat Jun 27 12:59:50 2026
     ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
     ** Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 
@@ -22,19 +22,17 @@ Starting synth_design
 Attempting to get a license for feature 'Synthesis' and/or device 'xc7a35t'
 INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a35t'
 INFO: [Device 21-403] Loading part xc7a35tcsg324-1
-INFO: [Designutils 20-5440] No compile time benefit to using incremental synthesis; A full resynthesis will be run
-INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
 INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
 INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
-INFO: [Synth 8-7075] Helper process launched with PID 38168
+INFO: [Synth 8-7075] Helper process launched with PID 16516
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:03 . Memory (MB): peak = 1351.676 ; gain = 491.711
+Starting RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 1350.266 ; gain = 491.219
 ---------------------------------------------------------------------------------
-INFO: [Synth 8-11241] undeclared symbol 'display_addr', assumed default net type 'wire' [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/Top_Project.v:270]
-WARNING: [Synth 8-8895] 'display_addr' is already implicitly declared on line 270 [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/Top_Project.v:285]
+INFO: [Synth 8-11241] undeclared symbol 'display_addr', assumed default net type 'wire' [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/Top_Project.v:261]
+WARNING: [Synth 8-8895] 'display_addr' is already implicitly declared on line 261 [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/Top_Project.v:275]
 INFO: [Synth 8-6157] synthesizing module 'Top_Project' [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/Top_Project.v:18]
-INFO: [Synth 8-6157] synthesizing module 'clk_wiz_0' [C:/Users/sgzmd/Desktop/Project/Project.runs/synth_1/.Xil/Vivado-41364-MOSS550W/realtime/clk_wiz_0_stub.v:6]
-INFO: [Synth 8-6155] done synthesizing module 'clk_wiz_0' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.runs/synth_1/.Xil/Vivado-41364-MOSS550W/realtime/clk_wiz_0_stub.v:6]
+INFO: [Synth 8-6157] synthesizing module 'clk_wiz_0' [C:/Users/sgzmd/Desktop/Project/Project.runs/synth_1/.Xil/Vivado-20292-MOSS550W/realtime/clk_wiz_0_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'clk_wiz_0' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.runs/synth_1/.Xil/Vivado-20292-MOSS550W/realtime/clk_wiz_0_stub.v:6]
 INFO: [Synth 8-6157] synthesizing module 'ui_ctrl' [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/ui_ctrl.v:19]
 	Parameter PHASE_WIDTH bound to: 24 - type: integer 
 INFO: [Synth 8-6155] done synthesizing module 'ui_ctrl' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/ui_ctrl.v:19]
@@ -50,27 +48,51 @@ INFO: [Synth 8-3876] $readmem data file 'sine_lut.hex' is read successfully [C:/
 INFO: [Synth 8-6155] done synthesizing module 'dds_core' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/dds_core.v:2]
 INFO: [Synth 8-6157] synthesizing module 'dac0832_ctrl' [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/dac0832_ctrl.v:6]
 INFO: [Synth 8-6155] done synthesizing module 'dac0832_ctrl' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/dac0832_ctrl.v:6]
-INFO: [Synth 8-6157] synthesizing module 'Oscilloscope_Acq' [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/Oscilloscope_Acq.v:12]
-INFO: [Synth 8-6157] synthesizing module 'xadc_wiz_1' [C:/Users/sgzmd/Desktop/Project/Project.runs/synth_1/.Xil/Vivado-41364-MOSS550W/realtime/xadc_wiz_1_stub.v:6]
-INFO: [Synth 8-6155] done synthesizing module 'xadc_wiz_1' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.runs/synth_1/.Xil/Vivado-41364-MOSS550W/realtime/xadc_wiz_1_stub.v:6]
-INFO: [Synth 8-6155] done synthesizing module 'Oscilloscope_Acq' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/Oscilloscope_Acq.v:12]
+INFO: [Synth 8-6157] synthesizing module 'Oscilloscope_Acq' [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/Oscilloscope_Acq.v:3]
+INFO: [Synth 8-6157] synthesizing module 'XADC' [D:/FPGA/2025.1/Vivado/scripts/rt/data/unisim_comp.v:164403]
+	Parameter INIT_40 bound to: 16'b0000000000000000 
+	Parameter INIT_41 bound to: 16'b0100000100000000 
+	Parameter INIT_42 bound to: 16'b0000010000000000 
+	Parameter INIT_48 bound to: 16'b0000100000000000 
+	Parameter INIT_49 bound to: 16'b0000000000000100 
+	Parameter INIT_4A bound to: 16'b0000000000000000 
+	Parameter INIT_4B bound to: 16'b0000000000000000 
+	Parameter INIT_4C bound to: 16'b0000000000000000 
+	Parameter INIT_4D bound to: 16'b0000000000000000 
+	Parameter INIT_4E bound to: 16'b0000000000000000 
+	Parameter INIT_4F bound to: 16'b0000000000000000 
+	Parameter INIT_50 bound to: 16'b1011010111101101 
+	Parameter INIT_51 bound to: 16'b0101011111100100 
+	Parameter INIT_52 bound to: 16'b1010000101000111 
+	Parameter INIT_53 bound to: 16'b1100101000110011 
+	Parameter INIT_54 bound to: 16'b1010100100111010 
+	Parameter INIT_55 bound to: 16'b0101001011000110 
+	Parameter INIT_56 bound to: 16'b1001010101010101 
+	Parameter INIT_57 bound to: 16'b1010111001001110 
+	Parameter INIT_58 bound to: 16'b0101100110011001 
+	Parameter INIT_5C bound to: 16'b0101000100010001 
+	Parameter SIM_DEVICE bound to: 7SERIES - type: string 
+	Parameter SIM_MONITOR_FILE bound to: design.txt - type: string 
+INFO: [Synth 8-6155] done synthesizing module 'XADC' (0#1) [D:/FPGA/2025.1/Vivado/scripts/rt/data/unisim_comp.v:164403]
+INFO: [Synth 8-6157] synthesizing module 'blk_mem_gen_0' [C:/Users/sgzmd/Desktop/Project/Project.runs/synth_1/.Xil/Vivado-20292-MOSS550W/realtime/blk_mem_gen_0_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'blk_mem_gen_0' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.runs/synth_1/.Xil/Vivado-20292-MOSS550W/realtime/blk_mem_gen_0_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'Oscilloscope_Acq' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/Oscilloscope_Acq.v:3]
 INFO: [Synth 8-6157] synthesizing module 'wave_analyzer' [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_analyzer.v:26]
-	Parameter FREQ_CAL_X10 bound to: 1920 - type: integer 
+	Parameter FREQ_CAL_X10 bound to: 961 - type: integer 
 	Parameter CAL_MV_X1024 bound to: 4000 - type: integer 
 INFO: [Synth 8-6155] done synthesizing module 'wave_analyzer' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_analyzer.v:26]
-INFO: [Synth 8-6157] synthesizing module 'vga_ctrl' [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/vga_ctrl.v:23]
-INFO: [Synth 8-6155] done synthesizing module 'vga_ctrl' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/vga_ctrl.v:23]
-INFO: [Synth 8-6157] synthesizing module 'waveform_display' [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/waveform_display.v:21]
+INFO: [Synth 8-6157] synthesizing module 'vga_ctrl' [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/vga_ctrl.v:8]
+INFO: [Synth 8-6155] done synthesizing module 'vga_ctrl' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/vga_ctrl.v:8]
+INFO: [Synth 8-6157] synthesizing module 'waveform_display' [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/waveform_display.v:19]
 INFO: [Synth 8-6157] synthesizing module 'char_gen' [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/char_gen.v:6]
 INFO: [Synth 8-6155] done synthesizing module 'char_gen' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/char_gen.v:6]
-INFO: [Synth 8-6155] done synthesizing module 'waveform_display' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/waveform_display.v:21]
+INFO: [Synth 8-6155] done synthesizing module 'waveform_display' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/waveform_display.v:19]
 INFO: [Synth 8-6157] synthesizing module 'lissajous_display' [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:14]
-INFO: [Synth 8-155] case statement is not full and has no default [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:222]
+INFO: [Synth 8-155] case statement is not full and has no default [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:132]
 INFO: [Synth 8-6155] done synthesizing module 'lissajous_display' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:14]
 INFO: [Synth 8-6157] synthesizing module 'kaleidoscope' [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/kaleidoscope.v:15]
 INFO: [Synth 8-6155] done synthesizing module 'kaleidoscope' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/kaleidoscope.v:15]
 INFO: [Synth 8-6155] done synthesizing module 'Top_Project' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/Top_Project.v:18]
-WARNING: [Synth 8-6014] Unused sequential element ch2_data_reg_reg was removed.  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/Oscilloscope_Acq.v:92]
 WARNING: [Synth 8-6014] Unused sequential element rt_vmin_reg was removed.  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_analyzer.v:244]
 WARNING: [Synth 8-6014] Unused sequential element rt_prev_below_90_reg was removed.  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_analyzer.v:252]
 WARNING: [Synth 8-6014] Unused sequential element near_peak_reg was removed.  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_analyzer.v:344]
@@ -79,106 +101,106 @@ WARNING: [Synth 8-6014] Unused sequential element sum_sq_acc_reg was removed.  [
 WARNING: [Synth 8-6014] Unused sequential element sum_acc_reg was removed.  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_analyzer.v:428]
 WARNING: [Synth 8-6014] Unused sequential element rms_peak_reg was removed.  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_analyzer.v:429]
 WARNING: [Synth 8-6014] Unused sequential element rms_cnt_reg was removed.  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_analyzer.v:430]
-WARNING: [Synth 8-7137] Register trail_x_reg[0] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[1] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[2] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[3] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[4] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[5] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[6] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[7] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[8] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[9] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[10] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[11] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[12] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[13] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[14] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[15] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[16] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[17] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[18] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[19] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[20] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[21] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[22] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[23] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[24] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[25] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[26] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[27] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[28] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[29] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[30] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[31] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[32] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[33] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[34] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[35] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[36] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[37] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[38] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[39] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[40] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[41] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[42] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[43] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[44] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[45] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[46] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[47] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[48] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[49] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[50] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[51] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[52] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[53] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[54] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[55] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[56] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[57] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[58] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[59] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[60] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[61] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[62] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[63] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[64] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[65] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[66] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[67] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[68] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[69] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[70] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[71] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[72] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[73] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[74] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[75] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[76] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[77] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[78] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[79] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[80] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[81] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[82] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[83] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[84] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[85] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[86] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[87] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[88] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[89] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[90] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[91] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[92] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[93] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[94] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[95] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[96] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[97] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[98] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
-WARNING: [Synth 8-7137] Register trail_x_reg[99] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:98]
+WARNING: [Synth 8-7137] Register trail_x_reg[0] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[1] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[2] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[3] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[4] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[5] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[6] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[7] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[8] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[9] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[10] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[11] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[12] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[13] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[14] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[15] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[16] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[17] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[18] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[19] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[20] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[21] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[22] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[23] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[24] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[25] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[26] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[27] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[28] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[29] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[30] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[31] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[32] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[33] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[34] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[35] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[36] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[37] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[38] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[39] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[40] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[41] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[42] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[43] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[44] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[45] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[46] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[47] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[48] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[49] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[50] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[51] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[52] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[53] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[54] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[55] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[56] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[57] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[58] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[59] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[60] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[61] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[62] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[63] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[64] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[65] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[66] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[67] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[68] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[69] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[70] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[71] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[72] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[73] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[74] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[75] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[76] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[77] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[78] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[79] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[80] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[81] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[82] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[83] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[84] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[85] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[86] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[87] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[88] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[89] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[90] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[91] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[92] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[93] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[94] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[95] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[96] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[97] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[98] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
+WARNING: [Synth 8-7137] Register trail_x_reg[99] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
 INFO: [Common 17-14] Message 'Synth 8-7137' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
 WARNING: [Synth 8-3917] design Top_Project has port ch1_range_sel driven by constant 0
 WARNING: [Synth 8-3917] design Top_Project has port ch1_acdc_sel driven by constant 0
@@ -287,62 +309,88 @@ WARNING: [Synth 8-7129] Port avg_ch2[6] in module waveform_display is either unc
 WARNING: [Synth 8-7129] Port avg_ch2[5] in module waveform_display is either unconnected or has no load
 INFO: [Common 17-14] Message 'Synth 8-7129' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 1582.512 ; gain = 722.547
+Finished RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 1583.625 ; gain = 724.578
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 1582.512 ; gain = 722.547
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 1583.625 ; gain = 724.578
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 1582.512 ; gain = 722.547
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 1583.625 ; gain = 724.578
 ---------------------------------------------------------------------------------
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.095 . Memory (MB): peak = 1582.512 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.096 . Memory (MB): peak = 1583.625 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 1 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 
 Processing XDC Constraints
 Initializing timing engine
 Parsing XDC File [c:/Users/sgzmd/Desktop/Project/Project.gen/sources_1/ip/clk_wiz_0/clk_wiz_0/clk_wiz_0_in_context.xdc] for cell 'u_clk_gen'
 Finished Parsing XDC File [c:/Users/sgzmd/Desktop/Project/Project.gen/sources_1/ip/clk_wiz_0/clk_wiz_0/clk_wiz_0_in_context.xdc] for cell 'u_clk_gen'
-Parsing XDC File [c:/Users/sgzmd/Desktop/Project/Project.gen/sources_1/ip/xadc_wiz_1/xadc_wiz_1/xadc_wiz_1_in_context.xdc] for cell 'u_osc_acq/u_xadc'
-Finished Parsing XDC File [c:/Users/sgzmd/Desktop/Project/Project.gen/sources_1/ip/xadc_wiz_1/xadc_wiz_1/xadc_wiz_1_in_context.xdc] for cell 'u_osc_acq/u_xadc'
+Parsing XDC File [c:/Users/sgzmd/Desktop/Project/Project.gen/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0/blk_mem_gen_0_in_context.xdc] for cell 'u_osc_acq/u_vga_bram'
+Finished Parsing XDC File [c:/Users/sgzmd/Desktop/Project/Project.gen/sources_1/ip/blk_mem_gen_0/blk_mem_gen_0/blk_mem_gen_0_in_context.xdc] for cell 'u_osc_acq/u_vga_bram'
 Parsing XDC File [C:/Users/sgzmd/Desktop/Project/Project.srcs/constrs_1/new/all.xdc]
 Finished Parsing XDC File [C:/Users/sgzmd/Desktop/Project/Project.srcs/constrs_1/new/all.xdc]
 INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [C:/Users/sgzmd/Desktop/Project/Project.srcs/constrs_1/new/all.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/Top_Project_propImpl.xdc].
 Resolution: To avoid this warning, move constraints listed in [.Xil/Top_Project_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
 Completed Processing XDC Constraints
 
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1673.262 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1680.781 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.021 . Memory (MB): peak = 1673.262 ; gain = 0.000
-INFO: [Designutils 20-5440] No compile time benefit to using incremental synthesis; A full resynthesis will be run
-INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.020 . Memory (MB): peak = 1680.781 ; gain = 0.000
+WARNING: [Timing 38-316] Clock period '20.000' specified during out-of-context synthesis of instance 'u_osc_acq/u_vga_bram' at clock pin 'clka' is different from the actual clock period '10.000', this can lead to different synthesis results.
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:10 ; elapsed = 00:00:11 . Memory (MB): peak = 1673.262 ; gain = 813.297
+Finished Constraint Validation : Time (s): cpu = 00:00:10 ; elapsed = 00:00:12 . Memory (MB): peak = 1681.246 ; gain = 822.199
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7a35tcsg324-1
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:10 ; elapsed = 00:00:11 . Memory (MB): peak = 1673.262 ; gain = 813.297
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:10 ; elapsed = 00:00:12 . Memory (MB): peak = 1681.246 ; gain = 822.199
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:10 ; elapsed = 00:00:11 . Memory (MB): peak = 1673.262 ; gain = 813.297
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:10 ; elapsed = 00:00:12 . Memory (MB): peak = 1681.246 ; gain = 822.199
 ---------------------------------------------------------------------------------
-DSP Debug: swapped A/B pins for adder 0000021237F40450
-DSP Debug: swapped A/B pins for adder 0000021237F39E50
-DSP Debug: swapped A/B pins for adder 0000021237F40CF0
-DSP Debug: swapped A/B pins for adder 0000021237F3F5B0
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:13 ; elapsed = 00:00:14 . Memory (MB): peak = 1673.262 ; gain = 813.297
+Start Preparing Guide Design
 ---------------------------------------------------------------------------------
+got a mismatch Oscilloscope_Acq
+got a mismatch vga_ctrl
+got a mismatch waveform_display
+got a mismatch lissajous_display
+got a mismatch kaleidoscope
+WARNING: [Synth 8-6702] IncrSynth : Design change found in an area of the design that prevents previous synthesis information being used, Reverting to default synthesis
+---------------------------------------------------------------------------------
+Finished Doing Graph Differ : Time (s): cpu = 00:00:11 ; elapsed = 00:00:13 . Memory (MB): peak = 1681.246 ; gain = 822.199
+---------------------------------------------------------------------------------
+---------------------------------------------------------------------------------
+Finished Preparing Guide Design : Time (s): cpu = 00:00:11 ; elapsed = 00:00:13 . Memory (MB): peak = 1681.246 ; gain = 822.199
+---------------------------------------------------------------------------------
+DSP Debug: swapped A/B pins for adder 000001F8A5E6E5C0
+DSP Debug: swapped A/B pins for adder 000001F8A5B56530
+DSP Debug: swapped A/B pins for adder 000001F8A5E6DDE0
+DSP Debug: swapped A/B pins for adder 000001F8A5E6CA00
+---------------------------------------------------------------------------------
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:14 ; elapsed = 00:00:15 . Memory (MB): peak = 1681.246 ; gain = 822.199
+---------------------------------------------------------------------------------
+
+
+Incremental Synthesis Report Summary:
+
+1. Incremental synthesis run: no
+
+   Reason for not running incremental synthesis : Design change found in an area of the design that prevents previous synthesis information being used
+
+
+INFO: [Synth 8-7130] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
 ---------------------------------------------------------------------------------
 Start RTL Component Statistics 
 ---------------------------------------------------------------------------------
@@ -357,8 +405,9 @@ Detailed RTL Component Info :
 	   4 Input   16 Bit       Adders := 2     
 	   3 Input   16 Bit       Adders := 2     
 	   2 Input   14 Bit       Adders := 10    
-	   2 Input   11 Bit       Adders := 18    
+	   2 Input   11 Bit       Adders := 20    
 	   2 Input   10 Bit       Adders := 409   
+	   3 Input    9 Bit       Adders := 2     
 	   2 Input    9 Bit       Adders := 137   
 	   2 Input    8 Bit       Adders := 29    
 	   3 Input    8 Bit       Adders := 2     
@@ -369,13 +418,13 @@ Detailed RTL Component Info :
 	  12 Input    4 Bit       Adders := 1     
 	   2 Input    3 Bit       Adders := 5     
 +---Registers : 
-	               24 Bit    Registers := 4     
+	               24 Bit    Registers := 3     
 	               22 Bit    Registers := 1     
 	               16 Bit    Registers := 25    
 	               14 Bit    Registers := 10    
-	               12 Bit    Registers := 2     
+	               12 Bit    Registers := 3     
 	               11 Bit    Registers := 2     
-	               10 Bit    Registers := 262   
+	               10 Bit    Registers := 263   
 	                8 Bit    Registers := 50    
 	                7 Bit    Registers := 4     
 	                5 Bit    Registers := 2     
@@ -383,18 +432,16 @@ Detailed RTL Component Info :
 	                3 Bit    Registers := 9     
 	                2 Bit    Registers := 23    
 	                1 Bit    Registers := 51    
-+---RAMs : 
-	              24K Bit	(1024 X 24 bit)          RAMs := 1     
 +---Muxes : 
 	   6 Input   39 Bit        Muxes := 2     
-	   2 Input   32 Bit        Muxes := 17    
+	   2 Input   32 Bit        Muxes := 19    
 	   2 Input   24 Bit        Muxes := 3     
 	   4 Input   24 Bit        Muxes := 1     
 	   2 Input   16 Bit        Muxes := 4     
 	   2 Input   14 Bit        Muxes := 1     
 	   8 Input   12 Bit        Muxes := 1     
 	   2 Input   11 Bit        Muxes := 21    
-	   2 Input   10 Bit        Muxes := 392   
+	   2 Input   10 Bit        Muxes := 396   
 	   2 Input    9 Bit        Muxes := 128   
 	   2 Input    8 Bit        Muxes := 40    
 	   4 Input    8 Bit        Muxes := 1     
@@ -434,10 +481,10 @@ WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
 DSP Report: Generating DSP trigger_mv0, operation Mode is: (C:0x200)+(A:0xfa0)*B.
 DSP Report: operator trigger_mv0 is absorbed into DSP trigger_mv0.
 DSP Report: operator trigger_mv1 is absorbed into DSP trigger_mv0.
-DSP Report: Generating DSP frequency_hz1, operation Mode is: (C:0x5)+A*(B:0x780).
+DSP Report: Generating DSP frequency_hz1, operation Mode is: (C:0x5)+A*(B:0x3c1).
 DSP Report: operator frequency_hz1 is absorbed into DSP frequency_hz1.
 DSP Report: operator frequency_hz2 is absorbed into DSP frequency_hz1.
-DSP Report: Generating DSP period_x100us4, operation Mode is: A*(B:0x780).
+DSP Report: Generating DSP period_x100us4, operation Mode is: A*(B:0x3c1).
 DSP Report: operator period_x100us4 is absorbed into DSP period_x100us4.
 DSP Report: Generating DSP period_x100us1, operation Mode is: A*(B:0x2710).
 DSP Report: operator period_x100us1 is absorbed into DSP period_x100us1.
@@ -448,10 +495,10 @@ DSP Report: Generating DSP vpp_mv1, operation Mode is: A*(B:0xfa0).
 DSP Report: operator vpp_mv1 is absorbed into DSP vpp_mv1.
 DSP Report: Generating DSP vmin_mv1, operation Mode is: (A:0xfa0)*B.
 DSP Report: operator vmin_mv1 is absorbed into DSP vmin_mv1.
-DSP Report: Generating DSP frequency_hz1, operation Mode is: (C:0x5)+A*(B:0x780).
+DSP Report: Generating DSP frequency_hz1, operation Mode is: (C:0x5)+A*(B:0x3c1).
 DSP Report: operator frequency_hz1 is absorbed into DSP frequency_hz1.
 DSP Report: operator frequency_hz2 is absorbed into DSP frequency_hz1.
-DSP Report: Generating DSP period_x100us4, operation Mode is: A*(B:0x780).
+DSP Report: Generating DSP period_x100us4, operation Mode is: A*(B:0x3c1).
 DSP Report: operator period_x100us4 is absorbed into DSP period_x100us4.
 DSP Report: Generating DSP period_x100us1, operation Mode is: A*(B:0x2710).
 DSP Report: operator period_x100us1 is absorbed into DSP period_x100us1.
@@ -513,7 +560,7 @@ WARNING: [Synth 8-3332] Sequential element (vmin_mv_reg__12) is unused and will 
 WARNING: [Synth 8-3332] Sequential element (vmin_mv_reg__13) is unused and will be removed from module wave_analyzer.
 WARNING: [Synth 8-3332] Sequential element (vmin_mv_reg__14) is unused and will be removed from module wave_analyzer.
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:01:04 ; elapsed = 00:01:07 . Memory (MB): peak = 2117.875 ; gain = 1257.910
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:01:06 ; elapsed = 00:01:09 . Memory (MB): peak = 2149.957 ; gain = 1290.910
 ---------------------------------------------------------------------------------
  Sort Area is Top_Project__GC0 u_mod/fm_dev2_16 : 0 0 : 848 848 : Used 1 time 0
  Sort Area is Top_Project__GC0 period_x100us1_4 : 0 0 : 747 747 : Used 1 time 0
@@ -521,13 +568,13 @@ Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:01:04 ; elaps
  Sort Area is Top_Project__GC0 mid60_y_prod_14 : 0 0 : 609 609 : Used 1 time 0
  Sort Area is Top_Project__GC0 vpp_mv1_12 : 0 0 : 485 485 : Used 1 time 0
  Sort Area is Top_Project__GC0 vpp_mv1_a : 0 0 : 485 485 : Used 1 time 0
- Sort Area is Top_Project__GC0 frequency_hz1_2 : 0 0 : 303 303 : Used 1 time 0
- Sort Area is Top_Project__GC0 frequency_hz1_e : 0 0 : 303 303 : Used 1 time 0
+ Sort Area is Top_Project__GC0 frequency_hz1_2 : 0 0 : 372 372 : Used 1 time 0
+ Sort Area is Top_Project__GC0 frequency_hz1_e : 0 0 : 372 372 : Used 1 time 0
+ Sort Area is Top_Project__GC0 period_x100us4_10 : 0 0 : 325 325 : Used 1 time 0
+ Sort Area is Top_Project__GC0 period_x100us4_6 : 0 0 : 325 325 : Used 1 time 0
  Sort Area is Top_Project__GC0 duty_cycle1_11 : 0 0 : 295 295 : Used 1 time 0
  Sort Area is Top_Project__GC0 duty_cycle1_8 : 0 0 : 295 295 : Used 1 time 0
- Sort Area is waveform_display__GB1 trigger_mv0_0 : 0 0 : 282 282 : Used 1 time 0
- Sort Area is Top_Project__GC0 period_x100us4_10 : 0 0 : 256 256 : Used 1 time 0
- Sort Area is Top_Project__GC0 period_x100us4_6 : 0 0 : 256 256 : Used 1 time 0
+ Sort Area is waveform_display__GB0 trigger_mv0_0 : 0 0 : 282 282 : Used 1 time 0
  Sort Area is Top_Project__GC0 vmin_mv1_13 : 0 0 : 235 235 : Used 1 time 0
  Sort Area is Top_Project__GC0 vmin_mv1_c : 0 0 : 235 235 : Used 1 time 0
 ---------------------------------------------------------------------------------
@@ -553,28 +600,19 @@ ROM: Preliminary Mapping Report
 +-------------+------------+---------------+----------------+
 
 
-Block RAM: Preliminary Mapping Report (see note below)
-+------------+--------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
-|Module Name | RTL Object         | PORT A (Depth x Width) | W | R | PORT B (Depth x Width) | W | R | Ports driving FF | RAMB18 | RAMB36 | 
-+------------+--------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
-|Top_Project | u_osc_acq/bram_reg | 1 K x 24(READ_FIRST)   | W |   | 1 K x 24(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
-+------------+--------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
-
-Note: The table above is a preliminary report that shows the Block RAMs at the current stage of the synthesis flow. Some Block RAMs may be reimplemented as non Block RAM primitives later in the synthesis flow. Multiple instantiated Block RAMs are reported only once. 
-
 DSP: Preliminary Mapping Report (see note below. The ' indicates corresponding REG is set)
 +-----------------+-----------------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
 |Module Name      | DSP Mapping           | A Size | B Size | C Size | D Size | P Size | AREG | BREG | CREG | DREG | ADREG | MREG | PREG | 
 +-----------------+-----------------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
 |waveform_display | (C:0x200)+(A:0xfa0)*B | 8      | 12     | 10     | -      | 16     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
-|wave_analyzer    | (C:0x5)+A*(B:0x780)   | 16     | 11     | 3      | -      | 16     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
-|wave_analyzer    | A*(B:0x780)           | 16     | 11     | -      | -      | 27     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|wave_analyzer    | (C:0x5)+A*(B:0x3c1)   | 16     | 10     | 3      | -      | 16     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
+|wave_analyzer    | A*(B:0x3c1)           | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
 |wave_analyzer    | A*(B:0x2710)          | 16     | 14     | -      | -      | 30     | 0    | 0    | -    | -    | -     | 0    | 0    | 
 |wave_analyzer    | (C:0x1388)+A*(B:0x64) | 14     | 7      | 13     | -      | 14     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
 |wave_analyzer    | A*(B:0xfa0)           | 16     | 12     | -      | -      | 28     | 0    | 0    | -    | -    | -     | 0    | 0    | 
 |wave_analyzer    | (A:0xfa0)*B           | 8      | 12     | -      | -      | 20     | 0    | 0    | -    | -    | -     | 0    | 0    | 
-|wave_analyzer    | (C:0x5)+A*(B:0x780)   | 16     | 11     | 3      | -      | 16     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
-|wave_analyzer    | A*(B:0x780)           | 16     | 11     | -      | -      | 27     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|wave_analyzer    | (C:0x5)+A*(B:0x3c1)   | 16     | 10     | 3      | -      | 16     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
+|wave_analyzer    | A*(B:0x3c1)           | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
 |wave_analyzer    | A*(B:0x2710)          | 16     | 14     | -      | -      | 30     | 0    | 0    | -    | -    | -     | 0    | 0    | 
 |wave_analyzer    | (C:0x1388)+A*(B:0x64) | 14     | 7      | 13     | -      | 14     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
 |wave_analyzer    | A*(B:0xfa0)           | 16     | 12     | -      | -      | 28     | 0    | 0    | -    | -    | -     | 0    | 0    | 
@@ -591,34 +629,19 @@ Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:01:09 ; elapsed = 00:01:12 . Memory (MB): peak = 2117.875 ; gain = 1257.910
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:01:11 ; elapsed = 00:01:14 . Memory (MB): peak = 2149.957 ; gain = 1290.910
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:01:12 ; elapsed = 00:01:15 . Memory (MB): peak = 2117.875 ; gain = 1257.910
----------------------------------------------------------------------------------
----------------------------------------------------------------------------------
-Start ROM, RAM, DSP, Shift Register and Retiming Reporting
----------------------------------------------------------------------------------
-
-Block RAM: Final Mapping Report
-+------------+--------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
-|Module Name | RTL Object         | PORT A (Depth x Width) | W | R | PORT B (Depth x Width) | W | R | Ports driving FF | RAMB18 | RAMB36 | 
-+------------+--------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
-|Top_Project | u_osc_acq/bram_reg | 1 K x 24(READ_FIRST)   | W |   | 1 K x 24(WRITE_FIRST)  |   | R | Port A and B     | 0      | 1      | 
-+------------+--------------------+------------------------+---+---+------------------------+---+---+------------------+--------+--------+
-
----------------------------------------------------------------------------------
-Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
+Finished Timing Optimization : Time (s): cpu = 00:01:15 ; elapsed = 00:01:18 . Memory (MB): peak = 2149.957 ; gain = 1290.910
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
-INFO: [Synth 8-7052] The timing for the instance u_osc_acq/bram_reg (implemented as a Block RAM) might be sub-optimal as no optional output register could be merged into the ram block. Providing additional output register may help in improving timing.
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:01:16 ; elapsed = 00:01:19 . Memory (MB): peak = 2117.875 ; gain = 1257.910
+Finished Technology Mapping : Time (s): cpu = 00:01:19 ; elapsed = 00:01:23 . Memory (MB): peak = 2149.957 ; gain = 1290.910
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start IO Insertion
@@ -636,37 +659,37 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:01:18 ; elapsed = 00:01:21 . Memory (MB): peak = 2126.344 ; gain = 1266.379
+Finished IO Insertion : Time (s): cpu = 00:01:22 ; elapsed = 00:01:25 . Memory (MB): peak = 2162.496 ; gain = 1303.449
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:01:18 ; elapsed = 00:01:21 . Memory (MB): peak = 2126.344 ; gain = 1266.379
+Finished Renaming Generated Instances : Time (s): cpu = 00:01:22 ; elapsed = 00:01:25 . Memory (MB): peak = 2162.496 ; gain = 1303.449
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:01:19 ; elapsed = 00:01:22 . Memory (MB): peak = 2126.344 ; gain = 1266.379
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:01:23 ; elapsed = 00:01:26 . Memory (MB): peak = 2162.496 ; gain = 1303.449
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:01:19 ; elapsed = 00:01:22 . Memory (MB): peak = 2126.344 ; gain = 1266.379
+Finished Renaming Generated Ports : Time (s): cpu = 00:01:23 ; elapsed = 00:01:26 . Memory (MB): peak = 2162.496 ; gain = 1303.449
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:01:19 ; elapsed = 00:01:22 . Memory (MB): peak = 2133.402 ; gain = 1273.438
+Finished Handling Custom Attributes : Time (s): cpu = 00:01:23 ; elapsed = 00:01:26 . Memory (MB): peak = 2162.496 ; gain = 1303.449
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:01:19 ; elapsed = 00:01:22 . Memory (MB): peak = 2133.402 ; gain = 1273.438
+Finished Renaming Generated Nets : Time (s): cpu = 00:01:23 ; elapsed = 00:01:26 . Memory (MB): peak = 2162.496 ; gain = 1303.449
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
@@ -676,16 +699,16 @@ DSP Final Report (the ' indicates corresponding REG is set)
 +-----------------+-------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
 |Module Name      | DSP Mapping | A Size | B Size | C Size | D Size | P Size | AREG | BREG | CREG | DREG | ADREG | MREG | PREG | 
 +-----------------+-------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
-|wave_analyzer    | C+A*B       | 16     | 11     | 3      | -      | 16     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
-|wave_analyzer    | A*B         | 16     | 11     | -      | -      | 27     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|wave_analyzer    | C+A*B       | 16     | 10     | 3      | -      | 16     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
+|wave_analyzer    | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
 |wave_analyzer    | A*B         | 16     | 14     | -      | -      | 30     | 0    | 0    | -    | -    | -     | 0    | 0    | 
 |wave_analyzer    | C+A*B       | 14     | 7      | 13     | -      | 14     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
 |wave_analyzer    | (A*B)'      | 16     | 12     | -      | -      | 28     | 0    | 0    | -    | -    | -     | 0    | 1    | 
 |wave_analyzer    | (A*B)'      | 8      | 12     | -      | -      | 20     | 0    | 0    | -    | -    | -     | 0    | 1    | 
-|wave_analyzer    | C+A*B       | 16     | 11     | 3      | -      | 16     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
-|wave_analyzer    | A*B         | 16     | 11     | -      | -      | 27     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|wave_analyzer    | C+A*B       | 16     | 10     | 3      | -      | 16     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
+|wave_analyzer    | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
 |wave_analyzer    | A*B         | 16     | 14     | -      | -      | 30     | 0    | 0    | -    | -    | -     | 0    | 0    | 
-|wave_analyzer    | C+A*B       | 0      | 7      | 13     | -      | 14     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
+|wave_analyzer    | C+A*B       | 14     | 7      | 13     | -      | 14     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
 |wave_analyzer    | (A*B)'      | 16     | 12     | -      | -      | 28     | 0    | 0    | -    | -    | -     | 0    | 1    | 
 |wave_analyzer    | (A*B)'      | 8      | 12     | -      | -      | 20     | 0    | 0    | -    | -    | -     | 0    | 1    | 
 |kaleidoscope     | C+A*B       | 30     | 8      | 48     | -      | 18     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
@@ -699,54 +722,54 @@ Report BlackBoxes:
 |      |BlackBox name |Instances |
 +------+--------------+----------+
 |1     |clk_wiz_0     |         1|
-|2     |xadc_wiz_1    |         1|
+|2     |blk_mem_gen_0 |         1|
 +------+--------------+----------+
 
 Report Cell Usage: 
-+------+---------+------+
-|      |Cell     |Count |
-+------+---------+------+
-|1     |clk_wiz  |     1|
-|2     |xadc_wiz |     1|
-|3     |CARRY4   |  1888|
-|4     |DSP48E1  |    15|
-|8     |LUT1     |   480|
-|9     |LUT2     |  3897|
-|10    |LUT3     |   950|
-|11    |LUT4     |  2293|
-|12    |LUT5     |  1334|
-|13    |LUT6     |  4159|
-|14    |MUXF7    |    43|
-|15    |MUXF8    |     6|
-|16    |RAMB36E1 |     1|
-|17    |FDCE     |   975|
-|18    |FDPE     |    34|
-|19    |FDRE     |  1287|
-|20    |IBUF     |    26|
-|21    |OBUF     |    35|
-+------+---------+------+
++------+------------+------+
+|      |Cell        |Count |
++------+------------+------+
+|1     |blk_mem_gen |     1|
+|2     |clk_wiz     |     1|
+|3     |CARRY4      |  1972|
+|4     |DSP48E1     |    15|
+|8     |LUT1        |   382|
+|9     |LUT2        |  2100|
+|10    |LUT3        |  1393|
+|11    |LUT4        |  3182|
+|12    |LUT5        |  2057|
+|13    |LUT6        |  6481|
+|14    |MUXF7       |    44|
+|15    |MUXF8       |     6|
+|16    |XADC        |     1|
+|17    |FDCE        |  1213|
+|18    |FDPE        |    48|
+|19    |FDRE        |  2320|
+|20    |IBUF        |    26|
+|21    |OBUF        |    35|
++------+------------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:01:19 ; elapsed = 00:01:22 . Memory (MB): peak = 2133.402 ; gain = 1273.438
+Finished Writing Synthesis Report : Time (s): cpu = 00:01:23 ; elapsed = 00:01:26 . Memory (MB): peak = 2162.496 ; gain = 1303.449
 ---------------------------------------------------------------------------------
-Synthesis finished with 0 errors, 0 critical warnings and 46 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:01:12 ; elapsed = 00:01:20 . Memory (MB): peak = 2133.402 ; gain = 1182.688
-Synthesis Optimization Complete : Time (s): cpu = 00:01:19 ; elapsed = 00:01:22 . Memory (MB): peak = 2133.402 ; gain = 1273.438
+Synthesis finished with 0 errors, 0 critical warnings and 47 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:01:16 ; elapsed = 00:01:24 . Memory (MB): peak = 2162.496 ; gain = 1205.828
+Synthesis Optimization Complete : Time (s): cpu = 00:01:23 ; elapsed = 00:01:27 . Memory (MB): peak = 2162.496 ; gain = 1303.449
 INFO: [Project 1-571] Translating synthesized netlist
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.085 . Memory (MB): peak = 2142.586 ; gain = 0.000
-INFO: [Netlist 29-17] Analyzing 1953 Unisim elements for replacement
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.102 . Memory (MB): peak = 2162.496 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 2038 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 2147.254 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.004 . Memory (MB): peak = 2190.312 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Synth Design complete | Checksum: f9438d76
+Synth Design complete | Checksum: 2d41e17f
 INFO: [Common 17-83] Releasing license: Synthesis
-56 Infos, 262 Warnings, 0 Critical Warnings and 0 Errors encountered.
+56 Infos, 263 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:01:23 ; elapsed = 00:01:28 . Memory (MB): peak = 2147.254 ; gain = 1477.691
-Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.029 . Memory (MB): peak = 2147.254 ; gain = 0.000
+synth_design: Time (s): cpu = 00:01:27 ; elapsed = 00:01:33 . Memory (MB): peak = 2190.312 ; gain = 1519.484
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.031 . Memory (MB): peak = 2190.312 ; gain = 0.000
 INFO: [Common 17-1381] The checkpoint 'C:/Users/sgzmd/Desktop/Project/Project.runs/synth_1/Top_Project.dcp' has been generated.
 INFO: [Vivado 12-24828] Executing command : report_utilization -file Top_Project_utilization_synth.rpt -pb Top_Project_utilization_synth.pb
-INFO: [Common 17-206] Exiting Vivado at Sat Jun 27 11:34:09 2026...
+INFO: [Common 17-206] Exiting Vivado at Sat Jun 27 13:01:36 2026...

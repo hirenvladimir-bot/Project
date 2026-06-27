@@ -1,9 +1,17 @@
 `timescale 1ns / 1ps
 //=============================================================================
-// PocketScope - Multi-function Pocket Instrument
+// PocketScope — Multi-function Pocket Instrument
 // EGO1 (XC7A35T-1CSG324C) Top Module
 //=============================================================================
 // Modes: 00=Signal Gen, 01=Oscilloscope, 10=Lissajous, 11=Kaleidoscope
+//
+// Clock architecture:
+//   sys_clk (100MHz) → VGA controller + display modules (pixel clock)
+//   sys_clk (100MHz) → clk_div_25m → 25MHz → DDS, DAC, UI, analyzers
+//   sys_clk (100MHz) → XADC DCLK (Oscilloscope_Acq internal)
+//
+// VGA: 1600×900 @ 60Hz, pixel clock = 100MHz
+//   H: 1600+48+32+80=1760, V: 900+3+5+39=947
 //=============================================================================
 
 module top
@@ -38,7 +46,7 @@ module top
 );
 
 //=============================================================================
-// Clock generation: 100MHz -> 25MHz
+// Clock generation: 100MHz → 25MHz
 //=============================================================================
 wire clk_25m;
 
@@ -199,18 +207,16 @@ dac0832_ctrl u_dac (
 );
 
 //=============================================================================
-// Signal Generator Waveform Buffer (1024-sample ring buffer)
-// Captures DDS output at ~1.56MHz for stable, non-jumping VGA preview.
-// Same architecture as oscilloscope wave_ram — write pointer advances,
-// VGA reads from (wr_ptr - 640 + pixel_x) for a scrolling trace.
+// Signal Generator Waveform Buffer (2048-sample ring buffer)
+// Captures DDS output at ~1.56MHz for stable VGA preview (1600-wide screen).
 //=============================================================================
-reg [7:0] sg_ram [0:1023];
-reg [9:0] sg_wr_ptr;
-reg [4:0] sg_sample_div;
+reg [7:0] sg_ram [0:2047];
+reg [10:0] sg_wr_ptr;
+reg [4:0]  sg_sample_div;
 
 always @(posedge clk_25m or negedge rst_n) begin
     if (!rst_n) begin
-        sg_wr_ptr     <= 10'd0;
+        sg_wr_ptr     <= 11'd0;
         sg_sample_div <= 5'd0;
     end else if (device_mode == 2'b00) begin
         if (sg_sample_div == 5'd15) begin
@@ -225,31 +231,36 @@ always @(posedge clk_25m or negedge rst_n) begin
     end
 end
 
-// Ring-buffer read address: 640-sample window ending at current write position
-wire [9:0] sg_rd_addr = (sg_wr_ptr - 10'd640 + pixel_x);
+// Ring-buffer read address: 1600-sample window ending at current write position.
+// pixel_x runs at 100MHz; register it in 25MHz domain to avoid CDC glitches.
+reg [10:0] pixel_x_25m;
+always @(posedge clk_25m)
+    pixel_x_25m <= pixel_x;
+
+wire [10:0] sg_rd_addr = (sg_wr_ptr - 11'd1600 + pixel_x_25m);
 
 reg [7:0] sg_rd_data;
 always @(posedge clk_25m)
     sg_rd_data <= sg_ram[sg_rd_addr];
 
-// Map 8-bit sample to Y coordinate (waveform area y=0..431)
-wire [9:0] sg_y = 10'd431 - ((sg_rd_data * 10'd431) >> 8);
+// Map 8-bit sample to Y coordinate (waveform area y=0..859, 860px height)
+wire [10:0] sg_y = 11'd859 - ((sg_rd_data * 11'd860) >> 8);
 
 //=============================================================================
 // Signal Generator Parameter Text Overlay
 //=============================================================================
-// Simple 3-row text bar at y=456-479 (24 rows, 3 char-rows of 8px each)
+// Text bar at y=860-899 (40 rows, 5 char-rows of 8px each)
 //   Row 0: "SG F:#####Hz A:### W:XXXX"
 //   Row 1: "   MOD:XX DEP:###"
 //   Row 2: "   PB0/1:Amp PB2/3:Dep"
 //=============================================================================
-wire sg_in_bar = (pixel_y >= 10'd456);
+wire sg_in_bar = (pixel_y >= 11'd860);
 
-// Character generator addressing (same scheme as waveform_display)
+// Character generator addressing
 wire [2:0] sg_char_row  = pixel_y[2:0];
 wire [2:0] sg_char_col  = pixel_x[2:0];
-wire [6:0] sg_char_cx   = pixel_x[9:3];
-wire [1:0] sg_char_cy   = (pixel_y - 10'd456) >> 3;  // char row 0..2
+wire [7:0] sg_char_cx   = pixel_x[10:3];     // 0..199 (8-bit)
+wire [2:0] sg_char_cy   = (pixel_y - 11'd860) >> 3;  // char row 0..4
 
 // Frequency digits
 wire [3:0] sg_f_d5 = (freq_hz / 16'd10000) % 4'd10;
@@ -258,7 +269,7 @@ wire [3:0] sg_f_d3 = (freq_hz / 16'd100)   % 4'd10;
 wire [3:0] sg_f_d2 = (freq_hz / 16'd10)    % 4'd10;
 wire [3:0] sg_f_d1 = (freq_hz)             % 4'd10;
 
-// Amplitude digits (0-255 range, display as raw for now)
+// Amplitude digits
 wire [3:0] sg_a_d3 = (amplitude / 8'd100) % 4'd10;
 wire [3:0] sg_a_d2 = (amplitude / 8'd10)  % 4'd10;
 wire [3:0] sg_a_d1 = (amplitude)          % 4'd10;
@@ -335,17 +346,17 @@ always @(*) begin
         // Row 1: "   MOD:X DEP:###"
         2'd1: begin
             case (sg_char_cx)
-                7'd0:  sg_char = 8'h20;  // ' '
-                7'd1:  sg_char = 8'h20;  // ' '
-                7'd2:  sg_char = 8'h20;  // ' '
+                7'd0:  sg_char = 8'h20;
+                7'd1:  sg_char = 8'h20;
+                7'd2:  sg_char = 8'h20;
                 7'd3:  sg_char = 8'h4D;  // 'M'
                 7'd4:  sg_char = 8'h4F;  // 'O'
                 7'd5:  sg_char = 8'h44;  // 'D'
                 7'd6:  sg_char = 8'h3A;  // ':'
-                7'd7:  sg_char = mod_enable ? sg_mod_char(mod_type) : 8'h4F;  // 'O'=Off or A/F/P
-                7'd8:  sg_char = mod_enable ? 8'h20 : 8'h46;  // 'F'=ofF
+                7'd7:  sg_char = mod_enable ? sg_mod_char(mod_type) : 8'h4F;  // 'O'=Off
+                7'd8:  sg_char = mod_enable ? 8'h20 : 8'h46;  // 'F'
                 7'd9:  sg_char = mod_enable ? 8'h20 : 8'h46;  // 'F'
-                7'd10: sg_char = 8'h20;  // ' '
+                7'd10: sg_char = 8'h20;
                 7'd11: sg_char = 8'h44;  // 'D'
                 7'd12: sg_char = 8'h45;  // 'E'
                 7'd13: sg_char = 8'h50;  // 'P'
@@ -359,9 +370,9 @@ always @(*) begin
         // Row 2: "   PB0/1:+/-A PB2/3:+/-D"
         2'd2: begin
             case (sg_char_cx)
-                7'd0:  sg_char = 8'h20;  // ' '
-                7'd1:  sg_char = 8'h20;  // ' '
-                7'd2:  sg_char = 8'h20;  // ' '
+                7'd0:  sg_char = 8'h20;
+                7'd1:  sg_char = 8'h20;
+                7'd2:  sg_char = 8'h20;
                 7'd3:  sg_char = 8'h50;  // 'P'
                 7'd4:  sg_char = 8'h42;  // 'B'
                 7'd5:  sg_char = 8'h30;  // '0'
@@ -371,7 +382,7 @@ always @(*) begin
                 7'd9:  sg_char = 8'h41;  // 'A'
                 7'd10: sg_char = 8'h6D;  // 'm'
                 7'd11: sg_char = 8'h70;  // 'p'
-                7'd12: sg_char = 8'h20;  // ' '
+                7'd12: sg_char = 8'h20;
                 7'd13: sg_char = 8'h50;  // 'P'
                 7'd14: sg_char = 8'h42;  // 'B'
                 7'd15: sg_char = 8'h32;  // '2'
@@ -399,8 +410,7 @@ char_gen u_sg_char (
 );
 
 //=============================================================================
-// Oscilloscope Acquisition — pocketscope_sim2_0 BRAM-based (single-channel)
-// Internal inferred BRAM (1024×24bit). CH1 only; CH2 fixed mid-scale.
+// Oscilloscope Acquisition — Inferred BRAM 2048×24, continuous XADC sequencer
 //=============================================================================
 
 wire [23:0] bram_dout;
@@ -409,7 +419,7 @@ Oscilloscope_Acq u_osc_acq (
     .clk_100m        (sys_clk),
     .rst_n           (rst_n),
     .ch1_en_n        (1'b0),         // CH1 always enabled
-    .ch2_en_n        (1'b1),         // CH2 disabled (single-channel)
+    .ch2_en_n        (1'b0),         // CH2 enabled
     .vauxp_ch1       (vauxp_ch1),
     .vauxn_ch1       (vauxn_ch1),
     .vauxp_ch2       (vauxp_ch2),
@@ -419,37 +429,53 @@ Oscilloscope_Acq u_osc_acq (
 );
 
 //=============================================================================
-// BRAM → 25MHz domain readout (no CDC needed — BRAM read port runs at 100MHz,
-// display_addr changes at 25MHz, stable > 40ns = 4× 100MHz cycles)
+// BRAM data extraction
+// bram_dout[23:0] = {ch2_data_reg[11:0], ch1_data_reg[11:0]}
+//   wave_ch1_12b: full 12-bit for waveform display (centered Y mapping)
+//   wave_ch2_12b: full 12-bit for waveform display
+//   wave_ch1_8b:  8-bit for wave_analyzer (compatibility, same as original)
+//   wave_ch2_8b:  8-bit for wave_analyzer
+//
+// bram_dout is registered inside Oscilloscope_Acq (2-cycle read latency).
+// bram_dout_25m captures at 25MHz for analyzer domain (stable CDC).
 //=============================================================================
 
-// bram_dout[23:0] = {CH2_mid(12'h800), CH1_data[11:0]}
-// wave_ch1/wave_ch2 = 8-bit for waveform_display
+// 100MHz domain — 12-bit for display
+wire [11:0] wave_ch1_12b = bram_dout[11:0];
+wire [11:0] wave_ch2_12b = bram_dout[23:12];
+
+// 25MHz domain — 8-bit for analyzer (captured from 100MHz BRAM output)
 reg [23:0] bram_dout_25m;
 always @(posedge clk_25m)
     bram_dout_25m <= bram_dout;
 
-wire [7:0] wave_ch1 = bram_dout_25m[11:4];    // CH1 12-bit → 8-bit (upper byte)
-wire [7:0] wave_ch2 = bram_dout_25m[23:16];   // CH2 = mid-scale 0x80
+wire [7:0] wave_ch1_8b = bram_dout_25m[11:4];
+wire [7:0] wave_ch2_8b = bram_dout_25m[23:16];
 
 // Sample rate display (kSPS)
-wire [15:0] sample_rate_disp = 16'd961;
-wire        trigger_armed    = 1'b1;   // always armed (trigger internal to Oscilloscope_Acq)
+// New ADC rate: ~1,136,000 SPS per channel (continuous sequencer, dual-channel)
+wire [15:0] sample_rate_disp = 16'd1136;
+wire        trigger_armed    = 1'b1;   // trigger internal to Oscilloscope_Acq
+
+// Vertical gain select: mapped from scope_timebase[1:0] for oscilloscope mode
+// 00=×1, 01=×2, 10=×5, 11=×10
+wire [1:0] vert_gain = scope_timebase[1:0];
 
 //=============================================================================
-// Waveform Display Readout — BRAM is inside Oscilloscope_Acq
-// pixel_x directly maps to BRAM address (0-639). No external RAM needed.
+// Waveform Display Readout
+// display_addr = pixel_x directly (100MHz domain, both in same clock domain)
+// pixel_x scans 0..1599 during active video, reading through BRAM linearly
 //=============================================================================
-wire       de;
-wire [9:0] pixel_x, pixel_y;
+wire        de;
+wire [10:0] pixel_x, pixel_y;
 
-wire [9:0] display_addr = pixel_x;
+wire [10:0] display_addr = pixel_x;
 
 //=============================================================================
-// VGA Controller
+// VGA Controller — 1600×900@60Hz, 100MHz pixel clock
 //=============================================================================
 vga_ctrl u_vga (
-    .clk(clk_25m), .rst_n(rst_n),
+    .clk(sys_clk), .rst_n(rst_n),
     .hsync(hsync), .vsync(vsync),
     .de(de), .pixel_x(pixel_x), .pixel_y(pixel_y)
 );
@@ -458,20 +484,21 @@ vga_ctrl u_vga (
 // Waveform Analyzers (Frequency, Vpp, Type, RMS, Avg, Max)
 //
 // Calibration based on EGO1_Oscilloscope_Gen extension board:
-//   Signal chain: BNC → 10kΩ + 100kΩ trimmer → MCP6002 (G=1.1×) → 74HC4053 → XADC VAUXP0 (J5 pin 13)
-//   XADC: 12-bit 0-1V, code uses adc[11:4] (8-bit, 0-255)
+//   Signal chain: BNC → 10kΩ + 100kΩ trimmer → MCP6002 (G=1.1×) → 74HC4053 → XADC VAUXP0
+//   XADC: 12-bit 0-1V, 8-bit value uses adc[11:4] → 0-255
 //   ADC LSB (8-bit) = 1V/256 = 3.90625mV at XADC input
-//   Front-end gain at max trimmer: 100k/(10k+100k) × 1.1 ≈ 1.0
-//   → BNC mV ≈ ADC_count × 3.906 → CAL_MV_X1024 = round(3.90625×1024) = 4000
+//   CAL_MV_X1024 = round(3.90625×1024) = 4000
 //
-// Frequency calibration (dual-VAUX sequencer mode, ~961kSPS per ch):
-//   GATE_MAX = 10000 samples, sample_rate ≈ 961000 SPS
-//   Gate time = 10000/961000 ≈ 10.4ms
-//   FREQ_CAL_X10 = sample_rate × 10 / GATE_MAX = 961 (for 961kSPS)
-//   → freq_hz = zc_count × 961 / 10
+// Frequency calibration:
+//   New ADC rate: ~1,136,000 SPS (continuous sequencer, 50MHz ADCCLK)
+//   Analyzer sees data at 25MHz (4:1 decimation from 100MHz display scan)
+//   Effective sample rate seen by analyzer: 100MHz / 4... the compression
+//   factor from ADC rate to analyzer rate is ~88:1.
+//   FREQ_CAL_X10 = ADC_rate / 8000 ≈ 142 (for 1,136,000 SPS)
+//   Needs empirical tuning — adjust by observing known-frequency signal.
 //=============================================================================
-localparam FREQ_CAL_X10_CH = 961;   // frequency cal (×10): 961 for 961kSPS
-localparam CAL_MV_X1024_VAL = 4000; // mV cal (×1024): 4000 → 3.90625 mV/LSB
+localparam FREQ_CAL_X10_CH = 142;    // frequency cal (×10): tuned for ~1.136MSPS
+localparam CAL_MV_X1024_VAL = 4000;  // mV cal (×1024): 4000 → 3.90625 mV/LSB
 
 wire [15:0] freq_ch1, freq_ch2;
 wire [15:0] period_ch1, period_ch2;
@@ -496,7 +523,7 @@ wave_analyzer #(
     .CAL_MV_X1024(CAL_MV_X1024_VAL)
 ) u_analyzer_ch1 (
     .clk(clk_25m), .rst_n(rst_n),
-    .wave_data(wave_ch1), .wave_valid(1'b1),
+    .wave_data(wave_ch1_8b), .wave_valid(1'b1),
     .frequency_hz(freq_ch1), .period_x100us(period_ch1),
     .vpp(vpp_ch1), .vmin_val(vmin_ch1),
     .wave_type_det(type_ch1), .duty_cycle(duty_ch1),
@@ -512,7 +539,7 @@ wave_analyzer #(
     .CAL_MV_X1024(CAL_MV_X1024_VAL)
 ) u_analyzer_ch2 (
     .clk(clk_25m), .rst_n(rst_n),
-    .wave_data(wave_ch2), .wave_valid(1'b1),
+    .wave_data(wave_ch2_8b), .wave_valid(1'b1),
     .frequency_hz(freq_ch2), .period_x100us(period_ch2),
     .vpp(vpp_ch2), .vmin_val(vmin_ch2),
     .wave_type_det(type_ch2), .duty_cycle(duty_ch2),
@@ -524,16 +551,17 @@ wave_analyzer #(
 );
 
 //=============================================================================
-// Display Modules
+// Display Modules — all clocked at 100MHz (sys_clk = VGA pixel clock)
 //=============================================================================
 
 // 1) Oscilloscope mode (dual-channel waveform display)
 wire [3:0] scope_r, scope_g, scope_b;
 
 waveform_display u_scope_display (
-    .clk(clk_25m), .de(de),
+    .clk(sys_clk), .de(de),
     .pixel_x(pixel_x), .pixel_y(pixel_y),
-    .wave_ch1(wave_ch1), .wave_ch2(wave_ch2),
+    .wave_ch1(wave_ch1_12b), .wave_ch2(wave_ch2_12b),
+    .vert_gain(vert_gain),
     // CH1 metrics
     .freq_ch1(freq_ch1), .period_ch1_x100us(period_ch1),
     .vpp_ch1(vpp_ch1), .vmin_ch1(vmin_ch1), .type_ch1(type_ch1),
@@ -562,9 +590,9 @@ waveform_display u_scope_display (
 wire [3:0] liss_r, liss_g, liss_b;
 
 lissajous_display u_liss (
-    .clk(clk_25m), .rst_n(rst_n), .de(de),
+    .clk(sys_clk), .rst_n(rst_n), .de(de),
     .pixel_x(pixel_x), .pixel_y(pixel_y),
-    .ch1_data(wave_ch1), .ch2_data(wave_ch2),
+    .ch1_data(wave_ch1_8b), .ch2_data(wave_ch2_8b),
     .ch1_valid(1'b1), .ch2_valid(1'b1),
     .freq_ch1(freq_ch1), .freq_ch2(freq_ch2),
     .vga_r(liss_r), .vga_g(liss_g), .vga_b(liss_b)
@@ -574,14 +602,14 @@ lissajous_display u_liss (
 wire [3:0] kalei_r, kalei_g, kalei_b;
 
 kaleidoscope u_kalei (
-    .clk(clk_25m), .rst_n(rst_n), .de(de),
+    .clk(sys_clk), .rst_n(rst_n), .de(de),
     .pixel_x(pixel_x), .pixel_y(pixel_y),
-    .ch1_data(wave_ch1), .ch2_data(wave_ch2),
+    .ch1_data(wave_ch1_8b), .ch2_data(wave_ch2_8b),
     .ch1_valid(1'b1), .ch2_valid(1'b1),
     .vga_r(kalei_r), .vga_g(kalei_g), .vga_b(kalei_b)
 );
 
-// 4) Signal Generator preview — stable waveform from ring buffer + parameter overlay
+// 4) Signal Generator preview — waveform from ring buffer + parameter overlay
 reg [3:0] sggen_r, sggen_g, sggen_b;
 
 always @(*) begin
@@ -590,13 +618,13 @@ always @(*) begin
     sggen_b = 4'h0;
 
     if (de) begin
-        //---- Text overlay bar (y=456..479) ----
+        //---- Text overlay bar (y=860..899) ----
         if (sg_in_bar) begin
             // Dark background
             sggen_r = 4'h1; sggen_g = 4'h1; sggen_b = 4'h1;
 
             // Separator line at top of text bar
-            if (pixel_y == 456) begin
+            if (pixel_y == 860) begin
                 sggen_r = 4'h8; sggen_g = 4'h8; sggen_b = 4'h8;
             end
 
@@ -624,21 +652,19 @@ always @(*) begin
                 end
             end
         end
-        //---- Waveform Area (y=0..455) ----
+        //---- Waveform Area (y=0..859) ----
         else begin
-            // Grid
-            if ((pixel_x % 80) == 0 || (pixel_y % 60) == 0) begin
+            // Grid — 10×10 divisions (160×86 pixels each)
+            if ((pixel_x % 160) == 0 || (pixel_y % 86) == 0) begin
                 sggen_r = 4'h2; sggen_g = 4'h2; sggen_b = 4'h2;
             end
             // Center cross
-            if (pixel_x == 320 || pixel_y == 228) begin
+            if (pixel_x == 800 || pixel_y == 430) begin
                 sggen_r = 4'h4; sggen_g = 4'h4; sggen_b = 4'h4;
             end
             // Waveform trace from RAM buffer — 3-pixel wide green line
-            // sg_rd_data has 1-cycle read latency, so trace lags 1 pixel
-            // behind sg_rd_addr — imperceptible on a 640-pixel scanline
             if (pixel_y >= ((sg_y > 1) ? sg_y - 1 : 0) &&
-                pixel_y <= ((sg_y < 454) ? sg_y + 1 : 455)) begin
+                pixel_y <= ((sg_y < 858) ? sg_y + 1 : 859)) begin
                 sggen_r = 4'h0; sggen_g = 4'hF; sggen_b = 4'h0;
             end
         end
@@ -648,17 +674,15 @@ end
 //=============================================================================
 // Mode MUX — select which display drives VGA
 //=============================================================================
-// Signal generator mode: DAC outputs the waveform directly — VGA stays blank.
-// Other modes drive VGA as before.
-assign vga_r = (device_mode == 2'b00) ? 4'h0 :
+assign vga_r = (device_mode == 2'b00) ? sggen_r :
                (device_mode == 2'b10) ? liss_r   :
                (device_mode == 2'b11) ? kalei_r  : scope_r;
 
-assign vga_g = (device_mode == 2'b00) ? 4'h0 :
+assign vga_g = (device_mode == 2'b00) ? sggen_g :
                (device_mode == 2'b10) ? liss_g   :
                (device_mode == 2'b11) ? kalei_g  : scope_g;
 
-assign vga_b = (device_mode == 2'b00) ? 4'h0 :
+assign vga_b = (device_mode == 2'b00) ? sggen_b :
                (device_mode == 2'b10) ? liss_b   :
                (device_mode == 2'b11) ? kalei_b  : scope_b;
 
@@ -673,21 +697,20 @@ assign led_speed[2] = (device_mode == 2'b10 || device_mode == 2'b11);  // XY mod
 assign loop_tx = {loop_rx[3:1], 1'b0};
 
 //=============================================================================
-// Analog Switch Control — single-channel (CH1 only), scope mode
+// Analog Switch Control — dual-channel, scope mode
 // 74HC4053 enables are active-low
 //=============================================================================
 assign ch1_switch_en_n = ~(device_mode == 2'b01 || device_mode == 2'b10 || device_mode == 2'b11);
-assign ch2_switch_en_n = 1'b1;         // CH2 disabled (single-channel)
+assign ch2_switch_en_n = ~(device_mode == 2'b01 || device_mode == 2'b10 || device_mode == 2'b11);
 assign sg_en_n         = ~(device_mode == 2'b00);
 assign sg_out_sel      = 1'b0;
 assign ch1_range_sel   = 1'b0;         // 1x range
-assign ch1_acdc_sel    = 1'b0;         // DC coupling
+assign ch1_acdc_sel    = 1'b0;         // DC coupling (default; AC via software control)
 assign ch2_range_sel   = 1'b0;
 assign ch2_acdc_sel    = 1'b0;
 
 //=============================================================================
-// ILA Debug — disabled (signals moved inside Oscilloscope_Acq BRAM)
-// Re-enable after verifying waveform display with Vivado ILA on XADC pins.
+// ILA Debug — disabled
 //=============================================================================
 
 endmodule

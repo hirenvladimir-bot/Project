@@ -1,42 +1,26 @@
 `timescale 1ns / 1ps
-//////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 2026/06/04 16:39:42
-// Design Name: 
-// Module Name: vga_ctrl
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
-//////////////////////////////////////////////////////////////////////////////////
-
+//=============================================================================
+// VGA Controller — 640×480 @ 60Hz
+// Pixel clock: 25MHz
+// Reference timing from pocketscope_sim2_0 / standard VESA
+//=============================================================================
 
 module vga_ctrl
 (
-    input wire clk,
-    input wire rst_n,
+    input  wire         clk,          // 25MHz pixel clock
+    input  wire         rst_n,
 
-    output reg hsync,
-    output reg vsync,
+    output reg          hsync,
+    output reg          vsync,
 
-    output wire de,
+    output wire         de,
 
-    output reg [9:0] pixel_x,
-    output reg [9:0] pixel_y
+    output reg  [9:0]   pixel_x,
+    output reg  [9:0]   pixel_y
 );
 
 //==================================================
-// 640x480@60Hz
-// Pixel Clock = 25MHz
+// 640×480@60Hz — standard VESA timing
 //==================================================
 
 localparam H_VISIBLE = 640;
@@ -52,110 +36,57 @@ localparam V_BACK    = 33;
 localparam V_TOTAL   = 525;
 
 //==================================================
-// 行列计数器
+// Counters
 //==================================================
 
 reg [9:0] h_cnt;
 reg [9:0] v_cnt;
 
-always @(posedge clk or negedge rst_n)
-begin
-
-    if(!rst_n)
-    begin
-        h_cnt <= 0;
-        v_cnt <= 0;
-    end
-    else
-    begin
-
-        if(h_cnt == H_TOTAL-1)
-        begin
-
-            h_cnt <= 0;
-
-            if(v_cnt == V_TOTAL-1)
-                v_cnt <= 0;
+always @(posedge clk or negedge rst_n) begin
+    if (!rst_n) begin
+        h_cnt   <= 10'd0;
+        v_cnt   <= 10'd0;
+        hsync   <= 1'b1;
+        vsync   <= 1'b1;
+        pixel_x <= 10'd0;
+        pixel_y <= 10'd0;
+    end else begin
+        //---- Horizontal counter ----
+        if (h_cnt == H_TOTAL - 1) begin
+            h_cnt <= 10'd0;
+            if (v_cnt == V_TOTAL - 1)
+                v_cnt <= 10'd0;
             else
                 v_cnt <= v_cnt + 1'b1;
-
-        end
-        else
-        begin
-
+        end else begin
             h_cnt <= h_cnt + 1'b1;
-
         end
 
+        //---- HSYNC ----
+        if (h_cnt >= (H_VISIBLE + H_FRONT) &&
+            h_cnt <  (H_VISIBLE + H_FRONT + H_SYNC))
+            hsync <= 1'b0;
+        else
+            hsync <= 1'b1;
+
+        //---- VSYNC ----
+        if (v_cnt >= (V_VISIBLE + V_FRONT) &&
+            v_cnt <  (V_VISIBLE + V_FRONT + V_SYNC))
+            vsync <= 1'b0;
+        else
+            vsync <= 1'b1;
+
+        //---- DE and pixel coordinates ----
+        if ((h_cnt < H_VISIBLE) && (v_cnt < V_VISIBLE)) begin
+            pixel_x <= h_cnt;
+            pixel_y <= v_cnt;
+        end else begin
+            pixel_x <= 10'd0;
+            pixel_y <= 10'd0;
+        end
     end
-
 end
 
-//==================================================
-// HSYNC
-//==================================================
-
-always @(posedge clk)
-begin
-
-    if(
-        h_cnt >= (H_VISIBLE + H_FRONT)
-        &&
-        h_cnt <  (H_VISIBLE + H_FRONT + H_SYNC)
-    )
-        hsync <= 1'b0;
-    else
-        hsync <= 1'b1;
-
-end
-
-//==================================================
-// VSYNC
-//==================================================
-
-always @(posedge clk)
-begin
-
-    if(
-        v_cnt >= (V_VISIBLE + V_FRONT)
-        &&
-        v_cnt <  (V_VISIBLE + V_FRONT + V_SYNC)
-    )
-        vsync <= 1'b0;
-    else
-        vsync <= 1'b1;
-
-end
-
-//==================================================
-// DE
-//==================================================
-
-assign de =
-(
-    (h_cnt < H_VISIBLE)
-    &&
-    (v_cnt < V_VISIBLE)
-);
-
-//==================================================
-// 像素坐标
-//==================================================
-
-always @(posedge clk)
-begin
-
-    if(de)
-    begin
-        pixel_x <= h_cnt;
-        pixel_y <= v_cnt;
-    end
-    else
-    begin
-        pixel_x <= 0;
-        pixel_y <= 0;
-    end
-
-end
+assign de = (h_cnt < H_VISIBLE) && (v_cnt < V_VISIBLE);
 
 endmodule

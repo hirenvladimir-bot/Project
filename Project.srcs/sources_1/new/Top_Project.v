@@ -77,18 +77,12 @@ module Top_Project (
 
     //=========================================================================
     // Switch bus — direct mapping to ui_ctrl (matches pocketscope_sim2_0)
-    //
-    // sw[1:0]   = main mode (00=sig gen, 01=scope, 10=lissajous, 11=kaleidoscope)
-    // sw[4:2]   = sub-mode / wave type in sig-gen mode
-    // sw[7:5]   = frequency coarse range
     //=========================================================================
 
-    // DIP bus — directly connected (was previously hardcoded)
+    // DIP bus — directly connected
     wire [7:0] sw_dip_bus = dip;
 
     // 5-bit button bus for ui_ctrl (matches pocketscope_sim2_0 PBs)
-    // PB0=right/amplitude+, PB1=down/amplitude-, PB2=center/mod_depth+,
-    // PB3=left/mod_depth-, PB4=up/trigger_level+
     wire [4:0] btn_bus = {btn_up, btn_left, btn_center, btn_down, btn_right};
 
     //=========================================================================
@@ -124,8 +118,6 @@ module Top_Project (
     //=========================================================================
     // Analog switch control — derived from device_mode
     //=========================================================================
-    // Scope modes (01,10,11): acquisition enabled, sig-gen disabled
-    // SigGen mode (00):      acquisition disabled, sig-gen enabled
     wire is_scope_mode  = (device_mode == 2'b01) || (device_mode == 2'b10) || (device_mode == 2'b11);
     wire is_siggen_mode = (device_mode == 2'b00);
 
@@ -134,7 +126,7 @@ module Top_Project (
     assign sg_en_n         = ~is_siggen_mode;
     assign sg_out_sel      = 1'b0;
 
-    // Range and AC/DC — fixed defaults (can be adjusted via HW)
+    // Range and AC/DC — fixed defaults
     assign ch1_range_sel = 1'b0;
     assign ch1_acdc_sel  = 1'b0;
     assign ch2_range_sel = 1'b0;
@@ -248,9 +240,8 @@ module Top_Project (
     );
 
     //=========================================================================
-    // Oscilloscope Acquisition — BRAM-based (single-channel)
-    // Internal inferred BRAM (1024×24bit) inside Oscilloscope_Acq.
-    // CH1 only; CH2 fixed mid-scale. XADC primitive in continuous sequencer mode.
+    // Oscilloscope Acquisition — BRAM-based (dual-channel)
+    // Uses blk_mem_gen_0 IP (1024×24bit) inside Oscilloscope_Acq.
     //=========================================================================
 
     wire       de;
@@ -261,8 +252,8 @@ module Top_Project (
     Oscilloscope_Acq u_osc_acq (
         .clk_100m       (clk_100m),
         .rst_n          (global_rst_n),
-        .ch1_en_n       (1'b0),         // CH1 always enabled
-        .ch2_en_n       (1'b1),         // CH2 disabled (single-channel)
+        .ch1_en_n       (1'b0),
+        .ch2_en_n       (1'b0),
         .vauxp_ch1      (vauxp_ch1),
         .vauxn_ch1      (vauxn_ch1),
         .vauxp_ch2      (vauxp_ch2),
@@ -271,28 +262,21 @@ module Top_Project (
         .bram_dout      (bram_dout)
     );
 
-    // BRAM → 25MHz domain readout (no CDC needed — BRAM read port runs at 100MHz,
-    // display_addr changes at 25MHz, stable > 40ns = 4× 100MHz cycles)
-    // bram_dout[23:0] = {CH2_mid(12'h800), CH1_data[11:0]}
+    // BRAM → 25MHz domain readout
+    // bram_dout[23:0] = {ch2_data_reg[11:0], ch1_data_reg[11:0]}
     reg [23:0] bram_dout_25m;
     always @(posedge clk_25m)
         bram_dout_25m <= bram_dout;
 
-    wire [7:0] wave_ch1 = bram_dout_25m[11:4];    // CH1 12-bit → 8-bit (upper byte)
-    wire [7:0] wave_ch2 = bram_dout_25m[23:16];   // CH2 = mid-scale 0x80
+    wire [7:0] wave_ch1 = bram_dout_25m[11:4];    // CH1 12-bit → 8-bit
+    wire [7:0] wave_ch2 = bram_dout_25m[23:16];   // CH2 12-bit → 8-bit
 
     // Display read address: pixel_x directly maps to BRAM address (0-639)
     wire [9:0] display_addr = pixel_x;
 
-    // Legacy wires for display modules and analyzers
-    wire [7:0] adc_ch1_8b      = wave_ch1;
-    wire [7:0] adc_ch2_8b      = 8'd128;           // CH2 fixed mid-scale
-    wire       adc_ch1_vld_25m = de;               // valid during active display
-    wire       adc_ch2_vld_25m = de;
-
     // Sample rate display (kSPS)
     wire [15:0] sample_rate_disp = 16'd961;
-    wire        trigger_armed    = 1'b1;           // trigger handled inside Oscilloscope_Acq
+    wire        trigger_armed    = 1'b1;
 
     //=========================================================================
     // Waveform Analyzers (Frequency, Vpp, Type, RMS, Avg, Max)
@@ -303,12 +287,12 @@ module Top_Project (
     //   ADC LSB (8-bit) = 1V/256 = 3.90625mV at XADC input
     //   → CAL_MV_X1024 = round(3.90625×1024) = 4000
     //
-    // Frequency calibration (single-channel, ~1.92MSPS):
-    //   GATE_MAX = 10000 samples, sample_rate ≈ 1.92MSPS
-    //   Gate time = 10000/1920000 ≈ 5.2ms
-    //   FREQ_CAL_X10 = sample_rate × 10 / GATE_MAX = 1920
+    // Frequency calibration (single-channel, ~961kSPS):
+    //   GATE_MAX = 10000 samples, sample_rate ≈ 961kSPS
+    //   Gate time = 10000/961000 ≈ 10.4ms
+    //   FREQ_CAL_X10 = sample_rate × 10 / GATE_MAX = 961
     //=========================================================================
-    localparam FREQ_CAL_X10_CH   = 1920;  // frequency cal (×10): 1920 for ~1.92MSPS
+    localparam FREQ_CAL_X10_CH   = 961;   // frequency cal (×10): 961 for ~961kSPS
     localparam CAL_MV_X1024_VAL  = 4000;  // mV cal (×1024): 4000 → 3.90625 mV/LSB
 
     wire [15:0] freq_ch1, freq_ch2;
@@ -335,8 +319,8 @@ module Top_Project (
     ) u_analyzer_ch1 (
         .clk            (clk_25m),
         .rst_n          (global_rst_n),
-        .wave_data      (adc_ch1_8b),
-        .wave_valid     (adc_ch1_vld_25m),
+        .wave_data      (wave_ch1),
+        .wave_valid     (1'b1),
         .frequency_hz   (freq_ch1),
         .period_x100us  (period_ch1),
         .vpp            (vpp_ch1),
@@ -356,15 +340,15 @@ module Top_Project (
         .max_mv         (max_mv_ch1)
     );
 
-    // CH2 analyzer fed with constant mid-scale (single-channel mode)
+    // CH2 analyzer
     wave_analyzer #(
         .FREQ_CAL_X10(FREQ_CAL_X10_CH),
         .CAL_MV_X1024(CAL_MV_X1024_VAL)
     ) u_analyzer_ch2 (
         .clk            (clk_25m),
         .rst_n          (global_rst_n),
-        .wave_data      (adc_ch2_8b),
-        .wave_valid     (adc_ch1_vld_25m),
+        .wave_data      (wave_ch2),
+        .wave_valid     (1'b1),
         .frequency_hz   (freq_ch2),
         .period_x100us  (period_ch2),
         .vpp            (vpp_ch2),
@@ -385,7 +369,7 @@ module Top_Project (
     );
 
     //=========================================================================
-    // VGA Controller
+    // VGA Controller — 640×480@60Hz, 25MHz pixel clock
     //=========================================================================
     vga_ctrl u_vga (
         .clk    (clk_25m),
@@ -464,10 +448,10 @@ module Top_Project (
         .de         (de),
         .pixel_x    (pixel_x),
         .pixel_y    (pixel_y),
-        .ch1_data   (adc_ch1_8b),
-        .ch2_data   (adc_ch2_8b),
-        .ch1_valid  (adc_ch1_vld_25m),
-        .ch2_valid  (adc_ch2_vld_25m),
+        .ch1_data   (wave_ch1),
+        .ch2_data   (wave_ch2),
+        .ch1_valid  (1'b1),
+        .ch2_valid  (1'b1),
         .freq_ch1   (freq_ch1),
         .freq_ch2   (freq_ch2),
         .vga_r      (liss_r),
@@ -484,10 +468,10 @@ module Top_Project (
         .de         (de),
         .pixel_x    (pixel_x),
         .pixel_y    (pixel_y),
-        .ch1_data   (adc_ch1_8b),
-        .ch2_data   (adc_ch2_8b),
-        .ch1_valid  (adc_ch1_vld_25m),
-        .ch2_valid  (adc_ch2_vld_25m),
+        .ch1_data   (wave_ch1),
+        .ch2_data   (wave_ch2),
+        .ch1_valid  (1'b1),
+        .ch2_valid  (1'b1),
         .vga_r      (kalei_r),
         .vga_g      (kalei_g),
         .vga_b      (kalei_b)
@@ -495,9 +479,6 @@ module Top_Project (
 
     //=========================================================================
     // Mode MUX — select which display drives VGA
-    //
-    // Signal generator mode (00): VGA blanked — signal goes to J2 dacOUT only.
-    // Other modes: drive VGA with the corresponding display module.
     //=========================================================================
     assign vga_r = (device_mode == 2'b00) ? 4'h0 :
                    (device_mode == 2'b10) ? liss_r   :
