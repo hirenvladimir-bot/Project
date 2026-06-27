@@ -162,7 +162,19 @@ module waveform_display
     wire [2:0] char_col = pixel_x[2:0];
     wire [2:0] char_row = pixel_y[2:0];
     wire [6:0] char_cell_x = pixel_x[9:3];
-    wire [2:0] char_cell_y = (pixel_y - 10'd432) >> 3;  // char row 0-5
+    wire [2:0] char_cell_y = in_metrics_bar ? ((pixel_y - 10'd432) >> 3) : 3'd0;
+
+    // Pipeline registers — break the long combinational path through the
+    // metrics_char mux + char_gen font ROM to meet 25MHz pixel clock timing.
+    // char_col/char_row are delayed one cycle to align with registered char_code.
+    reg [2:0]  char_col_d1;
+    reg [2:0]  char_row_d1;
+    reg [7:0]  metrics_char;
+
+    always @(posedge clk) begin
+        char_col_d1 <= char_col;
+        char_row_d1 <= char_row;
+    end
 
     //=========================================================================
     // Helper: BCD digit to ASCII
@@ -315,227 +327,233 @@ module waveform_display
     //=========================================================================
     // Character selection mux
     //=========================================================================
-    reg [7:0] metrics_char;
+    reg [7:0] metrics_char_comb;
 
     always @(*) begin
-        metrics_char = 8'h20;
+        metrics_char_comb = 8'h20;
         case (char_cell_y)
             3'd0: begin
                 case (char_cell_x)
-                    7'd0:  metrics_char = 8'h43; 7'd1:  metrics_char = 8'h48;
-                    7'd2:  metrics_char = 8'h31; 7'd3:  metrics_char = 8'h20;
-                    7'd4:  metrics_char = 8'h46; 7'd5:  metrics_char = 8'h3A;
-                    7'd6:  metrics_char = digit_to_ascii(f1_d5);
-                    7'd7:  metrics_char = digit_to_ascii(f1_d4);
-                    7'd8:  metrics_char = digit_to_ascii(f1_d3);
-                    7'd9:  metrics_char = digit_to_ascii(f1_d2);
-                    7'd10: metrics_char = digit_to_ascii(f1_d1);
-                    7'd11: metrics_char = 8'h48; 7'd12: metrics_char = 8'h7A;
-                    7'd13: metrics_char = 8'h20; 7'd14: metrics_char = 8'h54;
-                    7'd15: metrics_char = 8'h3A;
-                    7'd16: metrics_char = digit_to_ascii(p1_d4);
-                    7'd17: metrics_char = digit_to_ascii(p1_d3);
-                    7'd18: metrics_char = digit_to_ascii(p1_d2);
-                    7'd19: metrics_char = digit_to_ascii(p1_d1);
-                    7'd20: metrics_char = 8'h75; 7'd21: metrics_char = 8'h73;
-                    7'd22: metrics_char = 8'h20; 7'd23: metrics_char = 8'h56;
-                    7'd24: metrics_char = digit_to_ascii(vpp1_d4);
-                    7'd25: metrics_char = digit_to_ascii(vpp1_d3);
-                    7'd26: metrics_char = digit_to_ascii(vpp1_d2);
-                    7'd27: metrics_char = digit_to_ascii(vpp1_d1);
-                    7'd28: metrics_char = 8'h6D; 7'd29: metrics_char = 8'h56;
-                    7'd30: metrics_char = 8'h20; 7'd31: metrics_char = 8'h44;
-                    7'd32: metrics_char = 8'h3A;
-                    7'd33: metrics_char = digit_to_ascii(d1_d3);
-                    7'd34: metrics_char = digit_to_ascii(d1_d2);
-                    7'd35: metrics_char = digit_to_ascii(d1_d1);
-                    7'd36: metrics_char = 8'h25; 7'd37: metrics_char = 8'h20;
-                    7'd38: metrics_char = 8'h57; 7'd39: metrics_char = 8'h3A;
-                    7'd40: metrics_char = type_byte(type_str_ch1, 3'd0);
-                    7'd41: metrics_char = type_byte(type_str_ch1, 3'd1);
-                    7'd42: metrics_char = type_byte(type_str_ch1, 3'd2);
-                    7'd43: metrics_char = type_byte(type_str_ch1, 3'd3);
-                    7'd44: metrics_char = type_byte(type_str_ch1, 3'd4);
-                    default: metrics_char = 8'h20;
+                    7'd0:  metrics_char_comb = 8'h43; 7'd1:  metrics_char_comb = 8'h48;
+                    7'd2:  metrics_char_comb = 8'h31; 7'd3:  metrics_char_comb = 8'h20;
+                    7'd4:  metrics_char_comb = 8'h46; 7'd5:  metrics_char_comb = 8'h3A;
+                    7'd6:  metrics_char_comb = digit_to_ascii(f1_d5);
+                    7'd7:  metrics_char_comb = digit_to_ascii(f1_d4);
+                    7'd8:  metrics_char_comb = digit_to_ascii(f1_d3);
+                    7'd9:  metrics_char_comb = digit_to_ascii(f1_d2);
+                    7'd10: metrics_char_comb = digit_to_ascii(f1_d1);
+                    7'd11: metrics_char_comb = 8'h48; 7'd12: metrics_char_comb = 8'h7A;
+                    7'd13: metrics_char_comb = 8'h20; 7'd14: metrics_char_comb = 8'h54;
+                    7'd15: metrics_char_comb = 8'h3A;
+                    7'd16: metrics_char_comb = digit_to_ascii(p1_d4);
+                    7'd17: metrics_char_comb = digit_to_ascii(p1_d3);
+                    7'd18: metrics_char_comb = digit_to_ascii(p1_d2);
+                    7'd19: metrics_char_comb = digit_to_ascii(p1_d1);
+                    7'd20: metrics_char_comb = 8'h75; 7'd21: metrics_char_comb = 8'h73;
+                    7'd22: metrics_char_comb = 8'h20; 7'd23: metrics_char_comb = 8'h56;
+                    7'd24: metrics_char_comb = digit_to_ascii(vpp1_d4);
+                    7'd25: metrics_char_comb = digit_to_ascii(vpp1_d3);
+                    7'd26: metrics_char_comb = digit_to_ascii(vpp1_d2);
+                    7'd27: metrics_char_comb = digit_to_ascii(vpp1_d1);
+                    7'd28: metrics_char_comb = 8'h6D; 7'd29: metrics_char_comb = 8'h56;
+                    7'd30: metrics_char_comb = 8'h20; 7'd31: metrics_char_comb = 8'h44;
+                    7'd32: metrics_char_comb = 8'h3A;
+                    7'd33: metrics_char_comb = digit_to_ascii(d1_d3);
+                    7'd34: metrics_char_comb = digit_to_ascii(d1_d2);
+                    7'd35: metrics_char_comb = digit_to_ascii(d1_d1);
+                    7'd36: metrics_char_comb = 8'h25; 7'd37: metrics_char_comb = 8'h20;
+                    7'd38: metrics_char_comb = 8'h57; 7'd39: metrics_char_comb = 8'h3A;
+                    7'd40: metrics_char_comb = type_byte(type_str_ch1, 3'd0);
+                    7'd41: metrics_char_comb = type_byte(type_str_ch1, 3'd1);
+                    7'd42: metrics_char_comb = type_byte(type_str_ch1, 3'd2);
+                    7'd43: metrics_char_comb = type_byte(type_str_ch1, 3'd3);
+                    7'd44: metrics_char_comb = type_byte(type_str_ch1, 3'd4);
+                    default: metrics_char_comb = 8'h20;
                 endcase
             end
             3'd1: begin
                 case (char_cell_x)
-                    7'd0:  metrics_char = 8'h20; 7'd1:  metrics_char = 8'h20;
-                    7'd2:  metrics_char = 8'h20; 7'd3:  metrics_char = 8'h20;
-                    7'd4:  metrics_char = 8'h56; 7'd5:  metrics_char = 8'h72;
-                    7'd6:  metrics_char = 8'h6D; 7'd7:  metrics_char = 8'h73;
-                    7'd8:  metrics_char = 8'h3A;
-                    7'd9:  metrics_char = digit_to_ascii(rms1_d3);
-                    7'd10: metrics_char = digit_to_ascii(rms1_d2);
-                    7'd11: metrics_char = digit_to_ascii(rms1_d1);
-                    7'd12: metrics_char = 8'h20; 7'd13: metrics_char = 8'h56;
-                    7'd14: metrics_char = 8'h61; 7'd15: metrics_char = 8'h76;
-                    7'd16: metrics_char = 8'h67; 7'd17: metrics_char = 8'h3A;
-                    7'd18: metrics_char = digit_to_ascii(avg1_d3);
-                    7'd19: metrics_char = digit_to_ascii(avg1_d2);
-                    7'd20: metrics_char = digit_to_ascii(avg1_d1);
-                    7'd21: metrics_char = 8'h20; 7'd22: metrics_char = 8'h56;
-                    7'd23: metrics_char = 8'h6D; 7'd24: metrics_char = 8'h61;
-                    7'd25: metrics_char = 8'h78; 7'd26: metrics_char = 8'h3A;
-                    7'd27: metrics_char = digit_to_ascii(max1_d3);
-                    7'd28: metrics_char = digit_to_ascii(max1_d2);
-                    7'd29: metrics_char = digit_to_ascii(max1_d1);
-                    7'd30: metrics_char = 8'h20; 7'd31: metrics_char = 8'h56;
-                    7'd32: metrics_char = 8'h6D; 7'd33: metrics_char = 8'h69;
-                    7'd34: metrics_char = 8'h6E; 7'd35: metrics_char = 8'h3A;
-                    7'd36: metrics_char = digit_to_ascii(vmin1_d3);
-                    7'd37: metrics_char = digit_to_ascii(vmin1_d2);
-                    7'd38: metrics_char = digit_to_ascii(vmin1_d1);
-                    7'd39: metrics_char = 8'h6D; 7'd40: metrics_char = 8'h56;
-                    default: metrics_char = 8'h20;
+                    7'd0:  metrics_char_comb = 8'h20; 7'd1:  metrics_char_comb = 8'h20;
+                    7'd2:  metrics_char_comb = 8'h20; 7'd3:  metrics_char_comb = 8'h20;
+                    7'd4:  metrics_char_comb = 8'h56; 7'd5:  metrics_char_comb = 8'h72;
+                    7'd6:  metrics_char_comb = 8'h6D; 7'd7:  metrics_char_comb = 8'h73;
+                    7'd8:  metrics_char_comb = 8'h3A;
+                    7'd9:  metrics_char_comb = digit_to_ascii(rms1_d3);
+                    7'd10: metrics_char_comb = digit_to_ascii(rms1_d2);
+                    7'd11: metrics_char_comb = digit_to_ascii(rms1_d1);
+                    7'd12: metrics_char_comb = 8'h20; 7'd13: metrics_char_comb = 8'h56;
+                    7'd14: metrics_char_comb = 8'h61; 7'd15: metrics_char_comb = 8'h76;
+                    7'd16: metrics_char_comb = 8'h67; 7'd17: metrics_char_comb = 8'h3A;
+                    7'd18: metrics_char_comb = digit_to_ascii(avg1_d3);
+                    7'd19: metrics_char_comb = digit_to_ascii(avg1_d2);
+                    7'd20: metrics_char_comb = digit_to_ascii(avg1_d1);
+                    7'd21: metrics_char_comb = 8'h20; 7'd22: metrics_char_comb = 8'h56;
+                    7'd23: metrics_char_comb = 8'h6D; 7'd24: metrics_char_comb = 8'h61;
+                    7'd25: metrics_char_comb = 8'h78; 7'd26: metrics_char_comb = 8'h3A;
+                    7'd27: metrics_char_comb = digit_to_ascii(max1_d3);
+                    7'd28: metrics_char_comb = digit_to_ascii(max1_d2);
+                    7'd29: metrics_char_comb = digit_to_ascii(max1_d1);
+                    7'd30: metrics_char_comb = 8'h20; 7'd31: metrics_char_comb = 8'h56;
+                    7'd32: metrics_char_comb = 8'h6D; 7'd33: metrics_char_comb = 8'h69;
+                    7'd34: metrics_char_comb = 8'h6E; 7'd35: metrics_char_comb = 8'h3A;
+                    7'd36: metrics_char_comb = digit_to_ascii(vmin1_d3);
+                    7'd37: metrics_char_comb = digit_to_ascii(vmin1_d2);
+                    7'd38: metrics_char_comb = digit_to_ascii(vmin1_d1);
+                    7'd39: metrics_char_comb = 8'h6D; 7'd40: metrics_char_comb = 8'h56;
+                    default: metrics_char_comb = 8'h20;
                 endcase
             end
             3'd2: begin
                 case (char_cell_x)
-                    7'd0:  metrics_char = 8'h43; 7'd1:  metrics_char = 8'h48;
-                    7'd2:  metrics_char = 8'h32; 7'd3:  metrics_char = 8'h20;
-                    7'd4:  metrics_char = 8'h46; 7'd5:  metrics_char = 8'h3A;
-                    7'd6:  metrics_char = digit_to_ascii(f2_d5);
-                    7'd7:  metrics_char = digit_to_ascii(f2_d4);
-                    7'd8:  metrics_char = digit_to_ascii(f2_d3);
-                    7'd9:  metrics_char = digit_to_ascii(f2_d2);
-                    7'd10: metrics_char = digit_to_ascii(f2_d1);
-                    7'd11: metrics_char = 8'h48; 7'd12: metrics_char = 8'h7A;
-                    7'd13: metrics_char = 8'h20; 7'd14: metrics_char = 8'h54;
-                    7'd15: metrics_char = 8'h3A;
-                    7'd16: metrics_char = digit_to_ascii(p2_d4);
-                    7'd17: metrics_char = digit_to_ascii(p2_d3);
-                    7'd18: metrics_char = digit_to_ascii(p2_d2);
-                    7'd19: metrics_char = digit_to_ascii(p2_d1);
-                    7'd20: metrics_char = 8'h75; 7'd21: metrics_char = 8'h73;
-                    7'd22: metrics_char = 8'h20; 7'd23: metrics_char = 8'h56;
-                    7'd24: metrics_char = digit_to_ascii(vpp2_d4);
-                    7'd25: metrics_char = digit_to_ascii(vpp2_d3);
-                    7'd26: metrics_char = digit_to_ascii(vpp2_d2);
-                    7'd27: metrics_char = digit_to_ascii(vpp2_d1);
-                    7'd28: metrics_char = 8'h6D; 7'd29: metrics_char = 8'h56;
-                    7'd30: metrics_char = 8'h20; 7'd31: metrics_char = 8'h44;
-                    7'd32: metrics_char = 8'h3A;
-                    7'd33: metrics_char = digit_to_ascii(d2_d3);
-                    7'd34: metrics_char = digit_to_ascii(d2_d2);
-                    7'd35: metrics_char = digit_to_ascii(d2_d1);
-                    7'd36: metrics_char = 8'h25; 7'd37: metrics_char = 8'h20;
-                    7'd38: metrics_char = 8'h57; 7'd39: metrics_char = 8'h3A;
-                    7'd40: metrics_char = type_byte(type_str_ch2, 3'd0);
-                    7'd41: metrics_char = type_byte(type_str_ch2, 3'd1);
-                    7'd42: metrics_char = type_byte(type_str_ch2, 3'd2);
-                    7'd43: metrics_char = type_byte(type_str_ch2, 3'd3);
-                    7'd44: metrics_char = type_byte(type_str_ch2, 3'd4);
-                    default: metrics_char = 8'h20;
+                    7'd0:  metrics_char_comb = 8'h43; 7'd1:  metrics_char_comb = 8'h48;
+                    7'd2:  metrics_char_comb = 8'h32; 7'd3:  metrics_char_comb = 8'h20;
+                    7'd4:  metrics_char_comb = 8'h46; 7'd5:  metrics_char_comb = 8'h3A;
+                    7'd6:  metrics_char_comb = digit_to_ascii(f2_d5);
+                    7'd7:  metrics_char_comb = digit_to_ascii(f2_d4);
+                    7'd8:  metrics_char_comb = digit_to_ascii(f2_d3);
+                    7'd9:  metrics_char_comb = digit_to_ascii(f2_d2);
+                    7'd10: metrics_char_comb = digit_to_ascii(f2_d1);
+                    7'd11: metrics_char_comb = 8'h48; 7'd12: metrics_char_comb = 8'h7A;
+                    7'd13: metrics_char_comb = 8'h20; 7'd14: metrics_char_comb = 8'h54;
+                    7'd15: metrics_char_comb = 8'h3A;
+                    7'd16: metrics_char_comb = digit_to_ascii(p2_d4);
+                    7'd17: metrics_char_comb = digit_to_ascii(p2_d3);
+                    7'd18: metrics_char_comb = digit_to_ascii(p2_d2);
+                    7'd19: metrics_char_comb = digit_to_ascii(p2_d1);
+                    7'd20: metrics_char_comb = 8'h75; 7'd21: metrics_char_comb = 8'h73;
+                    7'd22: metrics_char_comb = 8'h20; 7'd23: metrics_char_comb = 8'h56;
+                    7'd24: metrics_char_comb = digit_to_ascii(vpp2_d4);
+                    7'd25: metrics_char_comb = digit_to_ascii(vpp2_d3);
+                    7'd26: metrics_char_comb = digit_to_ascii(vpp2_d2);
+                    7'd27: metrics_char_comb = digit_to_ascii(vpp2_d1);
+                    7'd28: metrics_char_comb = 8'h6D; 7'd29: metrics_char_comb = 8'h56;
+                    7'd30: metrics_char_comb = 8'h20; 7'd31: metrics_char_comb = 8'h44;
+                    7'd32: metrics_char_comb = 8'h3A;
+                    7'd33: metrics_char_comb = digit_to_ascii(d2_d3);
+                    7'd34: metrics_char_comb = digit_to_ascii(d2_d2);
+                    7'd35: metrics_char_comb = digit_to_ascii(d2_d1);
+                    7'd36: metrics_char_comb = 8'h25; 7'd37: metrics_char_comb = 8'h20;
+                    7'd38: metrics_char_comb = 8'h57; 7'd39: metrics_char_comb = 8'h3A;
+                    7'd40: metrics_char_comb = type_byte(type_str_ch2, 3'd0);
+                    7'd41: metrics_char_comb = type_byte(type_str_ch2, 3'd1);
+                    7'd42: metrics_char_comb = type_byte(type_str_ch2, 3'd2);
+                    7'd43: metrics_char_comb = type_byte(type_str_ch2, 3'd3);
+                    7'd44: metrics_char_comb = type_byte(type_str_ch2, 3'd4);
+                    default: metrics_char_comb = 8'h20;
                 endcase
             end
             3'd3: begin
                 case (char_cell_x)
-                    7'd0:  metrics_char = 8'h20; 7'd1:  metrics_char = 8'h20;
-                    7'd2:  metrics_char = 8'h20; 7'd3:  metrics_char = 8'h20;
-                    7'd4:  metrics_char = 8'h56; 7'd5:  metrics_char = 8'h72;
-                    7'd6:  metrics_char = 8'h6D; 7'd7:  metrics_char = 8'h73;
-                    7'd8:  metrics_char = 8'h3A;
-                    7'd9:  metrics_char = digit_to_ascii(rms2_d3);
-                    7'd10: metrics_char = digit_to_ascii(rms2_d2);
-                    7'd11: metrics_char = digit_to_ascii(rms2_d1);
-                    7'd12: metrics_char = 8'h20; 7'd13: metrics_char = 8'h56;
-                    7'd14: metrics_char = 8'h61; 7'd15: metrics_char = 8'h76;
-                    7'd16: metrics_char = 8'h67; 7'd17: metrics_char = 8'h3A;
-                    7'd18: metrics_char = digit_to_ascii(avg2_d3);
-                    7'd19: metrics_char = digit_to_ascii(avg2_d2);
-                    7'd20: metrics_char = digit_to_ascii(avg2_d1);
-                    7'd21: metrics_char = 8'h20; 7'd22: metrics_char = 8'h56;
-                    7'd23: metrics_char = 8'h6D; 7'd24: metrics_char = 8'h61;
-                    7'd25: metrics_char = 8'h78; 7'd26: metrics_char = 8'h3A;
-                    7'd27: metrics_char = digit_to_ascii(max2_d3);
-                    7'd28: metrics_char = digit_to_ascii(max2_d2);
-                    7'd29: metrics_char = digit_to_ascii(max2_d1);
-                    7'd30: metrics_char = 8'h20; 7'd31: metrics_char = 8'h56;
-                    7'd32: metrics_char = 8'h6D; 7'd33: metrics_char = 8'h69;
-                    7'd34: metrics_char = 8'h6E; 7'd35: metrics_char = 8'h3A;
-                    7'd36: metrics_char = digit_to_ascii(vmin2_d3);
-                    7'd37: metrics_char = digit_to_ascii(vmin2_d2);
-                    7'd38: metrics_char = digit_to_ascii(vmin2_d1);
-                    7'd39: metrics_char = 8'h6D; 7'd40: metrics_char = 8'h56;
-                    default: metrics_char = 8'h20;
+                    7'd0:  metrics_char_comb = 8'h20; 7'd1:  metrics_char_comb = 8'h20;
+                    7'd2:  metrics_char_comb = 8'h20; 7'd3:  metrics_char_comb = 8'h20;
+                    7'd4:  metrics_char_comb = 8'h56; 7'd5:  metrics_char_comb = 8'h72;
+                    7'd6:  metrics_char_comb = 8'h6D; 7'd7:  metrics_char_comb = 8'h73;
+                    7'd8:  metrics_char_comb = 8'h3A;
+                    7'd9:  metrics_char_comb = digit_to_ascii(rms2_d3);
+                    7'd10: metrics_char_comb = digit_to_ascii(rms2_d2);
+                    7'd11: metrics_char_comb = digit_to_ascii(rms2_d1);
+                    7'd12: metrics_char_comb = 8'h20; 7'd13: metrics_char_comb = 8'h56;
+                    7'd14: metrics_char_comb = 8'h61; 7'd15: metrics_char_comb = 8'h76;
+                    7'd16: metrics_char_comb = 8'h67; 7'd17: metrics_char_comb = 8'h3A;
+                    7'd18: metrics_char_comb = digit_to_ascii(avg2_d3);
+                    7'd19: metrics_char_comb = digit_to_ascii(avg2_d2);
+                    7'd20: metrics_char_comb = digit_to_ascii(avg2_d1);
+                    7'd21: metrics_char_comb = 8'h20; 7'd22: metrics_char_comb = 8'h56;
+                    7'd23: metrics_char_comb = 8'h6D; 7'd24: metrics_char_comb = 8'h61;
+                    7'd25: metrics_char_comb = 8'h78; 7'd26: metrics_char_comb = 8'h3A;
+                    7'd27: metrics_char_comb = digit_to_ascii(max2_d3);
+                    7'd28: metrics_char_comb = digit_to_ascii(max2_d2);
+                    7'd29: metrics_char_comb = digit_to_ascii(max2_d1);
+                    7'd30: metrics_char_comb = 8'h20; 7'd31: metrics_char_comb = 8'h56;
+                    7'd32: metrics_char_comb = 8'h6D; 7'd33: metrics_char_comb = 8'h69;
+                    7'd34: metrics_char_comb = 8'h6E; 7'd35: metrics_char_comb = 8'h3A;
+                    7'd36: metrics_char_comb = digit_to_ascii(vmin2_d3);
+                    7'd37: metrics_char_comb = digit_to_ascii(vmin2_d2);
+                    7'd38: metrics_char_comb = digit_to_ascii(vmin2_d1);
+                    7'd39: metrics_char_comb = 8'h6D; 7'd40: metrics_char_comb = 8'h56;
+                    default: metrics_char_comb = 8'h20;
                 endcase
             end
             3'd4: begin
                 case (char_cell_x)
-                    7'd0:  metrics_char = 8'h43; 7'd1:  metrics_char = 8'h46;
-                    7'd2:  metrics_char = 8'h31; 7'd3:  metrics_char = 8'h3A;
-                    7'd4:  metrics_char = digit_to_ascii(cf1_d4);
-                    7'd5:  metrics_char = digit_to_ascii(cf1_d3);
-                    7'd6:  metrics_char = digit_to_ascii(cf1_d2);
-                    7'd7:  metrics_char = 8'h2E; 7'd8:  metrics_char = digit_to_ascii(cf1_d1);
-                    7'd9:  metrics_char = 8'h20; 7'd10: metrics_char = 8'h43;
-                    7'd11: metrics_char = 8'h46; 7'd12: metrics_char = 8'h32;
-                    7'd13: metrics_char = 8'h3A;
-                    7'd14: metrics_char = digit_to_ascii(cf2_d4);
-                    7'd15: metrics_char = digit_to_ascii(cf2_d3);
-                    7'd16: metrics_char = digit_to_ascii(cf2_d2);
-                    7'd17: metrics_char = 8'h2E; 7'd18: metrics_char = digit_to_ascii(cf2_d1);
-                    7'd19: metrics_char = 8'h20; 7'd20: metrics_char = 8'h52;
-                    7'd21: metrics_char = 8'h54; 7'd22: metrics_char = 8'h31;
-                    7'd23: metrics_char = 8'h3A;
-                    7'd24: metrics_char = digit_to_ascii(rt1_d3);
-                    7'd25: metrics_char = digit_to_ascii(rt1_d2);
-                    7'd26: metrics_char = digit_to_ascii(rt1_d1);
-                    7'd27: metrics_char = 8'h20; 7'd28: metrics_char = 8'h52;
-                    7'd29: metrics_char = 8'h54; 7'd30: metrics_char = 8'h32;
-                    7'd31: metrics_char = 8'h3A;
-                    7'd32: metrics_char = digit_to_ascii(rt2_d3);
-                    7'd33: metrics_char = digit_to_ascii(rt2_d2);
-                    7'd34: metrics_char = digit_to_ascii(rt2_d1);
-                    7'd35: metrics_char = 8'h75; 7'd36: metrics_char = 8'h73;
-                    default: metrics_char = 8'h20;
+                    7'd0:  metrics_char_comb = 8'h43; 7'd1:  metrics_char_comb = 8'h46;
+                    7'd2:  metrics_char_comb = 8'h31; 7'd3:  metrics_char_comb = 8'h3A;
+                    7'd4:  metrics_char_comb = digit_to_ascii(cf1_d4);
+                    7'd5:  metrics_char_comb = digit_to_ascii(cf1_d3);
+                    7'd6:  metrics_char_comb = digit_to_ascii(cf1_d2);
+                    7'd7:  metrics_char_comb = 8'h2E; 7'd8:  metrics_char_comb = digit_to_ascii(cf1_d1);
+                    7'd9:  metrics_char_comb = 8'h20; 7'd10: metrics_char_comb = 8'h43;
+                    7'd11: metrics_char_comb = 8'h46; 7'd12: metrics_char_comb = 8'h32;
+                    7'd13: metrics_char_comb = 8'h3A;
+                    7'd14: metrics_char_comb = digit_to_ascii(cf2_d4);
+                    7'd15: metrics_char_comb = digit_to_ascii(cf2_d3);
+                    7'd16: metrics_char_comb = digit_to_ascii(cf2_d2);
+                    7'd17: metrics_char_comb = 8'h2E; 7'd18: metrics_char_comb = digit_to_ascii(cf2_d1);
+                    7'd19: metrics_char_comb = 8'h20; 7'd20: metrics_char_comb = 8'h52;
+                    7'd21: metrics_char_comb = 8'h54; 7'd22: metrics_char_comb = 8'h31;
+                    7'd23: metrics_char_comb = 8'h3A;
+                    7'd24: metrics_char_comb = digit_to_ascii(rt1_d3);
+                    7'd25: metrics_char_comb = digit_to_ascii(rt1_d2);
+                    7'd26: metrics_char_comb = digit_to_ascii(rt1_d1);
+                    7'd27: metrics_char_comb = 8'h20; 7'd28: metrics_char_comb = 8'h52;
+                    7'd29: metrics_char_comb = 8'h54; 7'd30: metrics_char_comb = 8'h32;
+                    7'd31: metrics_char_comb = 8'h3A;
+                    7'd32: metrics_char_comb = digit_to_ascii(rt2_d3);
+                    7'd33: metrics_char_comb = digit_to_ascii(rt2_d2);
+                    7'd34: metrics_char_comb = digit_to_ascii(rt2_d1);
+                    7'd35: metrics_char_comb = 8'h75; 7'd36: metrics_char_comb = 8'h73;
+                    default: metrics_char_comb = 8'h20;
                 endcase
             end
             3'd5: begin
                 case (char_cell_x)
-                    7'd0:  metrics_char = 8'h41; 7'd1:  metrics_char = 8'h44;
-                    7'd2:  metrics_char = 8'h43; 7'd3:  metrics_char = 8'h3A;
-                    7'd4:  metrics_char = digit_to_ascii(srate_d5);
-                    7'd5:  metrics_char = digit_to_ascii(srate_d4);
-                    7'd6:  metrics_char = digit_to_ascii(srate_d3);
-                    7'd7:  metrics_char = digit_to_ascii(srate_d2);
-                    7'd8:  metrics_char = digit_to_ascii(srate_d1);
-                    7'd9:  metrics_char = 8'h6B; 7'd10: metrics_char = 8'h53;
-                    7'd11: metrics_char = 8'h2F; 7'd12: metrics_char = 8'h73;
-                    7'd13: metrics_char = 8'h20; 7'd14: metrics_char = 8'h54;
-                    7'd15: metrics_char = 8'h52; 7'd16: metrics_char = 8'h47;
-                    7'd17: metrics_char = 8'h3A;
-                    7'd18: metrics_char = digit_to_ascii(trig_d3);
-                    7'd19: metrics_char = digit_to_ascii(trig_d2);
-                    7'd20: metrics_char = digit_to_ascii(trig_d1);
-                    7'd21: metrics_char = 8'h6D; 7'd22: metrics_char = 8'h56;
-                    7'd23: metrics_char = 8'h20; 7'd24: metrics_char = 8'h53;
-                    7'd25: metrics_char = 8'h54; 7'd26: metrics_char = 8'h41;
-                    7'd27: metrics_char = 8'h3A;
-                    7'd28: metrics_char = trigger_armed ? 8'h41 : 8'h57;
-                    7'd29: metrics_char = trigger_armed ? 8'h52 : 8'h41;
-                    7'd30: metrics_char = trigger_armed ? 8'h4D : 8'h49;
-                    7'd31: metrics_char = trigger_armed ? 8'h45 : 8'h54;
-                    7'd32: metrics_char = 8'h44;
-                    default: metrics_char = 8'h20;
+                    7'd0:  metrics_char_comb = 8'h41; 7'd1:  metrics_char_comb = 8'h44;
+                    7'd2:  metrics_char_comb = 8'h43; 7'd3:  metrics_char_comb = 8'h3A;
+                    7'd4:  metrics_char_comb = digit_to_ascii(srate_d5);
+                    7'd5:  metrics_char_comb = digit_to_ascii(srate_d4);
+                    7'd6:  metrics_char_comb = digit_to_ascii(srate_d3);
+                    7'd7:  metrics_char_comb = digit_to_ascii(srate_d2);
+                    7'd8:  metrics_char_comb = digit_to_ascii(srate_d1);
+                    7'd9:  metrics_char_comb = 8'h6B; 7'd10: metrics_char_comb = 8'h53;
+                    7'd11: metrics_char_comb = 8'h2F; 7'd12: metrics_char_comb = 8'h73;
+                    7'd13: metrics_char_comb = 8'h20; 7'd14: metrics_char_comb = 8'h54;
+                    7'd15: metrics_char_comb = 8'h52; 7'd16: metrics_char_comb = 8'h47;
+                    7'd17: metrics_char_comb = 8'h3A;
+                    7'd18: metrics_char_comb = digit_to_ascii(trig_d3);
+                    7'd19: metrics_char_comb = digit_to_ascii(trig_d2);
+                    7'd20: metrics_char_comb = digit_to_ascii(trig_d1);
+                    7'd21: metrics_char_comb = 8'h6D; 7'd22: metrics_char_comb = 8'h56;
+                    7'd23: metrics_char_comb = 8'h20; 7'd24: metrics_char_comb = 8'h53;
+                    7'd25: metrics_char_comb = 8'h54; 7'd26: metrics_char_comb = 8'h41;
+                    7'd27: metrics_char_comb = 8'h3A;
+                    7'd28: metrics_char_comb = trigger_armed ? 8'h41 : 8'h57;
+                    7'd29: metrics_char_comb = trigger_armed ? 8'h52 : 8'h41;
+                    7'd30: metrics_char_comb = trigger_armed ? 8'h4D : 8'h49;
+                    7'd31: metrics_char_comb = trigger_armed ? 8'h45 : 8'h54;
+                    7'd32: metrics_char_comb = 8'h44;
+                    default: metrics_char_comb = 8'h20;
                 endcase
             end
-            default: metrics_char = 8'h20;
+            default: metrics_char_comb = 8'h20;
         endcase
     end
 
+    // Pipeline register — clock metrics_char_comb into metrics_char
+    // to break the long combinational path: char_cell mux → font ROM
+    always @(posedge clk) begin
+        metrics_char <= metrics_char_comb;
+    end
+
     //=========================================================================
-    // Char gen instance
+    // Char gen instance — uses delayed col/row to align with pipelined char_code
     //=========================================================================
     wire char_pixel_on;
 
     char_gen u_char_gen (
         .clk(clk),
         .char_code(metrics_char),
-        .char_row(char_row),
-        .char_col(char_col),
+        .char_row(char_row_d1),
+        .char_col(char_col_d1),
         .pixel_on(char_pixel_on)
     );
 

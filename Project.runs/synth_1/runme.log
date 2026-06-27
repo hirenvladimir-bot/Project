@@ -8,7 +8,7 @@
   **** SW Build 6140274 on Thu May 22 00:12:29 MDT 2025
   **** IP Build 6138677 on Thu May 22 03:10:11 MDT 2025
   **** SharedData Build 6139179 on Tue May 20 17:58:58 MDT 2025
-  **** Start of session at: Sat Jun 27 12:59:50 2026
+  **** Start of session at: Sat Jun 27 13:48:25 2026
     ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
     ** Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 
@@ -22,17 +22,18 @@ Starting synth_design
 Attempting to get a license for feature 'Synthesis' and/or device 'xc7a35t'
 INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a35t'
 INFO: [Device 21-403] Loading part xc7a35tcsg324-1
+INFO: [Designutils 20-5440] No compile time benefit to using incremental synthesis; A full resynthesis will be run
+INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
 INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
 INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
-INFO: [Synth 8-7075] Helper process launched with PID 16516
+INFO: [Synth 8-7075] Helper process launched with PID 14388
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 1350.266 ; gain = 491.219
+Starting RTL Elaboration : Time (s): cpu = 00:00:03 ; elapsed = 00:00:03 . Memory (MB): peak = 1352.023 ; gain = 493.004
 ---------------------------------------------------------------------------------
-INFO: [Synth 8-11241] undeclared symbol 'display_addr', assumed default net type 'wire' [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/Top_Project.v:261]
-WARNING: [Synth 8-8895] 'display_addr' is already implicitly declared on line 261 [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/Top_Project.v:275]
+WARNING: [Synth 8-6901] identifier 'rms_cnt' is used before its declaration [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_analyzer.v:396]
 INFO: [Synth 8-6157] synthesizing module 'Top_Project' [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/Top_Project.v:18]
-INFO: [Synth 8-6157] synthesizing module 'clk_wiz_0' [C:/Users/sgzmd/Desktop/Project/Project.runs/synth_1/.Xil/Vivado-20292-MOSS550W/realtime/clk_wiz_0_stub.v:6]
-INFO: [Synth 8-6155] done synthesizing module 'clk_wiz_0' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.runs/synth_1/.Xil/Vivado-20292-MOSS550W/realtime/clk_wiz_0_stub.v:6]
+INFO: [Synth 8-6157] synthesizing module 'clk_wiz_0' [C:/Users/sgzmd/Desktop/Project/Project.runs/synth_1/.Xil/Vivado-7956-MOSS550W/realtime/clk_wiz_0_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'clk_wiz_0' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.runs/synth_1/.Xil/Vivado-7956-MOSS550W/realtime/clk_wiz_0_stub.v:6]
 INFO: [Synth 8-6157] synthesizing module 'ui_ctrl' [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/ui_ctrl.v:19]
 	Parameter PHASE_WIDTH bound to: 24 - type: integer 
 INFO: [Synth 8-6155] done synthesizing module 'ui_ctrl' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/ui_ctrl.v:19]
@@ -74,13 +75,13 @@ INFO: [Synth 8-6157] synthesizing module 'XADC' [D:/FPGA/2025.1/Vivado/scripts/r
 	Parameter SIM_DEVICE bound to: 7SERIES - type: string 
 	Parameter SIM_MONITOR_FILE bound to: design.txt - type: string 
 INFO: [Synth 8-6155] done synthesizing module 'XADC' (0#1) [D:/FPGA/2025.1/Vivado/scripts/rt/data/unisim_comp.v:164403]
-INFO: [Synth 8-6157] synthesizing module 'blk_mem_gen_0' [C:/Users/sgzmd/Desktop/Project/Project.runs/synth_1/.Xil/Vivado-20292-MOSS550W/realtime/blk_mem_gen_0_stub.v:6]
-INFO: [Synth 8-6155] done synthesizing module 'blk_mem_gen_0' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.runs/synth_1/.Xil/Vivado-20292-MOSS550W/realtime/blk_mem_gen_0_stub.v:6]
+INFO: [Synth 8-6157] synthesizing module 'blk_mem_gen_0' [C:/Users/sgzmd/Desktop/Project/Project.runs/synth_1/.Xil/Vivado-7956-MOSS550W/realtime/blk_mem_gen_0_stub.v:6]
+INFO: [Synth 8-6155] done synthesizing module 'blk_mem_gen_0' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.runs/synth_1/.Xil/Vivado-7956-MOSS550W/realtime/blk_mem_gen_0_stub.v:6]
 INFO: [Synth 8-6155] done synthesizing module 'Oscilloscope_Acq' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/Oscilloscope_Acq.v:3]
-INFO: [Synth 8-6157] synthesizing module 'wave_analyzer' [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_analyzer.v:26]
-	Parameter FREQ_CAL_X10 bound to: 961 - type: integer 
+INFO: [Synth 8-6157] synthesizing module 'wave_analyzer' [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_analyzer.v:32]
+	Parameter FREQ_CAL_X10 bound to: 500 - type: integer 
 	Parameter CAL_MV_X1024 bound to: 4000 - type: integer 
-INFO: [Synth 8-6155] done synthesizing module 'wave_analyzer' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_analyzer.v:26]
+INFO: [Synth 8-6155] done synthesizing module 'wave_analyzer' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_analyzer.v:32]
 INFO: [Synth 8-6157] synthesizing module 'vga_ctrl' [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/vga_ctrl.v:8]
 INFO: [Synth 8-6155] done synthesizing module 'vga_ctrl' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/vga_ctrl.v:8]
 INFO: [Synth 8-6157] synthesizing module 'waveform_display' [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/waveform_display.v:19]
@@ -93,14 +94,10 @@ INFO: [Synth 8-6155] done synthesizing module 'lissajous_display' (0#1) [C:/User
 INFO: [Synth 8-6157] synthesizing module 'kaleidoscope' [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/kaleidoscope.v:15]
 INFO: [Synth 8-6155] done synthesizing module 'kaleidoscope' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/kaleidoscope.v:15]
 INFO: [Synth 8-6155] done synthesizing module 'Top_Project' (0#1) [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/Top_Project.v:18]
-WARNING: [Synth 8-6014] Unused sequential element rt_vmin_reg was removed.  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_analyzer.v:244]
-WARNING: [Synth 8-6014] Unused sequential element rt_prev_below_90_reg was removed.  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_analyzer.v:252]
-WARNING: [Synth 8-6014] Unused sequential element near_peak_reg was removed.  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_analyzer.v:344]
-WARNING: [Synth 8-6014] Unused sequential element near_valley_reg was removed.  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_analyzer.v:345]
-WARNING: [Synth 8-6014] Unused sequential element sum_sq_acc_reg was removed.  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_analyzer.v:427]
-WARNING: [Synth 8-6014] Unused sequential element sum_acc_reg was removed.  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_analyzer.v:428]
-WARNING: [Synth 8-6014] Unused sequential element rms_peak_reg was removed.  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_analyzer.v:429]
-WARNING: [Synth 8-6014] Unused sequential element rms_cnt_reg was removed.  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_analyzer.v:430]
+WARNING: [Synth 8-6014] Unused sequential element sum_sq_acc_reg was removed.  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_analyzer.v:452]
+WARNING: [Synth 8-6014] Unused sequential element sum_acc_reg was removed.  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_analyzer.v:453]
+WARNING: [Synth 8-6014] Unused sequential element rms_peak_reg was removed.  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_analyzer.v:454]
+WARNING: [Synth 8-6014] Unused sequential element rms_cnt_reg was removed.  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_analyzer.v:455]
 WARNING: [Synth 8-7137] Register trail_x_reg[0] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
 WARNING: [Synth 8-7137] Register trail_x_reg[1] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
 WARNING: [Synth 8-7137] Register trail_x_reg[2] in module lissajous_display has both Set and reset with same priority. This may cause simulation mismatches. Consider rewriting code  [C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/lissajous_display.v:70]
@@ -309,18 +306,18 @@ WARNING: [Synth 8-7129] Port avg_ch2[6] in module waveform_display is either unc
 WARNING: [Synth 8-7129] Port avg_ch2[5] in module waveform_display is either unconnected or has no load
 INFO: [Common 17-14] Message 'Synth 8-7129' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:04 ; elapsed = 00:00:05 . Memory (MB): peak = 1583.625 ; gain = 724.578
+Finished RTL Elaboration : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 1584.766 ; gain = 725.746
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 1583.625 ; gain = 724.578
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 1584.766 ; gain = 725.746
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 1583.625 ; gain = 724.578
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:05 ; elapsed = 00:00:06 . Memory (MB): peak = 1584.766 ; gain = 725.746
 ---------------------------------------------------------------------------------
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.096 . Memory (MB): peak = 1583.625 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.096 . Memory (MB): peak = 1584.766 ; gain = 0.000
 INFO: [Netlist 29-17] Analyzing 1 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
@@ -337,60 +334,37 @@ INFO: [Project 1-236] Implementation specific constraints were found while readi
 Resolution: To avoid this warning, move constraints listed in [.Xil/Top_Project_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
 Completed Processing XDC Constraints
 
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1680.781 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1679.594 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.020 . Memory (MB): peak = 1680.781 ; gain = 0.000
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.021 . Memory (MB): peak = 1679.594 ; gain = 0.000
 WARNING: [Timing 38-316] Clock period '20.000' specified during out-of-context synthesis of instance 'u_osc_acq/u_vga_bram' at clock pin 'clka' is different from the actual clock period '10.000', this can lead to different synthesis results.
+INFO: [Designutils 20-5440] No compile time benefit to using incremental synthesis; A full resynthesis will be run
+INFO: [Designutils 20-4379] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:10 ; elapsed = 00:00:12 . Memory (MB): peak = 1681.246 ; gain = 822.199
+Finished Constraint Validation : Time (s): cpu = 00:00:11 ; elapsed = 00:00:12 . Memory (MB): peak = 1679.699 ; gain = 820.680
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7a35tcsg324-1
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:10 ; elapsed = 00:00:12 . Memory (MB): peak = 1681.246 ; gain = 822.199
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:11 ; elapsed = 00:00:12 . Memory (MB): peak = 1679.699 ; gain = 820.680
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:10 ; elapsed = 00:00:12 . Memory (MB): peak = 1681.246 ; gain = 822.199
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:11 ; elapsed = 00:00:12 . Memory (MB): peak = 1679.699 ; gain = 820.680
 ---------------------------------------------------------------------------------
+DSP Debug: swapped A/B pins for adder 000001766149F4C0
+DSP Debug: swapped A/B pins for adder 000001766154DF60
+DSP Debug: swapped A/B pins for adder 000001766149F6A0
+DSP Debug: swapped A/B pins for adder 000001766149E5C0
 ---------------------------------------------------------------------------------
-Start Preparing Guide Design
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:14 ; elapsed = 00:00:14 . Memory (MB): peak = 1679.699 ; gain = 820.680
 ---------------------------------------------------------------------------------
-got a mismatch Oscilloscope_Acq
-got a mismatch vga_ctrl
-got a mismatch waveform_display
-got a mismatch lissajous_display
-got a mismatch kaleidoscope
-WARNING: [Synth 8-6702] IncrSynth : Design change found in an area of the design that prevents previous synthesis information being used, Reverting to default synthesis
----------------------------------------------------------------------------------
-Finished Doing Graph Differ : Time (s): cpu = 00:00:11 ; elapsed = 00:00:13 . Memory (MB): peak = 1681.246 ; gain = 822.199
----------------------------------------------------------------------------------
----------------------------------------------------------------------------------
-Finished Preparing Guide Design : Time (s): cpu = 00:00:11 ; elapsed = 00:00:13 . Memory (MB): peak = 1681.246 ; gain = 822.199
----------------------------------------------------------------------------------
-DSP Debug: swapped A/B pins for adder 000001F8A5E6E5C0
-DSP Debug: swapped A/B pins for adder 000001F8A5B56530
-DSP Debug: swapped A/B pins for adder 000001F8A5E6DDE0
-DSP Debug: swapped A/B pins for adder 000001F8A5E6CA00
----------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:14 ; elapsed = 00:00:15 . Memory (MB): peak = 1681.246 ; gain = 822.199
----------------------------------------------------------------------------------
-
-
-Incremental Synthesis Report Summary:
-
-1. Incremental synthesis run: no
-
-   Reason for not running incremental synthesis : Design change found in an area of the design that prevents previous synthesis information being used
-
-
-INFO: [Synth 8-7130] Flow is switching to default flow due to incremental criteria not met. If you would like to alter this behaviour and have the flow terminate instead, please set the following parameter config_implementation {autoIncr.Synth.RejectBehavior Terminate}
 ---------------------------------------------------------------------------------
 Start RTL Component Statistics 
 ---------------------------------------------------------------------------------
@@ -401,44 +375,43 @@ Detailed RTL Component Info :
 	   2 Input   24 Bit       Adders := 1     
 	   3 Input   24 Bit       Adders := 1     
 	   2 Input   22 Bit       Adders := 1     
-	   2 Input   16 Bit       Adders := 6     
 	   4 Input   16 Bit       Adders := 2     
 	   3 Input   16 Bit       Adders := 2     
-	   2 Input   14 Bit       Adders := 10    
 	   2 Input   11 Bit       Adders := 20    
-	   2 Input   10 Bit       Adders := 409   
+	   2 Input   10 Bit       Adders := 407   
 	   3 Input    9 Bit       Adders := 2     
 	   2 Input    9 Bit       Adders := 137   
-	   2 Input    8 Bit       Adders := 29    
+	   2 Input    8 Bit       Adders := 31    
 	   3 Input    8 Bit       Adders := 2     
-	   4 Input    8 Bit       Adders := 2     
 	   2 Input    7 Bit       Adders := 2     
 	   2 Input    5 Bit       Adders := 2     
-	   2 Input    4 Bit       Adders := 2     
 	  12 Input    4 Bit       Adders := 1     
+	   2 Input    4 Bit       Adders := 2     
 	   2 Input    3 Bit       Adders := 5     
++---XORs : 
+	   2 Input      1 Bit         XORs := 1     
 +---Registers : 
+	               32 Bit    Registers := 4     
 	               24 Bit    Registers := 3     
 	               22 Bit    Registers := 1     
-	               16 Bit    Registers := 25    
-	               14 Bit    Registers := 10    
+	               16 Bit    Registers := 23    
 	               12 Bit    Registers := 3     
 	               11 Bit    Registers := 2     
-	               10 Bit    Registers := 263   
-	                8 Bit    Registers := 50    
+	               10 Bit    Registers := 261   
+	                8 Bit    Registers := 49    
 	                7 Bit    Registers := 4     
 	                5 Bit    Registers := 2     
 	                4 Bit    Registers := 2     
-	                3 Bit    Registers := 9     
+	                3 Bit    Registers := 11    
 	                2 Bit    Registers := 23    
-	                1 Bit    Registers := 51    
+	                1 Bit    Registers := 61    
 +---Muxes : 
 	   6 Input   39 Bit        Muxes := 2     
 	   2 Input   32 Bit        Muxes := 19    
 	   2 Input   24 Bit        Muxes := 3     
 	   4 Input   24 Bit        Muxes := 1     
 	   2 Input   16 Bit        Muxes := 4     
-	   2 Input   14 Bit        Muxes := 1     
+	   2 Input   14 Bit        Muxes := 3     
 	   8 Input   12 Bit        Muxes := 1     
 	   2 Input   11 Bit        Muxes := 21    
 	   2 Input   10 Bit        Muxes := 396   
@@ -448,18 +421,19 @@ Detailed RTL Component Info :
 	   3 Input    8 Bit        Muxes := 1     
 	   2 Input    7 Bit        Muxes := 4     
 	   2 Input    5 Bit        Muxes := 3     
-	   2 Input    4 Bit        Muxes := 55    
+	   2 Input    4 Bit        Muxes := 50    
 	   3 Input    4 Bit        Muxes := 9     
-	   7 Input    4 Bit        Muxes := 1     
 	   5 Input    4 Bit        Muxes := 2     
+	   7 Input    4 Bit        Muxes := 1     
 	   6 Input    4 Bit        Muxes := 3     
 	   4 Input    4 Bit        Muxes := 3     
-	   2 Input    3 Bit        Muxes := 10    
+	   2 Input    3 Bit        Muxes := 6     
 	   5 Input    3 Bit        Muxes := 1     
-	   2 Input    2 Bit        Muxes := 24    
+	   6 Input    3 Bit        Muxes := 2     
+	   2 Input    2 Bit        Muxes := 22    
 	   4 Input    2 Bit        Muxes := 1     
 	   8 Input    1 Bit        Muxes := 1     
-	   2 Input    1 Bit        Muxes := 71    
+	   2 Input    1 Bit        Muxes := 95    
 	   4 Input    1 Bit        Muxes := 1     
 	   3 Input    1 Bit        Muxes := 2     
 ---------------------------------------------------------------------------------
@@ -477,48 +451,253 @@ Finished Part Resource Summary
 ---------------------------------------------------------------------------------
 Start Cross Boundary and Area Optimization
 ---------------------------------------------------------------------------------
-WARNING: [Synth 8-7080] Parallel synthesis criteria is not met
-DSP Report: Generating DSP trigger_mv0, operation Mode is: (C:0x200)+(A:0xfa0)*B.
-DSP Report: operator trigger_mv0 is absorbed into DSP trigger_mv0.
-DSP Report: operator trigger_mv1 is absorbed into DSP trigger_mv0.
-DSP Report: Generating DSP frequency_hz1, operation Mode is: (C:0x5)+A*(B:0x3c1).
-DSP Report: operator frequency_hz1 is absorbed into DSP frequency_hz1.
-DSP Report: operator frequency_hz2 is absorbed into DSP frequency_hz1.
-DSP Report: Generating DSP period_x100us4, operation Mode is: A*(B:0x3c1).
-DSP Report: operator period_x100us4 is absorbed into DSP period_x100us4.
-DSP Report: Generating DSP period_x100us1, operation Mode is: A*(B:0x2710).
-DSP Report: operator period_x100us1 is absorbed into DSP period_x100us1.
-DSP Report: Generating DSP duty_cycle1, operation Mode is: (C:0x1388)+A*(B:0x64).
-DSP Report: operator duty_cycle1 is absorbed into DSP duty_cycle1.
-DSP Report: operator duty_cycle2 is absorbed into DSP duty_cycle1.
-DSP Report: Generating DSP vpp_mv1, operation Mode is: A*(B:0xfa0).
-DSP Report: operator vpp_mv1 is absorbed into DSP vpp_mv1.
-DSP Report: Generating DSP vmin_mv1, operation Mode is: (A:0xfa0)*B.
-DSP Report: operator vmin_mv1 is absorbed into DSP vmin_mv1.
-DSP Report: Generating DSP frequency_hz1, operation Mode is: (C:0x5)+A*(B:0x3c1).
-DSP Report: operator frequency_hz1 is absorbed into DSP frequency_hz1.
-DSP Report: operator frequency_hz2 is absorbed into DSP frequency_hz1.
-DSP Report: Generating DSP period_x100us4, operation Mode is: A*(B:0x3c1).
-DSP Report: operator period_x100us4 is absorbed into DSP period_x100us4.
-DSP Report: Generating DSP period_x100us1, operation Mode is: A*(B:0x2710).
-DSP Report: operator period_x100us1 is absorbed into DSP period_x100us1.
-DSP Report: Generating DSP duty_cycle1, operation Mode is: (C:0x1388)+A*(B:0x64).
-DSP Report: operator duty_cycle1 is absorbed into DSP duty_cycle1.
-DSP Report: operator duty_cycle2 is absorbed into DSP duty_cycle1.
-DSP Report: Generating DSP vpp_mv1, operation Mode is: A*(B:0xfa0).
-DSP Report: operator vpp_mv1 is absorbed into DSP vpp_mv1.
-DSP Report: Generating DSP vmin_mv1, operation Mode is: (A:0xfa0)*B.
-DSP Report: operator vmin_mv1 is absorbed into DSP vmin_mv1.
-DSP Report: Generating DSP mid60_y_prod, operation Mode is: C+A*(B:0xde).
-DSP Report: operator mid60_y_prod is absorbed into DSP mid60_y_prod.
-DSP Report: operator mid60_y_prod0 is absorbed into DSP mid60_y_prod.
-DSP Report: Generating DSP u_mod/fm_dev2, operation Mode is: A*B.
-DSP Report: operator u_mod/fm_dev2 is absorbed into DSP u_mod/fm_dev2.
 WARNING: [Synth 8-3917] design Top_Project has port ch1_range_sel driven by constant 0
 WARNING: [Synth 8-3917] design Top_Project has port ch1_acdc_sel driven by constant 0
 WARNING: [Synth 8-3917] design Top_Project has port ch2_range_sel driven by constant 0
 WARNING: [Synth 8-3917] design Top_Project has port ch2_acdc_sel driven by constant 0
 WARNING: [Synth 8-3917] design Top_Project has port sg_out_sel driven by constant 0
+INFO: [Synth 8-5544] ROM "type_string" won't be mapped to Block RAM because address size (3) smaller than threshold (5)
+INFO: [Synth 8-5544] ROM "type_string" won't be mapped to Block RAM because address size (3) smaller than threshold (5)
+DSP Report: Generating DSP trigger_mv0, operation Mode is: (C:0x200)+(A:0xfa0)*B.
+DSP Report: operator trigger_mv0 is absorbed into DSP trigger_mv0.
+DSP Report: operator trigger_mv1 is absorbed into DSP trigger_mv0.
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\metrics_char_reg[7] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[0][0]' (FDE) to 'trail_x_reg[0][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[0][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[3][0]' (FDE) to 'trail_x_reg[3][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[3][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[4][0]' (FDE) to 'trail_x_reg[4][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[4][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[6][0]' (FDE) to 'trail_x_reg[6][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[6][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[7][0]' (FDE) to 'trail_x_reg[7][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[7][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[9][0]' (FDE) to 'trail_x_reg[9][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[9][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[10][0]' (FDE) to 'trail_x_reg[10][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[10][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[11][0]' (FDE) to 'trail_x_reg[11][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[11][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[12][0]' (FDE) to 'trail_x_reg[12][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[12][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[13][0]' (FDE) to 'trail_x_reg[13][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[13][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[14][0]' (FDE) to 'trail_x_reg[14][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[14][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[16][0]' (FDE) to 'trail_x_reg[16][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[16][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[17][0]' (FDE) to 'trail_x_reg[17][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[17][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[18][0]' (FDE) to 'trail_x_reg[18][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[18][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[20][0]' (FDE) to 'trail_x_reg[20][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[20][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[22][0]' (FDE) to 'trail_x_reg[22][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[22][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[23][0]' (FDE) to 'trail_x_reg[23][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[23][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[25][0]' (FDE) to 'trail_x_reg[25][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[25][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[26][0]' (FDE) to 'trail_x_reg[26][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[26][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[28][0]' (FDE) to 'trail_x_reg[28][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[28][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[35][0]' (FDE) to 'trail_x_reg[35][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[35][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[36][0]' (FDE) to 'trail_x_reg[36][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[36][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[37][0]' (FDE) to 'trail_x_reg[37][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[37][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[39][0]' (FDE) to 'trail_x_reg[39][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[39][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[42][0]' (FDE) to 'trail_x_reg[42][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[42][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[43][0]' (FDE) to 'trail_x_reg[43][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[43][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[45][0]' (FDE) to 'trail_x_reg[45][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[45][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[46][0]' (FDE) to 'trail_x_reg[46][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[46][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[48][0]' (FDE) to 'trail_x_reg[48][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[48][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[50][0]' (FDE) to 'trail_x_reg[50][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[50][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[51][0]' (FDE) to 'trail_x_reg[51][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[51][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[52][0]' (FDE) to 'trail_x_reg[52][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[52][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[53][0]' (FDE) to 'trail_x_reg[53][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[53][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[56][0]' (FDE) to 'trail_x_reg[56][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[56][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[57][0]' (FDE) to 'trail_x_reg[57][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[57][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[60][0]' (FDE) to 'trail_x_reg[60][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[60][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[61][0]' (FDE) to 'trail_x_reg[61][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[61][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[62][0]' (FDE) to 'trail_x_reg[62][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[62][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[63][0]' (FDE) to 'trail_x_reg[63][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[63][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[64][0]' (FDE) to 'trail_x_reg[64][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[64][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[68][0]' (FDE) to 'trail_x_reg[68][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[68][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[69][0]' (FDE) to 'trail_x_reg[69][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[69][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[71][0]' (FDE) to 'trail_x_reg[71][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[71][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[73][0]' (FDE) to 'trail_x_reg[73][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[73][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[74][0]' (FDE) to 'trail_x_reg[74][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[74][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[76][0]' (FDE) to 'trail_x_reg[76][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[76][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[77][0]' (FDE) to 'trail_x_reg[77][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[77][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[78][0]' (FDE) to 'trail_x_reg[78][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[78][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[79][0]' (FDE) to 'trail_x_reg[79][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[79][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[81][0]' (FDE) to 'trail_x_reg[81][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[81][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[84][0]' (FDE) to 'trail_x_reg[84][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[84][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[85][0]' (FDE) to 'trail_x_reg[85][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[85][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[86][0]' (FDE) to 'trail_x_reg[86][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[86][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[87][0]' (FDE) to 'trail_x_reg[87][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[87][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[92][0]' (FDE) to 'trail_x_reg[92][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[92][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[93][0]' (FDE) to 'trail_x_reg[93][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[93][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[94][0]' (FDE) to 'trail_x_reg[94][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[94][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[95][0]' (FDE) to 'trail_x_reg[95][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[95][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[96][0]' (FDE) to 'trail_x_reg[96][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[96][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[97][0]' (FDE) to 'trail_x_reg[97][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[97][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[98][0]' (FDE) to 'trail_x_reg[98][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[98][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[99][0]' (FDE) to 'trail_x_reg[99][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[99][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[100][0]' (FDE) to 'trail_x_reg[100][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[100][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[103][0]' (FDE) to 'trail_x_reg[103][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[103][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[104][0]' (FDE) to 'trail_x_reg[104][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[104][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[105][0]' (FDE) to 'trail_x_reg[105][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[105][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[106][0]' (FDE) to 'trail_x_reg[106][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[106][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[108][0]' (FDE) to 'trail_x_reg[108][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[108][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[109][0]' (FDE) to 'trail_x_reg[109][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[109][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[110][0]' (FDE) to 'trail_x_reg[110][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[110][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[111][0]' (FDE) to 'trail_x_reg[111][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[111][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[115][0]' (FDE) to 'trail_x_reg[115][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[115][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[116][0]' (FDE) to 'trail_x_reg[116][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[116][0] )
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_y_reg[117][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[118][0]' (FDE) to 'trail_x_reg[118][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[118][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[119][0]' (FDE) to 'trail_x_reg[119][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[119][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[120][0]' (FDE) to 'trail_x_reg[120][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[120][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[121][0]' (FDE) to 'trail_x_reg[121][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[121][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[125][0]' (FDE) to 'trail_x_reg[125][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[125][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[1][0]' (FDE) to 'trail_x_reg[1][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[1][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[2][0]' (FDE) to 'trail_x_reg[2][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[2][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[8][0]' (FDE) to 'trail_x_reg[8][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[8][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[15][0]' (FDE) to 'trail_x_reg[15][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[15][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[27][0]' (FDE) to 'trail_x_reg[27][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[27][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[29][0]' (FDE) to 'trail_x_reg[29][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[29][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[30][0]' (FDE) to 'trail_x_reg[30][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[30][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[33][0]' (FDE) to 'trail_x_reg[33][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[33][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[34][0]' (FDE) to 'trail_x_reg[34][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[34][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[38][0]' (FDE) to 'trail_x_reg[38][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[38][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[41][0]' (FDE) to 'trail_x_reg[41][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[41][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[47][0]' (FDE) to 'trail_x_reg[47][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[47][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[49][0]' (FDE) to 'trail_x_reg[49][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[49][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[58][0]' (FDE) to 'trail_x_reg[58][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[58][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[59][0]' (FDE) to 'trail_x_reg[59][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[59][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[65][0]' (FDE) to 'trail_x_reg[65][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[65][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[67][0]' (FDE) to 'trail_x_reg[67][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[67][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[70][0]' (FDE) to 'trail_x_reg[70][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[70][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[75][0]' (FDE) to 'trail_x_reg[75][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[75][0] )
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[80][0]' (FDE) to 'trail_x_reg[80][0]'
+INFO: [Synth 8-3333] propagating constant 0 across sequential element (\trail_x_reg[80][0] )
+INFO: [Common 17-14] Message 'Synth 8-3333' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[83][0]' (FDE) to 'trail_x_reg[83][0]'
+INFO: [Synth 8-3886] merging instance 'trail_y_reg[89][0]' (FDE) to 'trail_x_reg[89][0]'
+INFO: [Common 17-14] Message 'Synth 8-3886' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
+INFO: [Synth 8-5544] ROM "wheel_color" won't be mapped to Block RAM because address size (3) smaller than threshold (5)
+DSP Report: Generating DSP mid60_y_prod, operation Mode is: C+A*(B:0xde).
+DSP Report: operator mid60_y_prod is absorbed into DSP mid60_y_prod.
+DSP Report: operator mid60_y_prod0 is absorbed into DSP mid60_y_prod.
+DSP Report: Generating DSP u_mod/fm_dev2, operation Mode is: A*B.
+DSP Report: operator u_mod/fm_dev2 is absorbed into DSP u_mod/fm_dev2.
+WARNING: [Synth 8-3917] design Top_Project__GCB0 has port dac_ile driven by constant 1
+WARNING: [Synth 8-3917] design Top_Project__GCB0 has port dac_cs_n driven by constant 0
+WARNING: [Synth 8-3917] design Top_Project__GCB0 has port dac_wr2_n driven by constant 0
+WARNING: [Synth 8-3917] design Top_Project__GCB0 has port dac_xfer_n driven by constant 0
+DSP Report: Generating DSP freq_num_pipe0, operation Mode is: (C:0x5)+A*(B:0x1f4).
+DSP Report: operator freq_num_pipe0 is absorbed into DSP freq_num_pipe0.
+DSP Report: operator freq_num_pipe1 is absorbed into DSP freq_num_pipe0.
+DSP Report: Generating DSP period_denom_pipe0, operation Mode is: A*(B:0x32).
+DSP Report: operator period_denom_pipe0 is absorbed into DSP period_denom_pipe0.
+DSP Report: Generating DSP duty_cycle1, operation Mode is: (C:0x1388)+A*(B:0x64).
+DSP Report: operator duty_cycle1 is absorbed into DSP duty_cycle1.
+DSP Report: operator duty_cycle2 is absorbed into DSP duty_cycle1.
+DSP Report: Generating DSP vpp_mv1, operation Mode is: A*(B:0xfa0).
+DSP Report: operator vpp_mv1 is absorbed into DSP vpp_mv1.
+DSP Report: Generating DSP vmin_mv1, operation Mode is: (A:0xfa0)*B.
+DSP Report: operator vmin_mv1 is absorbed into DSP vmin_mv1.
+DSP Report: Generating DSP freq_num_pipe0, operation Mode is: (C:0x5)+A*(B:0x1f4).
+DSP Report: operator freq_num_pipe0 is absorbed into DSP freq_num_pipe0.
+DSP Report: operator freq_num_pipe1 is absorbed into DSP freq_num_pipe0.
+DSP Report: Generating DSP period_denom_pipe0, operation Mode is: A*(B:0x32).
+DSP Report: operator period_denom_pipe0 is absorbed into DSP period_denom_pipe0.
+DSP Report: Generating DSP duty_cycle1, operation Mode is: (C:0x1388)+A*(B:0x64).
+DSP Report: operator duty_cycle1 is absorbed into DSP duty_cycle1.
+DSP Report: operator duty_cycle2 is absorbed into DSP duty_cycle1.
+DSP Report: Generating DSP vpp_mv1, operation Mode is: A*(B:0xfa0).
+DSP Report: operator vpp_mv1 is absorbed into DSP vpp_mv1.
+DSP Report: Generating DSP vmin_mv1, operation Mode is: (A:0xfa0)*B.
+DSP Report: operator vmin_mv1 is absorbed into DSP vmin_mv1.
+INFO: [Common 17-14] Message 'Synth 8-3333' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
 WARNING: [Synth 8-3332] Sequential element (vpp_mv_reg__5) is unused and will be removed from module wave_analyzer__1.
 WARNING: [Synth 8-3332] Sequential element (vpp_mv_reg__6) is unused and will be removed from module wave_analyzer__1.
 WARNING: [Synth 8-3332] Sequential element (vpp_mv_reg__7) is unused and will be removed from module wave_analyzer__1.
@@ -560,23 +739,21 @@ WARNING: [Synth 8-3332] Sequential element (vmin_mv_reg__12) is unused and will 
 WARNING: [Synth 8-3332] Sequential element (vmin_mv_reg__13) is unused and will be removed from module wave_analyzer.
 WARNING: [Synth 8-3332] Sequential element (vmin_mv_reg__14) is unused and will be removed from module wave_analyzer.
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:01:06 ; elapsed = 00:01:09 . Memory (MB): peak = 2149.957 ; gain = 1290.910
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:35 ; elapsed = 00:00:48 . Memory (MB): peak = 1904.086 ; gain = 1045.066
 ---------------------------------------------------------------------------------
- Sort Area is Top_Project__GC0 u_mod/fm_dev2_16 : 0 0 : 848 848 : Used 1 time 0
- Sort Area is Top_Project__GC0 period_x100us1_4 : 0 0 : 747 747 : Used 1 time 0
- Sort Area is Top_Project__GC0 period_x100us1_f : 0 0 : 747 747 : Used 1 time 0
- Sort Area is Top_Project__GC0 mid60_y_prod_14 : 0 0 : 609 609 : Used 1 time 0
- Sort Area is Top_Project__GC0 vpp_mv1_12 : 0 0 : 485 485 : Used 1 time 0
- Sort Area is Top_Project__GC0 vpp_mv1_a : 0 0 : 485 485 : Used 1 time 0
- Sort Area is Top_Project__GC0 frequency_hz1_2 : 0 0 : 372 372 : Used 1 time 0
- Sort Area is Top_Project__GC0 frequency_hz1_e : 0 0 : 372 372 : Used 1 time 0
- Sort Area is Top_Project__GC0 period_x100us4_10 : 0 0 : 325 325 : Used 1 time 0
- Sort Area is Top_Project__GC0 period_x100us4_6 : 0 0 : 325 325 : Used 1 time 0
- Sort Area is Top_Project__GC0 duty_cycle1_11 : 0 0 : 295 295 : Used 1 time 0
- Sort Area is Top_Project__GC0 duty_cycle1_8 : 0 0 : 295 295 : Used 1 time 0
+ Sort Area is Top_Project__GCB0 u_mod/fm_dev2_2 : 0 0 : 848 848 : Used 1 time 0
+ Sort Area is Top_Project__GCB0 mid60_y_prod_0 : 0 0 : 609 609 : Used 1 time 0
+ Sort Area is Top_Project__GCB1 freq_num_pipe0_0 : 0 0 : 508 508 : Used 1 time 0
+ Sort Area is Top_Project__GCB1 freq_num_pipe0_a : 0 0 : 508 508 : Used 1 time 0
+ Sort Area is Top_Project__GCB1 vpp_mv1_6 : 0 0 : 485 485 : Used 1 time 0
+ Sort Area is Top_Project__GCB1 vpp_mv1_d : 0 0 : 485 485 : Used 1 time 0
+ Sort Area is Top_Project__GCB1 duty_cycle1_4 : 0 0 : 295 295 : Used 1 time 0
+ Sort Area is Top_Project__GCB1 duty_cycle1_c : 0 0 : 295 295 : Used 1 time 0
+ Sort Area is Top_Project__GCB1 period_denom_pipe0_2 : 0 0 : 282 282 : Used 1 time 0
+ Sort Area is Top_Project__GCB1 period_denom_pipe0_b : 0 0 : 282 282 : Used 1 time 0
  Sort Area is waveform_display__GB0 trigger_mv0_0 : 0 0 : 282 282 : Used 1 time 0
- Sort Area is Top_Project__GC0 vmin_mv1_13 : 0 0 : 235 235 : Used 1 time 0
- Sort Area is Top_Project__GC0 vmin_mv1_c : 0 0 : 235 235 : Used 1 time 0
+ Sort Area is Top_Project__GCB1 vmin_mv1_8 : 0 0 : 235 235 : Used 1 time 0
+ Sort Area is Top_Project__GCB1 vmin_mv1_e : 0 0 : 235 235 : Used 1 time 0
 ---------------------------------------------------------------------------------
 Start ROM, RAM, DSP, Shift Register and Retiming Reporting
 ---------------------------------------------------------------------------------
@@ -591,12 +768,6 @@ ROM: Preliminary Mapping Report
 |kaleidoscope | sin_lut    | 64x8          | LUT            | 
 |kaleidoscope | sin_lut    | 64x8          | LUT            | 
 |kaleidoscope | sin_lut    | 64x8          | LUT            | 
-|char_gen     | p_0_out    | 1024x8        | LUT            | 
-|kaleidoscope | p_0_out    | 64x8          | LUT            | 
-|kaleidoscope | p_0_out    | 64x8          | LUT            | 
-|kaleidoscope | p_0_out    | 64x8          | LUT            | 
-|Top_Project  | p_0_out    | 64x8          | LUT            | 
-|Top_Project  | p_0_out    | 1024x8        | LUT            | 
 +-------------+------------+---------------+----------------+
 
 
@@ -605,20 +776,18 @@ DSP: Preliminary Mapping Report (see note below. The ' indicates corresponding R
 |Module Name      | DSP Mapping           | A Size | B Size | C Size | D Size | P Size | AREG | BREG | CREG | DREG | ADREG | MREG | PREG | 
 +-----------------+-----------------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
 |waveform_display | (C:0x200)+(A:0xfa0)*B | 8      | 12     | 10     | -      | 16     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
-|wave_analyzer    | (C:0x5)+A*(B:0x3c1)   | 16     | 10     | 3      | -      | 16     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
-|wave_analyzer    | A*(B:0x3c1)           | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
-|wave_analyzer    | A*(B:0x2710)          | 16     | 14     | -      | -      | 30     | 0    | 0    | -    | -    | -     | 0    | 0    | 
-|wave_analyzer    | (C:0x1388)+A*(B:0x64) | 14     | 7      | 13     | -      | 14     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
-|wave_analyzer    | A*(B:0xfa0)           | 16     | 12     | -      | -      | 28     | 0    | 0    | -    | -    | -     | 0    | 0    | 
-|wave_analyzer    | (A:0xfa0)*B           | 8      | 12     | -      | -      | 20     | 0    | 0    | -    | -    | -     | 0    | 0    | 
-|wave_analyzer    | (C:0x5)+A*(B:0x3c1)   | 16     | 10     | 3      | -      | 16     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
-|wave_analyzer    | A*(B:0x3c1)           | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
-|wave_analyzer    | A*(B:0x2710)          | 16     | 14     | -      | -      | 30     | 0    | 0    | -    | -    | -     | 0    | 0    | 
-|wave_analyzer    | (C:0x1388)+A*(B:0x64) | 14     | 7      | 13     | -      | 14     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
-|wave_analyzer    | A*(B:0xfa0)           | 16     | 12     | -      | -      | 28     | 0    | 0    | -    | -    | -     | 0    | 0    | 
-|wave_analyzer    | (A:0xfa0)*B           | 8      | 12     | -      | -      | 20     | 0    | 0    | -    | -    | -     | 0    | 0    | 
 |kaleidoscope     | C+A*(B:0xde)          | 18     | 9      | 18     | -      | 18     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
 |modulation       | A*B                   | 14     | 9      | -      | -      | 23     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|wave_analyzer    | (C:0x5)+A*(B:0x1f4)   | 16     | 9      | 3      | -      | 25     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
+|wave_analyzer    | A*(B:0x32)            | 16     | 6      | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|wave_analyzer    | (C:0x1388)+A*(B:0x64) | 14     | 7      | 13     | -      | 14     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
+|wave_analyzer    | A*(B:0xfa0)           | 16     | 12     | -      | -      | 28     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|wave_analyzer    | (A:0xfa0)*B           | 8      | 12     | -      | -      | 20     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|wave_analyzer    | (C:0x5)+A*(B:0x1f4)   | 16     | 9      | 3      | -      | 25     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
+|wave_analyzer    | A*(B:0x32)            | 16     | 6      | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|wave_analyzer    | (C:0x1388)+A*(B:0x64) | 14     | 7      | 13     | -      | 14     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
+|wave_analyzer    | A*(B:0xfa0)           | 16     | 12     | -      | -      | 28     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|wave_analyzer    | (A:0xfa0)*B           | 8      | 12     | -      | -      | 20     | 0    | 0    | -    | -    | -     | 0    | 0    | 
 +-----------------+-----------------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
 
 Note: The table above is a preliminary report that shows the DSPs inferred at the current stage of the synthesis flow. Some DSP may be reimplemented as non DSP primitives later in the synthesis flow. Multiple instantiated DSPs are reported only once.
@@ -629,19 +798,19 @@ Finished ROM, RAM, DSP, Shift Register and Retiming Reporting
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:01:11 ; elapsed = 00:01:14 . Memory (MB): peak = 2149.957 ; gain = 1290.910
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:41 ; elapsed = 00:00:54 . Memory (MB): peak = 1904.086 ; gain = 1045.066
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:01:15 ; elapsed = 00:01:18 . Memory (MB): peak = 2149.957 ; gain = 1290.910
+Finished Timing Optimization : Time (s): cpu = 00:00:44 ; elapsed = 00:00:57 . Memory (MB): peak = 1907.594 ; gain = 1048.574
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:01:19 ; elapsed = 00:01:23 . Memory (MB): peak = 2149.957 ; gain = 1290.910
+Finished Technology Mapping : Time (s): cpu = 00:00:47 ; elapsed = 00:01:04 . Memory (MB): peak = 1958.555 ; gain = 1099.535
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start IO Insertion
@@ -659,37 +828,37 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:01:22 ; elapsed = 00:01:25 . Memory (MB): peak = 2162.496 ; gain = 1303.449
+Finished IO Insertion : Time (s): cpu = 00:00:50 ; elapsed = 00:01:07 . Memory (MB): peak = 2087.688 ; gain = 1228.668
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:01:22 ; elapsed = 00:01:25 . Memory (MB): peak = 2162.496 ; gain = 1303.449
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:50 ; elapsed = 00:01:07 . Memory (MB): peak = 2087.688 ; gain = 1228.668
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:01:23 ; elapsed = 00:01:26 . Memory (MB): peak = 2162.496 ; gain = 1303.449
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:51 ; elapsed = 00:01:09 . Memory (MB): peak = 2087.688 ; gain = 1228.668
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:01:23 ; elapsed = 00:01:26 . Memory (MB): peak = 2162.496 ; gain = 1303.449
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:51 ; elapsed = 00:01:09 . Memory (MB): peak = 2087.688 ; gain = 1228.668
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:01:23 ; elapsed = 00:01:26 . Memory (MB): peak = 2162.496 ; gain = 1303.449
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:52 ; elapsed = 00:01:09 . Memory (MB): peak = 2087.688 ; gain = 1228.668
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:01:23 ; elapsed = 00:01:26 . Memory (MB): peak = 2162.496 ; gain = 1303.449
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:52 ; elapsed = 00:01:09 . Memory (MB): peak = 2087.688 ; gain = 1228.668
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
@@ -699,15 +868,13 @@ DSP Final Report (the ' indicates corresponding REG is set)
 +-----------------+-------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
 |Module Name      | DSP Mapping | A Size | B Size | C Size | D Size | P Size | AREG | BREG | CREG | DREG | ADREG | MREG | PREG | 
 +-----------------+-------------+--------+--------+--------+--------+--------+------+------+------+------+-------+------+------+
-|wave_analyzer    | C+A*B       | 16     | 10     | 3      | -      | 16     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
-|wave_analyzer    | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
-|wave_analyzer    | A*B         | 16     | 14     | -      | -      | 30     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|wave_analyzer    | (C+A*B)'    | 16     | 9      | 3      | -      | 25     | 0    | 0    | 0    | -    | -     | 0    | 1    | 
+|wave_analyzer    | (A*B)'      | 16     | 6      | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 1    | 
 |wave_analyzer    | C+A*B       | 14     | 7      | 13     | -      | 14     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
 |wave_analyzer    | (A*B)'      | 16     | 12     | -      | -      | 28     | 0    | 0    | -    | -    | -     | 0    | 1    | 
 |wave_analyzer    | (A*B)'      | 8      | 12     | -      | -      | 20     | 0    | 0    | -    | -    | -     | 0    | 1    | 
-|wave_analyzer    | C+A*B       | 16     | 10     | 3      | -      | 16     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
-|wave_analyzer    | A*B         | 16     | 10     | -      | -      | 26     | 0    | 0    | -    | -    | -     | 0    | 0    | 
-|wave_analyzer    | A*B         | 16     | 14     | -      | -      | 30     | 0    | 0    | -    | -    | -     | 0    | 0    | 
+|wave_analyzer    | (C+A*B)'    | 16     | 9      | 3      | -      | 25     | 0    | 0    | 0    | -    | -     | 0    | 1    | 
+|wave_analyzer    | (A*B)'      | 16     | 6      | -      | -      | 22     | 0    | 0    | -    | -    | -     | 0    | 1    | 
 |wave_analyzer    | C+A*B       | 14     | 7      | 13     | -      | 14     | 0    | 0    | 0    | -    | -     | 0    | 0    | 
 |wave_analyzer    | (A*B)'      | 16     | 12     | -      | -      | 28     | 0    | 0    | -    | -    | -     | 0    | 1    | 
 |wave_analyzer    | (A*B)'      | 8      | 12     | -      | -      | 20     | 0    | 0    | -    | -    | -     | 0    | 1    | 
@@ -731,45 +898,45 @@ Report Cell Usage:
 +------+------------+------+
 |1     |blk_mem_gen |     1|
 |2     |clk_wiz     |     1|
-|3     |CARRY4      |  1972|
-|4     |DSP48E1     |    15|
-|8     |LUT1        |   382|
-|9     |LUT2        |  2100|
-|10    |LUT3        |  1393|
-|11    |LUT4        |  3182|
-|12    |LUT5        |  2057|
-|13    |LUT6        |  6481|
-|14    |MUXF7       |    44|
-|15    |MUXF8       |     6|
+|3     |CARRY4      |  2424|
+|4     |DSP48E1     |    13|
+|8     |LUT1        |   431|
+|9     |LUT2        |  2982|
+|10    |LUT3        |  1650|
+|11    |LUT4        |  3797|
+|12    |LUT5        |  2306|
+|13    |LUT6        |  6633|
+|14    |MUXF7       |    73|
+|15    |MUXF8       |    25|
 |16    |XADC        |     1|
-|17    |FDCE        |  1213|
+|17    |FDCE        |  1255|
 |18    |FDPE        |    48|
-|19    |FDRE        |  2320|
+|19    |FDRE        |  2353|
 |20    |IBUF        |    26|
 |21    |OBUF        |    35|
 +------+------------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:01:23 ; elapsed = 00:01:26 . Memory (MB): peak = 2162.496 ; gain = 1303.449
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:52 ; elapsed = 00:01:09 . Memory (MB): peak = 2087.688 ; gain = 1228.668
 ---------------------------------------------------------------------------------
-Synthesis finished with 0 errors, 0 critical warnings and 47 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:01:16 ; elapsed = 00:01:24 . Memory (MB): peak = 2162.496 ; gain = 1205.828
-Synthesis Optimization Complete : Time (s): cpu = 00:01:23 ; elapsed = 00:01:27 . Memory (MB): peak = 2162.496 ; gain = 1303.449
+Synthesis finished with 0 errors, 0 critical warnings and 50 warnings.
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:44 ; elapsed = 00:01:07 . Memory (MB): peak = 2087.688 ; gain = 1133.734
+Synthesis Optimization Complete : Time (s): cpu = 00:00:52 ; elapsed = 00:01:09 . Memory (MB): peak = 2087.688 ; gain = 1228.668
 INFO: [Project 1-571] Translating synthesized netlist
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.102 . Memory (MB): peak = 2162.496 ; gain = 0.000
-INFO: [Netlist 29-17] Analyzing 2038 Unisim elements for replacement
-INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.120 . Memory (MB): peak = 2087.688 ; gain = 0.000
+INFO: [Netlist 29-17] Analyzing 2536 Unisim elements for replacement
+INFO: [Netlist 29-28] Unisim Transformation completed in 1 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.004 . Memory (MB): peak = 2190.312 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:01 ; elapsed = 00:00:00.004 . Memory (MB): peak = 2120.348 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Synth Design complete | Checksum: 2d41e17f
+Synth Design complete | Checksum: dc3b3110
 INFO: [Common 17-83] Releasing license: Synthesis
-56 Infos, 263 Warnings, 0 Critical Warnings and 0 Errors encountered.
+264 Infos, 261 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:01:27 ; elapsed = 00:01:33 . Memory (MB): peak = 2190.312 ; gain = 1519.484
-Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.031 . Memory (MB): peak = 2190.312 ; gain = 0.000
+synth_design: Time (s): cpu = 00:00:55 ; elapsed = 00:01:16 . Memory (MB): peak = 2120.348 ; gain = 1448.379
+Write ShapeDB Complete: Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.042 . Memory (MB): peak = 2120.348 ; gain = 0.000
 INFO: [Common 17-1381] The checkpoint 'C:/Users/sgzmd/Desktop/Project/Project.runs/synth_1/Top_Project.dcp' has been generated.
 INFO: [Vivado 12-24828] Executing command : report_utilization -file Top_Project_utilization_synth.rpt -pb Top_Project_utilization_synth.pb
-INFO: [Common 17-206] Exiting Vivado at Sat Jun 27 13:01:36 2026...
+INFO: [Common 17-206] Exiting Vivado at Sat Jun 27 13:49:53 2026...

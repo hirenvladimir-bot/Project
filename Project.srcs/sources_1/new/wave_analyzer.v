@@ -1,13 +1,12 @@
 `timescale 1ns / 1ps
 //=============================================================================
-// Waveform Analyzer — Enhanced Lab-Oscilloscope Measurements
+// Waveform Analyzer — Optimized Lab-Oscilloscope Measurements
 //
-// Measurements (GATE_MAX = 10000 sample gate, ~24.8ms at 403kSPS):
+// Measurements (GATE_MAX = 10000 sample gate, ~20ms at 500kSPS):
 //   Frequency:   zero-crossing counter, freq_hz = zc × FREQ_CAL_X10 / 10
 //   Period:      estimated from zero-crossing spacing (in 100µs units)
 //   Vpp:         peak_max − peak_min over gate (raw ADC + calibrated mV)
-//   Vmin:        valley (minimum) value in gate (raw + calibrated mV)
-//   Vmax:        peak (maximum) value in gate (raw + calibrated mV)
+//   Vmin/Vmax:   valley / peak values in gate (raw + calibrated mV)
 //   RMS:         sqrt(Σ(wave−128)² / 8192) — AC RMS (raw + calibrated mV)
 //   Average:     Σ(wave) / 8192 — DC level (raw + calibrated mV)
 //   Duty Cycle:  time-above-midpoint / total-time × 100% (square waves)
@@ -21,6 +20,13 @@
 // Calibration:
 //   ADC LSB (8-bit) = 1V/256 = 3.90625mV at XADC input
 //   CAL_MV_X1024 = 4000 → raw × 4000 / 1024 ≈ raw × 3.90625 mV/LSB
+//
+// Changes from previous version:
+//   - Single shared gate_cnt replaces 4 redundant counters
+//   - Rise time uses stable vpp/vmin_val from last completed gate
+//   - Rise time thresholds: Vpp×26>>8 (≈10.2%) and Vpp×230>>8 (≈89.8%)
+//   - Period division pipelined (capture → divide, 1-cycle latency)
+//   - Removed dead rt_vpp/rt_vmin tracking registers
 //=============================================================================
 
 module wave_analyzer
@@ -91,22 +97,56 @@ module wave_analyzer
     endfunction
 
     //=========================================================================
-    // Frequency measurement (zero-crossing, GATE_MAX samples)
-    // Also track zero-crossing spacing for period estimation.
+    // Derived constants
+    //=========================================================================
+    // Sample rate = FREQ_CAL_X10 * GATE_MAX / 10
+    //   With FREQ_CAL_X10=500, GATE_MAX=10000: sample_rate = 500kSPS
+    localparam [31:0] SAMPLE_RATE   = (FREQ_CAL_X10 * GATE_MAX + 16'd5) / 16'd10;
+    localparam [15:0] PERIOD_DIV    = (SAMPLE_RATE + 5000) / 10000;  // round
+
+    //=========================================================================
+    // Shared gate counter — replaces gate_cnt, peak_cnt, total_duty_count,
+    // hist_cnt which all counted 0..GATE_MAX-1 on the same wave_valid.
     //=========================================================================
     reg [13:0] gate_cnt;
+    wire       gate_done = (gate_cnt == GATE_MAX - 1);
+
+    always @(posedge clk or negedge rst_n) begin
+        if (!rst_n) begin
+            gate_cnt <= 0;
+        end else if (wave_valid) begin
+            if (gate_done)
+                gate_cnt <= 0;
+            else
+                gate_cnt <= gate_cnt + 1'b1;
+        end
+    end
+
+    //=========================================================================
+    // Frequency measurement (zero-crossing, GATE_MAX samples)
+    // Also track zero-crossing spacing for period estimation.
+    //
+    // Period division is pipelined: capture operands at gate_done, then
+    // compute in the following cycle to ease timing closure.
+    //=========================================================================
     reg [15:0] zc_count;
     reg        prev_sign;
     wire       curr_sign = (wave_data >= 8'd128);
 
-    // Period tracking: measure spacing between zero crossings
-    reg [15:0] zc_spacing_sum;   // sum of spacing values (in samples)
-    reg [15:0] zc_spacing_cnt;   // number of spacings measured
-    reg [15:0] last_zc_sample;   // sample index of last zero crossing
+    // Period tracking
+    reg [15:0] zc_spacing_sum;
+    reg [15:0] zc_spacing_cnt;
+    reg [15:0] last_zc_sample;
+
+    // Pipeline stage for frequency & period division
+    reg [31:0] freq_num_pipe;       // zc_count * FREQ_CAL_X10 + 5
+    reg [15:0] period_sum_pipe;
+    reg [31:0] period_denom_pipe;   // zc_spacing_cnt * PERIOD_DIV
+    reg [15:0] period_zc_pipe;
+    reg        div_pending;
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            gate_cnt        <= 0;
             zc_count        <= 0;
             prev_sign       <= 1'b0;
             frequency_hz    <= 0;
@@ -115,13 +155,41 @@ module wave_analyzer
             zc_spacing_cnt  <= 0;
             last_zc_sample  <= 0;
             meas_valid      <= 1'b0;
+            freq_num_pipe   <= 0;
+            period_sum_pipe <= 0;
+            period_denom_pipe <= 0;
+            period_zc_pipe  <= 0;
+            div_pending     <= 1'b0;
         end else begin
             meas_valid <= 1'b0;
+
+            // ---- Pipeline stage 2: division completes ----
+            if (div_pending) begin
+                div_pending <= 1'b0;
+
+                // freq_hz = (zc_count × FREQ_CAL_X10 + 5) / 10
+                // freq_num_pipe max ≈ 10000×500+5 = 5_000_005 (23 bits).
+                // Constant divisor /10 synthesizes to a lightweight multiply+shift.
+                frequency_hz <= freq_num_pipe / 16'd10;
+
+                // Period: avg_spacing × 10000 / SAMPLE_RATE
+                //        = zc_spacing_sum / (zc_spacing_cnt × PERIOD_DIV)
+                if (period_zc_pipe > 1 && period_denom_pipe > 0)
+                    period_x100us <= period_sum_pipe / period_denom_pipe;
+                else if (period_zc_pipe == 1)
+                    period_x100us <= (GATE_MAX * 10000) / SAMPLE_RATE;
+                else
+                    period_x100us <= 0;
+
+                meas_valid <= 1'b1;
+            end
+
+            // ---- Stage 1: accumulate during gate, capture at gate_done ----
             if (wave_valid) begin
+                // Zero-crossing detection (rising edge through 128)
                 if (curr_sign && !prev_sign && gate_cnt > 0) begin
                     zc_count <= zc_count + 1'b1;
-                    // Record spacing between zero crossings
-                    if (last_zc_sample > 0 || zc_count == 0) begin
+                    if (zc_count > 0) begin
                         zc_spacing_sum <= zc_spacing_sum + (gate_cnt - last_zc_sample);
                         zc_spacing_cnt <= zc_spacing_cnt + 1'b1;
                     end
@@ -129,37 +197,19 @@ module wave_analyzer
                 end
                 prev_sign <= curr_sign;
 
-                if (gate_cnt == GATE_MAX - 1) begin
-                    // freq_hz = zc_count × FREQ_CAL_X10 / 10 (rounded)
-                    frequency_hz <= (zc_count * FREQ_CAL_X10 + 16'd5) / 16'd10;
+                if (gate_done) begin
+                    // Capture operands for pipelined division
+                    freq_num_pipe   <= zc_count * FREQ_CAL_X10 + 16'd5;
+                    period_sum_pipe <= zc_spacing_sum;
+                    period_denom_pipe <= zc_spacing_cnt * PERIOD_DIV;
+                    period_zc_pipe  <= zc_count;
+                    div_pending     <= 1'b1;
 
-                    // Period: average spacing / sample_rate
-                    // period_100us = (avg_spacing * 100000) / sample_rate (in 100µs)
-                    // With sample_rate ≈ FREQ_CAL_X10*GATE_MAX/10,
-                    // period_100us ≈ avg_spacing * 1e6 / sample_rate
-                    // Simplified: period_100us ≈ avg_spacing * 10000 / FREQ_CAL_X10
-                    if (zc_count > 1 && zc_spacing_cnt > 0) begin
-                        // avg_spacing = zc_spacing_sum / zc_spacing_cnt
-                        // period_x100us = avg_spacing * 10000 / FREQ_CAL_X10
-                        // = zc_spacing_sum * 10000 / (zc_spacing_cnt * FREQ_CAL_X10)
-                        period_x100us <= (zc_spacing_sum * 16'd10000) /
-                                        ((zc_spacing_cnt * FREQ_CAL_X10 == 0) ? 16'd1 :
-                                         (zc_spacing_cnt * FREQ_CAL_X10));
-                    end else if (zc_count == 1) begin
-                        // Single crossing: period ≈ gate time
-                        period_x100us <= 16'd24800;  // ~24.8ms gate → period unknown
-                    end else begin
-                        period_x100us <= 0;  // no crossings
-                    end
-
-                    meas_valid   <= 1'b1;
-                    gate_cnt     <= 0;
-                    zc_count     <= 0;
+                    // Reset accumulators
+                    zc_count        <= 0;
                     zc_spacing_sum  <= 0;
                     zc_spacing_cnt  <= 0;
                     last_zc_sample  <= 0;
-                end else begin
-                    gate_cnt <= gate_cnt + 1'b1;
                 end
             end
         end
@@ -169,13 +219,11 @@ module wave_analyzer
     // Peak-to-peak detector (GATE_MAX samples) + Vmin + calibrated mV outputs
     //=========================================================================
     reg [7:0]  peak_max, peak_min;
-    reg [13:0] peak_cnt;
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
             peak_max <= 8'h00;
             peak_min <= 8'hFF;
-            peak_cnt <= 0;
             vpp      <= 0;
             vpp_mv   <= 0;
             vmin_val <= 8'h80;
@@ -183,16 +231,13 @@ module wave_analyzer
         end else if (wave_valid) begin
             if (wave_data > peak_max) peak_max <= wave_data;
             if (wave_data < peak_min) peak_min <= wave_data;
-            if (peak_cnt == GATE_MAX - 1) begin
+            if (gate_done) begin
                 vpp      <= peak_max - peak_min;
                 vpp_mv   <= ((peak_max - peak_min) * CAL_MV_X1024) >> 10;
                 vmin_val <= peak_min;
                 vmin_mv  <= (peak_min * CAL_MV_X1024) >> 10;
                 peak_max <= 8'h00;
                 peak_min <= 8'hFF;
-                peak_cnt <= 0;
-            end else begin
-                peak_cnt <= peak_cnt + 1'b1;
             end
         end
     end
@@ -200,122 +245,108 @@ module wave_analyzer
     //=========================================================================
     // Duty Cycle measurement (GATE_MAX samples)
     // Counts samples above midpoint (128) vs total samples.
+    // duty = (high_count * 100 + GATE_MAX/2) / GATE_MAX  →  0..100%
     //=========================================================================
     reg [13:0] high_count;
-    reg [13:0] total_duty_count;
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            high_count        <= 0;
-            total_duty_count  <= 0;
-            duty_cycle        <= 7'd50;  // default 50%
+            high_count <= 0;
+            duty_cycle <= 7'd50;
         end else if (wave_valid) begin
-            if (wave_data > 8'd128)
+            if (wave_data >= 8'd128)
                 high_count <= high_count + 1'b1;
-            total_duty_count <= total_duty_count + 1'b1;
 
-            if (total_duty_count == GATE_MAX - 1) begin
-                // duty_cycle = high_count * 100 / total = high_count * 100 / GATE_MAX
-                // Use approximation: (high_count * 100 + GATE_MAX/2) / GATE_MAX
+            if (gate_done) begin
                 duty_cycle <= ((high_count * 7'd100) + (GATE_MAX >> 1)) / GATE_MAX;
-                high_count       <= 0;
-                total_duty_count <= 0;
+                high_count <= 0;
             end
         end
     end
 
     //=========================================================================
-    // Rise Time estimation — track 10%→90% transition on rising edges
-    // For each rising edge through midpoint, estimate samples from 10% to 90%
+    // Rise Time estimation — stable thresholds from registered vpp/vmin_val
+    //
+    // Uses the vpp/vmin_val registers (updated at gate_done) as stable
+    // threshold references for the entire gate period. Thresholds:
+    //   rt_10 ≈ vmin_val + Vpp ×  26 / 256  (≈ 10.2%)
+    //   rt_90 ≈ vmin_val + Vpp × 230 / 256  (≈ 89.8%)
+    //
+    // FSM: IDLE → wait for rising edge through 10% → COUNT until 90% or abort
+    // Multiple edges are captured per gate; the average rise time is reported.
     //=========================================================================
-    reg [7:0]  rt_vpp;           // cached Vpp for threshold calculation
-    reg [7:0]  rt_vmin;          // cached Vmin
-    reg        rt_in_rise;       // flag: currently tracking a rising edge
-    reg [7:0]  rt_rise_start;    // sample when rise crossed 10%
-    reg [7:0]  rt_rise_cnt;      // current rise duration counter
-    reg [7:0]  rt_acc;           // accumulated rise times
-    reg [3:0]  rt_count;         // number of rises measured
-    reg        rt_prev_below_10;
-    reg        rt_prev_below_90;
+    localparam RISE_IDLE  = 1'b0;
+    localparam RISE_COUNT = 1'b1;
+
+    reg        rise_state;
+    reg [7:0]  rise_cnt;
+    reg [7:0]  rise_acc;
+    reg [3:0]  rise_evt_count;
+    reg        rise_below_10_d1;    // previous sample was below 10% threshold
+
+    // Stable thresholds from last completed measurement
+    wire [7:0] rt_10 = vmin_val + ((vpp * 8'd26) >> 8);
+    wire [7:0] rt_90 = vmin_val + ((vpp * 8'd230) >> 8);
+    wire       rt_valid = (vpp > 8'd10);   // require meaningful Vpp
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            rt_vpp             <= 8'd128;
-            rt_vmin            <= 8'd128;
-            rt_in_rise         <= 1'b0;
-            rt_rise_start      <= 0;
-            rt_rise_cnt        <= 0;
-            rt_acc             <= 0;
-            rt_count           <= 0;
-            rise_time_us       <= 0;
-            rt_prev_below_10   <= 1'b1;
-            rt_prev_below_90   <= 1'b1;
+            rise_state      <= RISE_IDLE;
+            rise_cnt        <= 0;
+            rise_acc        <= 0;
+            rise_evt_count  <= 0;
+            rise_time_us    <= 0;
+            rise_below_10_d1 <= 1'b1;
         end else if (wave_valid) begin
-            // Update Vpp/Vmin tracking for thresholds
-            if (wave_data > peak_max) rt_vpp <= peak_max;
-            if (wave_data < peak_min) rt_vmin <= peak_min;
-
-            // On gate completion, update rise_time
-            if (gate_cnt == GATE_MAX - 1) begin
-                if (rt_count > 0) begin
-                    // Average rise time in samples → µs
-                    // 1 sample ≈ 2.48µs at 403kSPS
-                    // rise_time_us = avg_samples * 2.48 ≈ avg * 25 / 10
-                    rise_time_us <= ((rt_acc / {4'b0, rt_count}) * 8'd25 + 8'd5) / 8'd10;
+            // At gate end, publish the average rise time
+            if (gate_done) begin
+                if (rise_evt_count > 0) begin
+                    // avg_samples → µs: ×2 for 500kSPS (1 sample ≈ 2µs)
+                    rise_time_us <= ((rise_acc / {4'b0, rise_evt_count}) << 1);
                 end
-                rt_acc   <= 0;
-                rt_count <= 0;
+                rise_acc       <= 0;
+                rise_evt_count <= 0;
             end
 
-            // Rise time edge detection logic
-            // 10% threshold = rt_vmin + Vpp/10
-            // 90% threshold = rt_vmin + Vpp*9/10
-            // Simplified: use fixed mid-scale thresholds
-            // 10% ≈ 128 - Vpp*0.4, 90% ≈ 128 + Vpp*0.4 (for AC-coupled signals centered at 128)
-            if (rt_vpp > 8'd20) begin
-                // Rise time uses fixed 10/90 levels on 0-255 scale
-                // thresh_10 = 8'd40 (~10%), thresh_90 = 8'd215 (~90%)
+            // Track previous-below state for edge detection
+            rise_below_10_d1 <= (wave_data < rt_10);
 
-                if (!rt_in_rise) begin
-                    // Looking for start of rising edge: was below 10%, now above
-                    if (wave_data >= 8'd40) begin
-                        rt_in_rise    <= 1'b1;
-                        rt_rise_cnt   <= 0;
-                        rt_rise_start <= 0;
-                    end
-                end else begin
-                    rt_rise_cnt <= rt_rise_cnt + 1'b1;
-
-                    // Mark 10% crossing point
-                    if (rt_rise_start == 0 && !rt_prev_below_10 && wave_data >= 8'd40)
-                        rt_rise_start <= rt_rise_cnt;
-
-                    // 90% crossing → complete measurement
-                    if (wave_data >= 8'd215 && rt_rise_start > 0) begin
-                        rt_acc   <= rt_acc + (rt_rise_cnt - rt_rise_start);
-                        rt_count <= rt_count + 1'b1;
-                        rt_in_rise    <= 1'b0;
-                        rt_rise_start <= 0;
-                        rt_rise_cnt   <= 0;
+            if (rt_valid) begin
+                case (rise_state)
+                    RISE_IDLE: begin
+                        // Rising edge through 10% threshold
+                        if (wave_data >= rt_10 && rise_below_10_d1) begin
+                            rise_state <= RISE_COUNT;
+                            rise_cnt   <= 1;   // this sample counts as first above 10%
+                        end
                     end
 
-                    // Timeout: if rise takes too long (>200 samples), abort
-                    if (rt_rise_cnt == 8'd200) begin
-                        rt_in_rise    <= 1'b0;
-                        rt_rise_start <= 0;
-                        rt_rise_cnt   <= 0;
-                    end
+                    RISE_COUNT: begin
+                        rise_cnt <= rise_cnt + 1'b1;
 
-                    // Signal went back down before reaching 90% → abort
-                    if (wave_data < 8'd40 && rt_rise_cnt > 1) begin
-                        rt_in_rise    <= 1'b0;
-                        rt_rise_start <= 0;
-                        rt_rise_cnt   <= 0;
+                        // Reached 90% → record measurement
+                        if (wave_data >= rt_90) begin
+                            rise_acc       <= rise_acc + rise_cnt;
+                            rise_evt_count <= rise_evt_count + 1'b1;
+                            rise_state     <= RISE_IDLE;
+                            rise_cnt       <= 0;
+                        end
+                        // Fell back below 10% without reaching 90% → abort
+                        else if (wave_data < rt_10 && !rise_below_10_d1) begin
+                            rise_state <= RISE_IDLE;
+                            rise_cnt   <= 0;
+                        end
+                        // Timeout guard (>200 samples ≈ 400µs)
+                        else if (rise_cnt == 8'd200) begin
+                            rise_state <= RISE_IDLE;
+                            rise_cnt   <= 0;
+                        end
                     end
-                end
-
-                rt_prev_below_10 <= (wave_data < 8'd40);
-                rt_prev_below_90 <= (wave_data < 8'd215);
+                endcase
+            end else begin
+                // Signal too small for meaningful rise-time
+                rise_state <= RISE_IDLE;
+                rise_cnt   <= 0;
             end
         end
     end
@@ -323,82 +354,77 @@ module wave_analyzer
     //=========================================================================
     // Waveform Type Detection (histogram + shape analysis, GATE_MAX samples)
     //
-    // Bins: near_peak (>192, top 25%), near_valley (<64, bottom 25%),
-    //       near_mid (112-144, center 12.5%), rising_edge samples (for sawtooth)
+    // Bins: near_peak  (>192, top 25%),  near_valley (<64, bottom 25%),
+    //       near_mid   (112-144, center 12.5%),
+    //       zc_rapid   (rapid zero-crossings for noise detection)
     //
     // Classification:
     //   Square:   many at extremes, few in middle
     //   Triangle: uniform spread, significant mid-count
-    //   Sawtooth: asymmetric — many mid + moderate peak/valley, duty ≠ 50%
+    //   Sawtooth: asymmetric — moderate mid + unbalanced duty
     //   DC:       Vpp < 5 (nearly flat)
-    //   Noise:    high zero-crossing rate + small Vpp
+    //   Noise:    small Vpp + high zero-crossing rate
     //   Sine:     default fallback
     //=========================================================================
-    reg [9:0]  near_peak, near_valley, near_mid;
-    reg [13:0] hist_cnt;
-    reg [15:0] zc_rapid;       // rapid zero-crossings for noise detection
+    reg [13:0] near_peak, near_valley, near_mid;  // widened from 10-bit to prevent overflow
+    reg [15:0] zc_rapid;
     reg        prev_sign2;
+    reg        rms_valid;       // set after first RMS measurement completes
 
     always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            near_peak       <= 0;
-            near_valley     <= 0;
-            near_mid        <= 0;
-            hist_cnt        <= 0;
-            wave_type_det   <= 3'b000;
-            zc_rapid        <= 0;
-            prev_sign2      <= 1'b0;
-            crest_factor_x100 <= 11'd141;  // default sine
+            near_peak        <= 0;
+            near_valley      <= 0;
+            near_mid         <= 0;
+            zc_rapid         <= 0;
+            prev_sign2       <= 1'b0;
+            wave_type_det    <= 3'b000;
+            crest_factor_x100 <= 11'd141;
+            rms_valid        <= 1'b0;
         end else if (wave_valid) begin
             // Histogram bins
-            if (wave_data > 8'd192)       near_peak   <= near_peak + 1'b1;
-            if (wave_data < 8'd64)        near_valley <= near_valley + 1'b1;
-            if (wave_data > 8'd112 && wave_data < 8'd144) near_mid <= near_mid + 1'b1;
+            if (wave_data > 8'd192)                          near_peak   <= near_peak + 1'b1;
+            if (wave_data < 8'd64)                           near_valley <= near_valley + 1'b1;
+            if (wave_data > 8'd112 && wave_data < 8'd144)    near_mid    <= near_mid + 1'b1;
 
-            // Rapid zero-crossing detection for noise
+            // Rapid zero-crossing count for noise detection
             if (curr_sign != prev_sign2)
                 zc_rapid <= zc_rapid + 1'b1;
             prev_sign2 <= curr_sign;
 
-            if (hist_cnt == GATE_MAX - 1) begin
-                // Compute crest factor (with safety divide-by-zero)
-                // crest = Vpeak / Vrms, where Vpeak = max(|max-128|, |min-128|)
-                // For now, use Vpp/2 as approximation of Vpeak
-                if (vpp > 8'd10 && rms > 8'd0) begin
-                    // crest × 100 = (Vpp/2) × 100 / rms
+            // Track whether RMS has been computed at least once
+            if (rms_cnt == RMS_GATE - 1)
+                rms_valid <= 1'b1;
+
+            if (gate_done) begin
+                // ---- Crest Factor ----
+                // crest × 100 = (Vpp/2) × 100 / RMS
+                if (vpp > 8'd10 && rms > 8'd0 && rms_valid) begin
                     crest_factor_x100 <= (({3'b0, vpp[7:1]} * 11'd100) / {3'b0, rms});
                 end else begin
-                    crest_factor_x100 <= 11'd141;  // default: sine ≈ 1.414 × 100
+                    crest_factor_x100 <= 11'd141;   // default: sine ≈ 1.414 × 100
                 end
 
                 // ---- Waveform Classification ----
                 if (vpp < 8'd5) begin
-                    // DC signal (flat)
                     wave_type_det <= 3'b100;  // DC
                 end
                 else if (vpp < 8'd15 && zc_rapid > 5000) begin
-                    // Small amplitude + high zero-crossing rate → noise
                     wave_type_det <= 3'b101;  // Noise
                 end
-                // Square: concentrated at extremes, sparse in middle
                 else if (near_peak > 3500 && near_valley > 3500 && near_mid < 800) begin
                     wave_type_det <= 3'b001;  // Square
                 end
-                // Triangle: uniform distribution, many mid-samples
                 else if (near_peak < 3000 && near_valley < 3000 && near_mid > 1500 &&
                          duty_cycle > 7'd35 && duty_cycle < 7'd65) begin
                     wave_type_det <= 3'b010;  // Triangle
                 end
-                // Sawtooth: asymmetric distribution + unbalanced duty
                 else if (duty_cycle < 7'd30 || duty_cycle > 7'd70) begin
-                    // Sawtooth has skewed duty cycle + moderate mid count
-                    if (near_mid > 800) begin
+                    if (near_mid > 800)
                         wave_type_det <= 3'b011;  // Sawtooth
-                    end else begin
+                    else
                         wave_type_det <= 3'b000;  // Sine (distorted)
-                    end
                 end
-                // Default: Sine
                 else begin
                     wave_type_det <= 3'b000;  // Sine
                 end
@@ -406,16 +432,15 @@ module wave_analyzer
                 near_peak    <= 0;
                 near_valley  <= 0;
                 near_mid     <= 0;
-                hist_cnt     <= 0;
                 zc_rapid     <= 0;
-            end else begin
-                hist_cnt <= hist_cnt + 1'b1;
             end
         end
     end
 
     //=========================================================================
     // RMS, Average, Max accumulators (RMS_GATE = 8192 samples) + calibrated mV
+    //
+    // Uses its own rms_cnt (different gate size from GATE_MAX).
     //=========================================================================
     reg [27:0] sum_sq_acc;    // sum of (wave_data - 128)^2
     reg [20:0] sum_acc;       // sum of wave_data
@@ -447,7 +472,7 @@ module wave_analyzer
                 avg_val <= sum_acc[20:13];
 
                 // rms = sqrt(sum_sq / 8192) = sqrt(sum_sq[27:13])
-                rms <= sqrt_int({1'b0, sum_sq_acc[27:13]});
+                rms     <= sqrt_int({1'b0, sum_sq_acc[27:13]});
 
                 // max = peak
                 max_val <= rms_peak;

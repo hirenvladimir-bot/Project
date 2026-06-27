@@ -890,6 +890,10 @@ module char_gen
     //=====================================================================
     // ROM address: char_idx = (char_code - 0x20), bounded to 0-95
     // Supports 0x20-0x7F (96 characters). Out-of-range codes map to 0x20.
+    //
+    // NOTE: char_code is registered externally (in waveform_display), so it
+    // remains stable for a full 8-pixel character cell. This gives the font
+    // ROM LUT cascade 8 pixel clocks (320ns) to settle — plenty at 25MHz.
     //=====================================================================
     wire [7:0] cc_sub = char_code - 8'h20;
     wire [6:0] char_idx = (char_code < 8'h20 || char_code > 8'h7E) ? 7'd0 : cc_sub[6:0];

@@ -116,14 +116,15 @@ module Top_Project (
     );
 
     //=========================================================================
-    // Analog switch control — derived from device_mode
+    // Analog switch control — derived from device_mode + XADC mux toggling
     //=========================================================================
     wire is_scope_mode  = (device_mode == 2'b01) || (device_mode == 2'b10) || (device_mode == 2'b11);
     wire is_siggen_mode = (device_mode == 2'b00);
+    wire adc_mux_sel;
 
     assign ch1_switch_en_n = ~is_scope_mode;
     assign ch2_switch_en_n = ~is_scope_mode;
-    assign sg_en_n         = ~is_siggen_mode;
+    assign sg_en_n         = adc_mux_sel;     // IO-18P (H17) → external ADC mux 0=CH1 1=CH2
     assign sg_out_sel      = 1'b0;
 
     // Range and AC/DC — fixed defaults
@@ -247,22 +248,35 @@ module Top_Project (
     wire       de;
     wire [9:0] pixel_x, pixel_y;
 
+    // Display read address: pixel_x directly maps to BRAM address (0-639)
+    wire [9:0] display_addr = pixel_x;
+
+    //=========================================================================
+    // Oscilloscope Acquisition — provides both VGA BRAM data and raw
+    // measurement data for the wave_analyzer modules.
+    //=========================================================================
     wire [23:0] bram_dout;
+    wire [7:0]  meas_ch1_raw, meas_ch2_raw;
+    wire        meas_data_valid_100m;   // single-cycle pulse in 100MHz domain
 
     Oscilloscope_Acq u_osc_acq (
-        .clk_100m       (clk_100m),
-        .rst_n          (global_rst_n),
-        .ch1_en_n       (1'b0),
-        .ch2_en_n       (1'b0),
-        .vauxp_ch1      (vauxp_ch1),
-        .vauxn_ch1      (vauxn_ch1),
-        .vauxp_ch2      (vauxp_ch2),
-        .vauxn_ch2      (vauxn_ch2),
-        .bram_read_addr (display_addr),
-        .bram_dout      (bram_dout)
+        .clk_100m         (clk_100m),
+        .rst_n            (global_rst_n),
+        .ch1_en_n         (1'b0),
+        .ch2_en_n         (1'b0),
+        .vauxp_ch1        (vauxp_ch1),
+        .vauxn_ch1        (vauxn_ch1),
+        .vauxp_ch2        (vauxp_ch2),
+        .vauxn_ch2        (vauxn_ch2),
+        .bram_read_addr   (display_addr),
+        .bram_dout        (bram_dout),
+        .adc_mux_sel      (adc_mux_sel),
+        .meas_ch1_data    (meas_ch1_raw),
+        .meas_ch2_data    (meas_ch2_raw),
+        .meas_data_valid  (meas_data_valid_100m)
     );
 
-    // BRAM → 25MHz domain readout
+    // BRAM → 25MHz domain readout (for VGA waveform display)
     // bram_dout[23:0] = {ch2_data_reg[11:0], ch1_data_reg[11:0]}
     reg [23:0] bram_dout_25m;
     always @(posedge clk_25m)
@@ -271,15 +285,47 @@ module Top_Project (
     wire [7:0] wave_ch1 = bram_dout_25m[11:4];    // CH1 12-bit → 8-bit
     wire [7:0] wave_ch2 = bram_dout_25m[23:16];   // CH2 12-bit → 8-bit
 
-    // Display read address: pixel_x directly maps to BRAM address (0-639)
-    wire [9:0] display_addr = pixel_x;
+    //=========================================================================
+    // CDC: XADC measurement data 100MHz → 25MHz
+    //
+    // meas_data_valid_100m is a single-cycle pulse. We use a toggle flip-flop
+    // in the source domain, synchronize the toggle through 2 FFs, then edge-
+    // detect in the destination domain to reconstruct the valid strobe.
+    // The data bus is stable when valid is asserted, so a simple 2-FF sync
+    // on the data (with the regenerated valid as a load-enable) is safe.
+    //=========================================================================
+    reg        valid_toggle_100m;
+    reg        valid_toggle_sync1, valid_toggle_sync2, valid_toggle_25m_d;
+    wire       meas_valid_25m;
 
-    // Sample rate display (kSPS)
-    wire [15:0] sample_rate_disp = 16'd961;
-    wire        trigger_armed    = 1'b1;
+    always @(posedge clk_100m) begin
+        if (meas_data_valid_100m)
+            valid_toggle_100m <= ~valid_toggle_100m;
+    end
+
+    always @(posedge clk_25m) begin
+        valid_toggle_sync1   <= valid_toggle_100m;
+        valid_toggle_sync2   <= valid_toggle_sync1;
+        valid_toggle_25m_d   <= valid_toggle_sync2;
+    end
+
+    assign meas_valid_25m = valid_toggle_sync2 ^ valid_toggle_25m_d;
+
+    // Register measurement data in 25MHz domain (stable when valid toggles)
+    reg [7:0] meas_ch1_25m, meas_ch2_25m;
+    always @(posedge clk_25m) begin
+        if (meas_valid_25m) begin
+            meas_ch1_25m <= meas_ch1_raw;
+            meas_ch2_25m <= meas_ch2_raw;
+        end
+    end
 
     //=========================================================================
     // Waveform Analyzers (Frequency, Vpp, Type, RMS, Avg, Max)
+    //
+    // Now fed from the direct XADC measurement data path (CDC'd to 25MHz)
+    // instead of the VGA-scanned BRAM readout. This gives unique, properly
+    // timed samples for accurate frequency/period/RMS calculations.
     //
     // Calibration based on EGO1 extension board:
     //   Signal chain: BNC → 10kΩ + 100kΩ trimmer → MCP6002 (G=1.1×) → XADC VAUXP2
@@ -287,13 +333,14 @@ module Top_Project (
     //   ADC LSB (8-bit) = 1V/256 = 3.90625mV at XADC input
     //   → CAL_MV_X1024 = round(3.90625×1024) = 4000
     //
-    // Frequency calibration (single-channel, ~961kSPS):
-    //   GATE_MAX = 10000 samples, sample_rate ≈ 961kSPS
-    //   Gate time = 10000/961000 ≈ 10.4ms
-    //   FREQ_CAL_X10 = sample_rate × 10 / GATE_MAX = 961
+    // Frequency calibration:
+    //   XADC continuous-sequence mode at 100MHz DCLK:
+    //   CH1+CH2 channel-sequenced, per-channel rate ≈ 500 kSPS
+    //   GATE_MAX = 10000 samples, gate time ≈ 10000/500000 = 20 ms
+    //   FREQ_CAL_X10 = sample_rate × 10 / GATE_MAX = 500000 × 10 / 10000 = 500
     //=========================================================================
-    localparam FREQ_CAL_X10_CH   = 961;   // frequency cal (×10): 961 for ~961kSPS
-    localparam CAL_MV_X1024_VAL  = 4000;  // mV cal (×1024): 4000 → 3.90625 mV/LSB
+    localparam FREQ_CAL_X10_CH   = 500;    // per-channel XADC rate ≈ 500kSPS
+    localparam CAL_MV_X1024_VAL  = 4000;   // mV cal (×1024): 4000 → 3.90625 mV/LSB
 
     wire [15:0] freq_ch1, freq_ch2;
     wire [15:0] period_ch1, period_ch2;
@@ -317,27 +364,27 @@ module Top_Project (
         .FREQ_CAL_X10(FREQ_CAL_X10_CH),
         .CAL_MV_X1024(CAL_MV_X1024_VAL)
     ) u_analyzer_ch1 (
-        .clk            (clk_25m),
-        .rst_n          (global_rst_n),
-        .wave_data      (wave_ch1),
-        .wave_valid     (1'b1),
-        .frequency_hz   (freq_ch1),
-        .period_x100us  (period_ch1),
-        .vpp            (vpp_ch1),
-        .vmin_val       (vmin_ch1),
-        .wave_type_det  (type_ch1),
-        .duty_cycle     (duty_ch1),
-        .rise_time_us   (rise_time_ch1),
+        .clk              (clk_25m),
+        .rst_n            (global_rst_n),
+        .wave_data        (meas_ch1_25m),
+        .wave_valid       (meas_valid_25m),
+        .frequency_hz     (freq_ch1),
+        .period_x100us    (period_ch1),
+        .vpp              (vpp_ch1),
+        .vmin_val         (vmin_ch1),
+        .wave_type_det    (type_ch1),
+        .duty_cycle       (duty_ch1),
+        .rise_time_us     (rise_time_ch1),
         .crest_factor_x100(crest_ch1),
-        .meas_valid     (meas_valid_ch1),
-        .rms            (rms_ch1),
-        .avg_val        (avg_ch1),
-        .max_val        (max_ch1),
-        .vpp_mv         (vpp_mv_ch1),
-        .vmin_mv        (vmin_mv_ch1),
-        .rms_mv         (rms_mv_ch1),
-        .avg_mv         (avg_mv_ch1),
-        .max_mv         (max_mv_ch1)
+        .meas_valid       (meas_valid_ch1),
+        .rms              (rms_ch1),
+        .avg_val          (avg_ch1),
+        .max_val          (max_ch1),
+        .vpp_mv           (vpp_mv_ch1),
+        .vmin_mv          (vmin_mv_ch1),
+        .rms_mv           (rms_mv_ch1),
+        .avg_mv           (avg_mv_ch1),
+        .max_mv           (max_mv_ch1)
     );
 
     // CH2 analyzer
@@ -345,28 +392,32 @@ module Top_Project (
         .FREQ_CAL_X10(FREQ_CAL_X10_CH),
         .CAL_MV_X1024(CAL_MV_X1024_VAL)
     ) u_analyzer_ch2 (
-        .clk            (clk_25m),
-        .rst_n          (global_rst_n),
-        .wave_data      (wave_ch2),
-        .wave_valid     (1'b1),
-        .frequency_hz   (freq_ch2),
-        .period_x100us  (period_ch2),
-        .vpp            (vpp_ch2),
-        .vmin_val       (vmin_ch2),
-        .wave_type_det  (type_ch2),
-        .duty_cycle     (duty_ch2),
-        .rise_time_us   (rise_time_ch2),
+        .clk              (clk_25m),
+        .rst_n            (global_rst_n),
+        .wave_data        (meas_ch2_25m),
+        .wave_valid       (meas_valid_25m),
+        .frequency_hz     (freq_ch2),
+        .period_x100us    (period_ch2),
+        .vpp              (vpp_ch2),
+        .vmin_val         (vmin_ch2),
+        .wave_type_det    (type_ch2),
+        .duty_cycle       (duty_ch2),
+        .rise_time_us     (rise_time_ch2),
         .crest_factor_x100(crest_ch2),
-        .meas_valid     (meas_valid_ch2),
-        .rms            (rms_ch2),
-        .avg_val        (avg_ch2),
-        .max_val        (max_ch2),
-        .vpp_mv         (vpp_mv_ch2),
-        .vmin_mv        (vmin_mv_ch2),
-        .rms_mv         (rms_mv_ch2),
-        .avg_mv         (avg_mv_ch2),
-        .max_mv         (max_mv_ch2)
+        .meas_valid       (meas_valid_ch2),
+        .rms              (rms_ch2),
+        .avg_val          (avg_ch2),
+        .max_val          (max_ch2),
+        .vpp_mv           (vpp_mv_ch2),
+        .vmin_mv          (vmin_mv_ch2),
+        .rms_mv           (rms_mv_ch2),
+        .avg_mv           (avg_mv_ch2),
+        .max_mv           (max_mv_ch2)
     );
+
+    // Sample rate display for metrics bar
+    wire [15:0] sample_rate_disp = 16'd500;    // ~500 kSPS per channel
+    wire        trigger_armed    = 1'b1;
 
     //=========================================================================
     // VGA Controller — 640×480@60Hz, 25MHz pixel clock

@@ -12,7 +12,15 @@ module Oscilloscope_Acq (
     input  wire        vauxn_ch2,
 
     input  wire [9:0]  bram_read_addr,
-    output wire [23:0] bram_dout
+    output wire [23:0] bram_dout,
+
+    // ---- External analog-switch control (IO-18P / H17) ----
+    output reg         adc_mux_sel,     // 0=CH1, 1=CH2
+
+    // ---- Raw measurement data output (for wave_analyzer) ----
+    output wire [7:0]  meas_ch1_data,
+    output wire [7:0]  meas_ch2_data,
+    output wire        meas_data_valid
 );
 
     localparam ADDR_CH1 = 7'h12;
@@ -28,16 +36,27 @@ module Oscilloscope_Acq (
 
     reg [6:0] xadc_daddr;
     reg       xadc_den;
+    reg       channel_sel;   // latched at EOC: which channel was JUST converted
 
+    // XADC always samples VAUX2 (ADDR_CH1). The external analog switch
+    // controlled by adc_mux_sel routes either CH1 or CH2 into VAUX2.
+    // adc_mux_sel toggles at EOC (end of conversion) so the external mux
+    // has maximum time to settle before the next conversion's sampling instant.
+    // channel_sel records the pre-toggle value to identify which channel's
+    // data arrives at the next DRDY.
     always @(posedge clk_100m or negedge rst_n) begin
         if (!rst_n) begin
-            xadc_daddr <= ADDR_CH1;
-            xadc_den   <= 1'b0;
+            xadc_daddr  <= ADDR_CH1;
+            xadc_den    <= 1'b0;
+            adc_mux_sel <= 1'b0;
+            channel_sel <= 1'b0;
         end else if (xadc_eoc) begin
-            xadc_den <= 1'b1;
+            xadc_den    <= 1'b1;
+            channel_sel <= adc_mux_sel;       // latch which channel was just sampled
+            adc_mux_sel <= ~adc_mux_sel;      // toggle external mux NOW, before next conv
         end else if (xadc_drdy) begin
-            xadc_den <= 1'b0;
-            xadc_daddr <= (xadc_daddr == ADDR_CH1) ? ADDR_CH2 : ADDR_CH1;
+            xadc_den    <= 1'b0;
+            xadc_daddr  <= ADDR_CH1;          // fixed — single-channel ADC scheme
         end else begin
             xadc_den <= 1'b0;
         end
@@ -118,6 +137,8 @@ module Oscilloscope_Acq (
     reg [11:0] ch2_data_reg;
     reg        data_pair_ready;
 
+    // channel_sel is latched at EOC (pre-toggle adc_mux_sel), so it correctly
+    // identifies which channel produced the conversion data now arriving at DRDY.
     always @(posedge clk_100m or negedge rst_n) begin
         if (!rst_n) begin
             ch1_data_reg <= 12'd0;
@@ -126,11 +147,11 @@ module Oscilloscope_Acq (
         end else begin
             data_pair_ready <= 1'b0;
             if (xadc_drdy) begin
-                if (xadc_daddr == ADDR_CH1) begin
+                if (!channel_sel) begin          // CH1 data
                     ch1_data_reg <= xadc_do[15:4];
-                end else begin
+                end else begin                   // CH2 data
                     ch2_data_reg <= xadc_do[15:4];
-                    data_pair_ready <= 1'b1;
+                    data_pair_ready <= 1'b1;     // both channels now fresh
                 end
             end
         end
@@ -188,5 +209,13 @@ module Oscilloscope_Acq (
         .addrb (bram_read_addr),
         .doutb (bram_dout)
     );
+
+    //=========================================================================
+    // Raw measurement data outputs — XADC 12-bit → 8-bit
+    // data_pair_ready is a single-cycle pulse when both CH1 & CH2 are fresh
+    //=========================================================================
+    assign meas_ch1_data  = ch1_data_reg[11:4];
+    assign meas_ch2_data  = ch2_data_reg[11:4];
+    assign meas_data_valid = data_pair_ready;
 
 endmodule
