@@ -34,16 +34,12 @@ module wave_ram_ch2
     output reg [7:0] dout
 );
 
-reg [7:0] ram [0:1023];
+(* ram_style = "block" *) reg [7:0] ram [0:1023];
 
 always @(posedge clk)
 begin
     if(we)
         ram[wr_addr] <= din;
-end
-
-always @(posedge clk)
-begin
     dout <= ram[rd_addr];
 end
 

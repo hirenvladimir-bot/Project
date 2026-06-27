@@ -15,19 +15,26 @@ module top
     // DAC0832
     output wire [7:0]    dac_d,
     output wire          dac_ile, dac_cs_n, dac_wr1_n, dac_wr2_n, dac_xfer_n,
-    // XADC analog inputs
-    input  wire          adc_p_in, adc_n_in,
-    input  wire          adc_vauxp2, adc_vauxn2, // ADC_MUX_OUT J5 pins 9-10 (VAUXP[2]/N[2])
+    // XADC analog inputs — VAUX2 (CH1) + VAUX10 (CH2)
+    input  wire          vauxp_ch1, vauxn_ch1, // VAUXP[2]/N[2], EGO1 pins B16/B17
+    input  wire          vauxp_ch2, vauxn_ch2, // VAUXP[10]/N[10], EGO1 pins A15/A16
     // UI
     input  wire [4:0]    btn,
     input  wire [7:0]    sw_in,
     input  wire [7:0]    sw_dip,
     // Status / loopback
     output wire [2:0]    led_speed,
-    output wire [3:0]    loop_tx,       // loop_tx[0] repurposed as mux_sel
+    output wire [3:0]    loop_tx,
     input  wire [3:0]    loop_rx,
-    // 4053 analog switch control (expansion board)
-    output wire          mux_sel        // 0=CH1, 1=CH2 (toggled each sample)
+    // Analog switch control (74HC4053, active-low enables)
+    output wire          ch1_switch_en_n,
+    output wire          ch2_switch_en_n,
+    output wire          ch1_range_sel,
+    output wire          ch2_range_sel,
+    output wire          ch1_acdc_sel,
+    output wire          ch2_acdc_sel,
+    output wire          sg_en_n,
+    output wire          sg_out_sel
 );
 
 //=============================================================================
@@ -392,270 +399,51 @@ char_gen u_sg_char (
 );
 
 //=============================================================================
-// XADC Dual-Channel Reader
+// Oscilloscope Acquisition — pocketscope_sim2_0 BRAM-based (single-channel)
+// Internal inferred BRAM (1024×24bit). CH1 only; CH2 fixed mid-scale.
 //=============================================================================
-// Pre-declare sample rate wires (before xadc_reader instantiation to avoid
-// implicit wire declaration warnings).
-wire [15:0] sample_rate_hz_sys;
-wire        sample_rate_update_sys;
 
-// Map physical ADC inputs to XADC VAUXP/VAUXN buses
-wire [15:0] xadc_vauxp, xadc_vauxn;
-// VAUXP/VAUXN bus mapping to XADC auxiliary channels:
-//   [15:4] = unused
-//   [3]    = 0 (VAUXP[3]/VAUXN[3] unused — USE_4053=1, only VAUXP[2] needed)
-//   [2]    = adc_vauxp2/vauxn2  (AD2, auxiliary channel 2, DRP addr 0x12 — ADC_MUX_OUT)
-//   [1]    = unused
-//   [0]    = unused
-assign xadc_vauxp = {12'd0, 1'b0, adc_vauxp2, 2'b0};
-assign xadc_vauxn = {12'd0, 1'b0, adc_vauxn2, 2'b0};
+wire [23:0] bram_dout;
 
-wire [11:0] adc_ch1_raw, adc_ch2_raw;
-wire        adc_ch1_vld, adc_ch2_vld;
-
-// XADC DRP handshake debug signals (for ILA monitoring)
-wire        dbg_drp_drdy, dbg_drp_den, dbg_settling, dbg_den_pending, dbg_startup_done;
-
-xadc_reader #(
-    .SIM_MODE(0),
-    .USE_4053(1),           // 1 = single XADC channel + 4053 mux
-    .SINGLE_CH_ADDR(7'h12), // VAUXP[2]/VAUXN[2] (AD2, J5 pins 9-10) carries the muxed signal
-    .SETTLE_CYCLES(10)      // 100ns settle time at 100MHz (> 74HC4053 t_on=60ns)
-) u_xadc (
-    .clk(sys_clk), .rst_n(rst_n),
-    .vp_in(adc_p_in), .vn_in(adc_n_in),
-    .vauxp(xadc_vauxp), .vauxn(xadc_vauxn),
-    .ch1_data(adc_ch1_raw), .ch1_valid(adc_ch1_vld),
-    .ch2_data(adc_ch2_raw), .ch2_valid(adc_ch2_vld),
-    .mux_sel(mux_sel),
-    .sample_rate_hz(sample_rate_hz_sys),
-    .sample_rate_update(sample_rate_update_sys),
-    .dbg_drp_drdy(dbg_drp_drdy),
-    .dbg_drp_den(dbg_drp_den),
-    .dbg_settling(dbg_settling),
-    .dbg_den_pending(dbg_den_pending),
-    .dbg_startup_done(dbg_startup_done)
+Oscilloscope_Acq u_osc_acq (
+    .clk_100m        (sys_clk),
+    .rst_n           (rst_n),
+    .ch1_en_n        (1'b0),         // CH1 always enabled
+    .ch2_en_n        (1'b1),         // CH2 disabled (single-channel)
+    .vauxp_ch1       (vauxp_ch1),
+    .vauxn_ch1       (vauxn_ch1),
+    .vauxp_ch2       (vauxp_ch2),
+    .vauxn_ch2       (vauxn_ch2),
+    .bram_read_addr  (display_addr),
+    .bram_dout       (bram_dout)
 );
 
 //=============================================================================
-// CDC Bridge: 100MHz (sys_clk) → 25MHz (clk_25m)
-// XADC valid pulses are 1 cycle wide at 100MHz (10ns) — too narrow for
-// 25MHz logic (40ns period). Pulse stretching in the source domain +
-// 2-stage synchronizer in the destination domain ensures safe capture.
-// Sample rate ~403kSPS per ch → one sample every ~62 clk_25m cycles → safe.
+// BRAM → 25MHz domain readout (no CDC needed — BRAM read port runs at 100MHz,
+// display_addr changes at 25MHz, stable > 40ns = 4× 100MHz cycles)
 //=============================================================================
 
-// --- 100MHz domain: pulse stretching + data hold ---
-reg [3:0]  ch1_stretch_cnt, ch2_stretch_cnt;
-reg        ch1_valid_sys, ch2_valid_sys;
-reg [11:0] ch1_data_sys, ch2_data_sys;
+// bram_dout[23:0] = {CH2_mid(12'h800), CH1_data[11:0]}
+// wave_ch1/wave_ch2 = 8-bit for waveform_display
+reg [23:0] bram_dout_25m;
+always @(posedge clk_25m)
+    bram_dout_25m <= bram_dout;
 
-always @(posedge sys_clk or negedge rst_n) begin
-    if (!rst_n) begin
-        ch1_stretch_cnt <= 0;
-        ch2_stretch_cnt <= 0;
-        ch1_valid_sys   <= 0;
-        ch2_valid_sys   <= 0;
-        ch1_data_sys    <= 12'h800;
-        ch2_data_sys    <= 12'h800;
-    end else begin
-        // CH1: stretch valid pulse to 8 sys_clk cycles (80ns > 40ns clk_25m period)
-        if (adc_ch1_vld) begin
-            ch1_valid_sys   <= 1'b1;
-            ch1_stretch_cnt <= 0;
-            ch1_data_sys    <= adc_ch1_raw;
-        end else if (ch1_valid_sys) begin
-            if (ch1_stretch_cnt == 4'd7) begin
-                ch1_valid_sys   <= 1'b0;
-                ch1_stretch_cnt <= 0;
-            end else begin
-                ch1_stretch_cnt <= ch1_stretch_cnt + 1'b1;
-            end
-        end
+wire [7:0] wave_ch1 = bram_dout_25m[11:4];    // CH1 12-bit → 8-bit (upper byte)
+wire [7:0] wave_ch2 = bram_dout_25m[23:16];   // CH2 = mid-scale 0x80
 
-        // CH2: same stretching logic
-        if (adc_ch2_vld) begin
-            ch2_valid_sys   <= 1'b1;
-            ch2_stretch_cnt <= 0;
-            ch2_data_sys    <= adc_ch2_raw;
-        end else if (ch2_valid_sys) begin
-            if (ch2_stretch_cnt == 4'd7) begin
-                ch2_valid_sys   <= 1'b0;
-                ch2_stretch_cnt <= 0;
-            end else begin
-                ch2_stretch_cnt <= ch2_stretch_cnt + 1'b1;
-            end
-        end
-    end
-end
-
-// --- 25MHz domain: 2-stage sync + edge detect + data capture ---
-reg        ch1_v_s25_1, ch1_v_s25_2, ch1_v_s25_prev;
-reg [11:0] adc_ch1_synced;
-reg        ch2_v_s25_1, ch2_v_s25_2, ch2_v_s25_prev;
-reg [11:0] adc_ch2_synced;
-
-always @(posedge clk_25m or negedge rst_n) begin
-    if (!rst_n) begin
-        ch1_v_s25_1    <= 0;
-        ch1_v_s25_2    <= 0;
-        ch1_v_s25_prev <= 0;
-        adc_ch1_synced <= 12'h800;
-        ch2_v_s25_1    <= 0;
-        ch2_v_s25_2    <= 0;
-        ch2_v_s25_prev <= 0;
-        adc_ch2_synced <= 12'h800;
-    end else begin
-        // 2-stage synchronizer
-        ch1_v_s25_1 <= ch1_valid_sys;
-        ch1_v_s25_2 <= ch1_v_s25_1;
-        ch1_v_s25_prev <= ch1_v_s25_2;
-
-        ch2_v_s25_1 <= ch2_valid_sys;
-        ch2_v_s25_2 <= ch2_v_s25_1;
-        ch2_v_s25_prev <= ch2_v_s25_2;
-
-        // Rising-edge detect + data capture
-        if (ch1_v_s25_2 && !ch1_v_s25_prev)
-            adc_ch1_synced <= ch1_data_sys;
-        if (ch2_v_s25_2 && !ch2_v_s25_prev)
-            adc_ch2_synced <= ch2_data_sys;
-    end
-end
-
-// Synchronized valid flags and 8-bit data in 25MHz domain
-wire adc_ch1_vld_25m = ch1_v_s25_2 && !ch1_v_s25_prev;
-wire adc_ch2_vld_25m = ch2_v_s25_2 && !ch2_v_s25_prev;
-wire [7:0] adc_ch1_8b = adc_ch1_synced[11:4];
-wire [7:0] adc_ch2_8b = adc_ch2_synced[11:4];
+// Sample rate display (kSPS)
+wire [15:0] sample_rate_disp = 16'd961;
+wire        trigger_armed    = 1'b1;   // always armed (trigger internal to Oscilloscope_Acq)
 
 //=============================================================================
-// CDC: Sample rate from 100MHz sys_clk domain to 25MHz clk_25m domain
-// Data updates once per second, stretched update flag ensures safe capture.
-//=============================================================================
-
-// 2-stage synchronizer for update flag (100MHz -> 25MHz)
-reg sample_rate_update_sync1, sample_rate_update_sync2, sample_rate_update_prev;
-// Captured sample rate in 25MHz domain
-reg [15:0] sample_rate_disp;
-
-always @(posedge clk_25m or negedge rst_n) begin
-    if (!rst_n) begin
-        sample_rate_update_sync1 <= 1'b0;
-        sample_rate_update_sync2 <= 1'b0;
-        sample_rate_update_prev  <= 1'b0;
-        sample_rate_disp         <= 16'd0;
-    end else begin
-        // Synchronize update flag
-        sample_rate_update_sync1 <= sample_rate_update_sys;
-        sample_rate_update_sync2 <= sample_rate_update_sync1;
-        sample_rate_update_prev  <= sample_rate_update_sync2;
-        // Capture data on rising edge of synchronized update
-        if (sample_rate_update_sync2 && !sample_rate_update_prev) begin
-            sample_rate_disp <= sample_rate_hz_sys;
-        end
-    end
-end
-
-//=============================================================================
-// Oscilloscope Trigger
-// Rising-edge trigger on CH1: when adc_ch1_8b crosses above
-// scope_trigger_level, the trigger fires and resets the write address
-// to align the trigger event with the screen center.
-//=============================================================================
-reg        trigger_armed;
-reg [7:0]  ch1_prev;
-reg [15:0] trigger_holdoff_cnt;   // hold-off counter (~10ms at 25MHz = 250000)
-wire       trigger_event;
-reg        trigger_fired;
-
-localparam TRIGGER_HOLDOFF = 16'd50000;  // ~2ms hold-off at 25MHz
-
-always @(posedge clk_25m or negedge rst_n) begin
-    if (!rst_n) begin
-        trigger_armed      <= 1'b0;
-        ch1_prev           <= 8'd128;
-        trigger_holdoff_cnt <= 0;
-        trigger_fired      <= 1'b0;
-    end else begin
-        trigger_fired <= 1'b0;
-
-        // Track previous CH1 value for edge detection
-        if (adc_ch1_vld_25m)
-            ch1_prev <= adc_ch1_8b;
-
-        // Hold-off countdown
-        if (trigger_holdoff_cnt > 0)
-            trigger_holdoff_cnt <= trigger_holdoff_cnt - 1'b1;
-
-        // Trigger FSM
-        if (device_mode == 2'b01) begin  // scope mode only
-            if (!trigger_armed) begin
-                // Arm when signal goes below trigger level (wait for rising edge)
-                if (adc_ch1_vld_25m && adc_ch1_8b < scope_trigger_level)
-                    trigger_armed <= 1'b1;
-            end else begin
-                // Fire on rising edge crossing + hold-off expired
-                if (adc_ch1_vld_25m &&
-                    ch1_prev < scope_trigger_level &&
-                    adc_ch1_8b >= scope_trigger_level &&
-                    trigger_holdoff_cnt == 0) begin
-                    trigger_fired      <= 1'b1;
-                    trigger_armed      <= 1'b0;
-                    trigger_holdoff_cnt <= TRIGGER_HOLDOFF;
-                end
-            end
-        end else begin
-            trigger_armed <= 1'b0;
-        end
-    end
-end
-
-assign trigger_event = trigger_fired;
-
-//=============================================================================
-// Waveform Storage (Dual Channel RAM)
+// Waveform Display Readout — BRAM is inside Oscilloscope_Acq
+// pixel_x directly maps to BRAM address (0-639). No external RAM needed.
 //=============================================================================
 wire       de;
 wire [9:0] pixel_x, pixel_y;
 
-// Trigger resets the write address to align trigger point with screen center
-// (center = 512 pixels into the 1024-sample buffer)
-wire trigger_reset;
-assign trigger_reset = trigger_event && (device_mode == 2'b01);
-
-// Sequential write address: increments on each CH2 valid (CH1+CH2 pair
-// complete in 4053 mux mode). CH1 and CH2 write to the SAME address so
-// they share the same horizontal position on screen.
-reg [9:0] sample_wr_addr;
-
-always @(posedge clk_25m or negedge rst_n) begin
-    if (!rst_n)
-        sample_wr_addr <= 10'd0;
-    else if (trigger_reset)
-        sample_wr_addr <= 10'd512;  // align trigger point to buffer center
-    else if (adc_ch2_vld_25m)
-        sample_wr_addr <= sample_wr_addr + 1'b1;
-end
-
-// Display read address: show the last 640 samples before current write pos.
-// pixel_x=0 → oldest visible sample; pixel_x=639 → newest visible sample.
-// 10-bit unsigned underflow naturally implements modulo-1024 wrap.
-wire [9:0] display_addr = (sample_wr_addr - 10'd640 + pixel_x);
-
-wire [7:0] wave_ch1, wave_ch2;
-
-wave_ram_ch1 u_ram_ch1 (
-    .clk(clk_25m),
-    .we(adc_ch1_vld_25m), .wr_addr(sample_wr_addr), .din(adc_ch1_8b),
-    .rd_addr(display_addr), .dout(wave_ch1)
-);
-
-wave_ram_ch2 u_ram_ch2 (
-    .clk(clk_25m),
-    .we(adc_ch2_vld_25m), .wr_addr(sample_wr_addr), .din(adc_ch2_8b),
-    .rd_addr(display_addr), .dout(wave_ch2)
-);
+wire [9:0] display_addr = pixel_x;
 
 //=============================================================================
 // VGA Controller
@@ -676,14 +464,13 @@ vga_ctrl u_vga (
 //   Front-end gain at max trimmer: 100k/(10k+100k) × 1.1 ≈ 1.0
 //   → BNC mV ≈ ADC_count × 3.906 → CAL_MV_X1024 = round(3.90625×1024) = 4000
 //
-// Frequency calibration (4053 mux mode, ~403kSPS per ch):
-//   GATE_MAX = 10000 samples, sample_rate ≈ 403000 SPS
-//   Gate time = 10000/403000 ≈ 24.8ms
-//   FREQ_CAL_X10 = sample_rate × 10 / GATE_MAX = 403 (for 403kSPS)
-//   → freq_hz = zc_count × 403 / 10
-//   For simulation: sample_rate ≈ 100000 → FREQ_CAL_X10 = 100
+// Frequency calibration (dual-VAUX sequencer mode, ~961kSPS per ch):
+//   GATE_MAX = 10000 samples, sample_rate ≈ 961000 SPS
+//   Gate time = 10000/961000 ≈ 10.4ms
+//   FREQ_CAL_X10 = sample_rate × 10 / GATE_MAX = 961 (for 961kSPS)
+//   → freq_hz = zc_count × 961 / 10
 //=============================================================================
-localparam FREQ_CAL_X10_CH = 403;   // frequency cal (×10): 403 for 403kSPS
+localparam FREQ_CAL_X10_CH = 961;   // frequency cal (×10): 961 for 961kSPS
 localparam CAL_MV_X1024_VAL = 4000; // mV cal (×1024): 4000 → 3.90625 mV/LSB
 
 wire [15:0] freq_ch1, freq_ch2;
@@ -709,7 +496,7 @@ wave_analyzer #(
     .CAL_MV_X1024(CAL_MV_X1024_VAL)
 ) u_analyzer_ch1 (
     .clk(clk_25m), .rst_n(rst_n),
-    .wave_data(adc_ch1_8b), .wave_valid(adc_ch1_vld_25m),
+    .wave_data(wave_ch1), .wave_valid(1'b1),
     .frequency_hz(freq_ch1), .period_x100us(period_ch1),
     .vpp(vpp_ch1), .vmin_val(vmin_ch1),
     .wave_type_det(type_ch1), .duty_cycle(duty_ch1),
@@ -725,7 +512,7 @@ wave_analyzer #(
     .CAL_MV_X1024(CAL_MV_X1024_VAL)
 ) u_analyzer_ch2 (
     .clk(clk_25m), .rst_n(rst_n),
-    .wave_data(adc_ch2_8b), .wave_valid(adc_ch2_vld_25m),
+    .wave_data(wave_ch2), .wave_valid(1'b1),
     .frequency_hz(freq_ch2), .period_x100us(period_ch2),
     .vpp(vpp_ch2), .vmin_val(vmin_ch2),
     .wave_type_det(type_ch2), .duty_cycle(duty_ch2),
@@ -777,8 +564,8 @@ wire [3:0] liss_r, liss_g, liss_b;
 lissajous_display u_liss (
     .clk(clk_25m), .rst_n(rst_n), .de(de),
     .pixel_x(pixel_x), .pixel_y(pixel_y),
-    .ch1_data(adc_ch1_8b), .ch2_data(adc_ch2_8b),
-    .ch1_valid(adc_ch1_vld_25m), .ch2_valid(adc_ch2_vld_25m),
+    .ch1_data(wave_ch1), .ch2_data(wave_ch2),
+    .ch1_valid(1'b1), .ch2_valid(1'b1),
     .freq_ch1(freq_ch1), .freq_ch2(freq_ch2),
     .vga_r(liss_r), .vga_g(liss_g), .vga_b(liss_b)
 );
@@ -789,8 +576,8 @@ wire [3:0] kalei_r, kalei_g, kalei_b;
 kaleidoscope u_kalei (
     .clk(clk_25m), .rst_n(rst_n), .de(de),
     .pixel_x(pixel_x), .pixel_y(pixel_y),
-    .ch1_data(adc_ch1_8b), .ch2_data(adc_ch2_8b),
-    .ch1_valid(adc_ch1_vld_25m), .ch2_valid(adc_ch2_vld_25m),
+    .ch1_data(wave_ch1), .ch2_data(wave_ch2),
+    .ch1_valid(1'b1), .ch2_valid(1'b1),
     .vga_r(kalei_r), .vga_g(kalei_g), .vga_b(kalei_b)
 );
 
@@ -883,84 +670,24 @@ assign led_speed[1] = (device_mode == 2'b01);   // Scope
 assign led_speed[2] = (device_mode == 2'b10 || device_mode == 2'b11);  // XY modes
 
 // Loopback: echo rx to tx for self-test
-// loop_tx[0] carries mux_sel for 74HC4053 analog switch control
-assign loop_tx = {loop_rx[3:1], mux_sel};
+assign loop_tx = {loop_rx[3:1], 1'b0};
 
 //=============================================================================
-// ILA Debug Probe — ADC signal chain monitoring
+// Analog Switch Control — single-channel (CH1 only), scope mode
+// 74HC4053 enables are active-low
 //=============================================================================
-// Resynchronize 25MHz-domain signals into sys_clk (100MHz) domain for ILA.
-// 2-stage synchronizers prevent metastability in the debug capture path.
-// These are DEBUG-ONLY; they do not affect functional data paths.
+assign ch1_switch_en_n = ~(device_mode == 2'b01 || device_mode == 2'b10 || device_mode == 2'b11);
+assign ch2_switch_en_n = 1'b1;         // CH2 disabled (single-channel)
+assign sg_en_n         = ~(device_mode == 2'b00);
+assign sg_out_sel      = 1'b0;
+assign ch1_range_sel   = 1'b0;         // 1x range
+assign ch1_acdc_sel    = 1'b0;         // DC coupling
+assign ch2_range_sel   = 1'b0;
+assign ch2_acdc_sel    = 1'b0;
 
-// --- 2-stage synchronizers for 25MHz → 100MHz signals ---
-reg        ila_ch1_vld_25m_s1, ila_ch1_vld_25m_s2;
-reg        ila_ch2_vld_25m_s1, ila_ch2_vld_25m_s2;
-reg [7:0]  ila_ch1_8b_s1,     ila_ch1_8b_s2;
-reg [7:0]  ila_ch2_8b_s1,     ila_ch2_8b_s2;
-reg        ila_trig_fired_s1,  ila_trig_fired_s2;
-reg        ila_trig_armed_s1,  ila_trig_armed_s2;
-reg [9:0]  ila_wr_addr_s1,    ila_wr_addr_s2;
-reg [1:0]  ila_mode_s1,       ila_mode_s2;
-reg        ila_clk25m_s1,      ila_clk25m_s2;
-
-always @(posedge sys_clk) begin
-    // CH1 valid
-    ila_ch1_vld_25m_s1 <= adc_ch1_vld_25m;
-    ila_ch1_vld_25m_s2 <= ila_ch1_vld_25m_s1;
-    // CH2 valid
-    ila_ch2_vld_25m_s1 <= adc_ch2_vld_25m;
-    ila_ch2_vld_25m_s2 <= ila_ch2_vld_25m_s1;
-    // CH1 8-bit data
-    ila_ch1_8b_s1 <= adc_ch1_8b;
-    ila_ch1_8b_s2 <= ila_ch1_8b_s1;
-    // CH2 8-bit data
-    ila_ch2_8b_s1 <= adc_ch2_8b;
-    ila_ch2_8b_s2 <= ila_ch2_8b_s1;
-    // Trigger fired
-    ila_trig_fired_s1 <= trigger_fired;
-    ila_trig_fired_s2 <= ila_trig_fired_s1;
-    // Trigger armed
-    ila_trig_armed_s1 <= trigger_armed;
-    ila_trig_armed_s2 <= ila_trig_armed_s1;
-    // Write address
-    ila_wr_addr_s1 <= sample_wr_addr;
-    ila_wr_addr_s2 <= ila_wr_addr_s1;
-    // Device mode
-    ila_mode_s1 <= device_mode;
-    ila_mode_s2 <= ila_mode_s1;
-    // 25MHz clock sampled as reference
-    ila_clk25m_s1 <= clk_25m;
-    ila_clk25m_s2 <= ila_clk25m_s1;
-end
-
-// --- Probe bus assembly ---
-// See ila_adc_debug.v for complete bit-mapping documentation
-wire [63:0] ila_probe;
-assign ila_probe = {
-    ila_mode_s2,          // [63:62] device_mode
-    mux_sel,              // [61]    4053 channel select
-    adc_ch1_vld,          // [60]    CH1 valid raw (XADC)
-    adc_ch2_vld,          // [59]    CH2 valid raw (XADC)
-    dbg_drp_drdy,         // [58]    DRP data-ready from XADC
-    dbg_drp_den,          // [57]    DRP enable to XADC
-    dbg_settling,         // [56]    4053 settle wait state
-    dbg_den_pending,      // [55]    DEN pending flag
-    dbg_startup_done,     // [54]    XADC startup calibration done
-    ila_trig_fired_s2,    // [53]    scope trigger fired
-    ila_wr_addr_s2,       // [52:43] sample write address
-    adc_ch1_raw,          // [42:31] CH1 raw 12-bit XADC
-    adc_ch2_raw,          // [30:19] CH2 raw 12-bit XADC
-    ila_ch1_8b_s2,        // [18:11] CH1 8-bit scope data
-    ila_ch2_8b_s2,        // [10:3]  CH2 8-bit scope data
-    ila_clk25m_s2,        // [2]     25MHz clock reference
-    2'b00                 // [1:0]   reserved
-};
-
-// --- ILA Core instantiation ---
-ila_adc_debug u_ila_adc (
-    .clk   (sys_clk),
-    .probe (ila_probe)
-);
+//=============================================================================
+// ILA Debug — disabled (signals moved inside Oscilloscope_Acq BRAM)
+// Re-enable after verifying waveform display with Vivado ILA on XADC pins.
+//=============================================================================
 
 endmodule

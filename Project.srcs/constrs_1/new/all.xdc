@@ -12,16 +12,16 @@ set_property IOSTANDARD LVCMOS33 [get_ports sys_rst_n]
 set_property CFGBVS VCCO [current_design]
 set_property CONFIG_VOLTAGE 3.3 [current_design]
 
-# Buttons, mapped as required by FPGA�ڴ����������ֲ�.md.
-set_property PACKAGE_PIN R15 [get_ports btn_center]
-set_property PACKAGE_PIN V1  [get_ports btn_left]
-set_property PACKAGE_PIN R11 [get_ports btn_right]
+# Buttons (EGO1 5-key), separate ports matching Top_Project
+#   btn_up, btn_left, btn_center, btn_down, btn_right
 set_property PACKAGE_PIN U4  [get_ports btn_up]
+set_property PACKAGE_PIN V1  [get_ports btn_left]
+set_property PACKAGE_PIN R15 [get_ports btn_center]
 set_property PACKAGE_PIN R17 [get_ports btn_down]
-set_property IOSTANDARD LVCMOS33 [get_ports {btn_center btn_left btn_right btn_up btn_down}]
+set_property PACKAGE_PIN R11 [get_ports btn_right]
+set_property IOSTANDARD LVCMOS33 [get_ports {btn_up btn_left btn_center btn_down btn_right}]
 
-# Slide switches (8x, EGO1 built-in) — matches pocketscope_sim2_0
-#   sw[1:0] = main mode, sw[4:2] = sub-mode, sw[7:5] = freq coarse
+# Slide switches (8x, EGO1 built-in)
 set_property PACKAGE_PIN R1 [get_ports {sw[0]}]
 set_property PACKAGE_PIN N4 [get_ports {sw[1]}]
 set_property PACKAGE_PIN M4 [get_ports {sw[2]}]
@@ -32,7 +32,7 @@ set_property PACKAGE_PIN P4 [get_ports {sw[6]}]
 set_property PACKAGE_PIN P5 [get_ports {sw[7]}]
 set_property IOSTANDARD LVCMOS33 [get_ports {sw[*]}]
 
-# DIP switches (8x, EGO1 built-in) — frequency fine adjust
+# DIP switches (8x, EGO1 built-in)
 set_property PACKAGE_PIN T5 [get_ports {dip[0]}]
 set_property PACKAGE_PIN T3 [get_ports {dip[1]}]
 set_property PACKAGE_PIN R3 [get_ports {dip[2]}]
@@ -82,6 +82,11 @@ set_property PACKAGE_PIN B17 [get_ports vauxn_ch1]
 set_property PACKAGE_PIN A15 [get_ports vauxp_ch2]
 set_property PACKAGE_PIN A16 [get_ports vauxn_ch2]
 set_property IOSTANDARD LVCMOS33 [get_ports {vauxp_ch1 vauxn_ch1 vauxp_ch2 vauxn_ch2}]
+
+# XADC DCLK — driven by clk_wiz_0 clk_out1 (100MHz). Timing is constrained
+# by the auto-generated clk_wiz_0.xdc. No additional DCLK constraint needed
+# since DCLK is internal fabric (not a top-level port) and clk_100m is
+# already constrained by clk_wiz_0's generated clock output.
 
 # AFE and analog switch controls. CD74HC4053 enables are active low.
 set_property PACKAGE_PIN G14 [get_ports ch1_range_sel]

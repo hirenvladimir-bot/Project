@@ -89,8 +89,6 @@ read_verilog -library xil_defaultlib {
   C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/ui_ctrl.v
   C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/vga_ctrl.v
   C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_analyzer.v
-  C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_ram_ch1.v
-  C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/wave_ram_ch2.v
   C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/waveform_display.v
   C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/new/Top_Project.v
 }
@@ -98,6 +96,10 @@ read_ip -quiet C:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/ip/clk_wiz_
 set_property used_in_implementation false [get_files -all c:/Users/sgzmd/Desktop/Project/Project.gen/sources_1/ip/clk_wiz_0/clk_wiz_0_board.xdc]
 set_property used_in_implementation false [get_files -all c:/Users/sgzmd/Desktop/Project/Project.gen/sources_1/ip/clk_wiz_0/clk_wiz_0.xdc]
 set_property used_in_implementation false [get_files -all c:/Users/sgzmd/Desktop/Project/Project.gen/sources_1/ip/clk_wiz_0/clk_wiz_0_ooc.xdc]
+
+read_ip -quiet c:/Users/sgzmd/Desktop/Project/Project.srcs/sources_1/ip/xadc_wiz_1/xadc_wiz_1.xci
+set_property used_in_implementation false [get_files -all c:/Users/sgzmd/Desktop/Project/Project.gen/sources_1/ip/xadc_wiz_1/xadc_wiz_1_ooc.xdc]
+set_property used_in_implementation false [get_files -all c:/Users/sgzmd/Desktop/Project/Project.gen/sources_1/ip/xadc_wiz_1/xadc_wiz_1.xdc]
 
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being

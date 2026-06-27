@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2025.1 (win64) Build 6140274 Thu May 22 00:12:29 MDT 2025
-| Date         : Sat Jun 27 09:20:50 2026
+| Date         : Sat Jun 27 11:34:56 2026
 | Host         : MOSS550W running 64-bit major release  (build 9200)
 | Command      : report_control_sets -verbose -file Top_Project_control_sets_placed.rpt
 | Design       : Top_Project
@@ -23,11 +23,11 @@ Table of Contents
 +----------------------------------------------------------+-------+
 |                          Status                          | Count |
 +----------------------------------------------------------+-------+
-| Total control sets                                       |   189 |
-|    Minimum number of control sets                        |   189 |
+| Total control sets                                       |   186 |
+|    Minimum number of control sets                        |   186 |
 |    Addition due to synthesis replication                 |     0 |
 |    Addition due to physical synthesis replication        |     0 |
-| Unused register locations in slices containing registers |  1047 |
+| Unused register locations in slices containing registers |  1040 |
 +----------------------------------------------------------+-------+
 * Control sets can be merged at opt_design using control_set_merge or merge_equivalent_drivers
 ** Run report_qor_suggestions for automated merging and remapping suggestions
@@ -39,15 +39,15 @@ Table of Contents
 +--------------------+-------+
 |       Fanout       | Count |
 +--------------------+-------+
-| Total control sets |   189 |
+| Total control sets |   186 |
 | >= 0 to < 4        |     5 |
 | >= 4 to < 6        |     2 |
-| >= 6 to < 8        |     1 |
-| >= 8 to < 10       |   157 |
-| >= 10 to < 12      |     4 |
+| >= 6 to < 8        |     2 |
+| >= 8 to < 10       |   155 |
+| >= 10 to < 12      |     3 |
 | >= 12 to < 14      |     2 |
 | >= 14 to < 16      |     1 |
-| >= 16              |    17 |
+| >= 16              |    16 |
 +--------------------+-------+
 * Control sets can be remapped at either synth_design or opt_design
 
@@ -58,11 +58,11 @@ Table of Contents
 +--------------+-----------------------+------------------------+-----------------+--------------+
 | Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
 +--------------+-----------------------+------------------------+-----------------+--------------+
-| No           | No                    | No                     |               0 |            0 |
-| No           | No                    | Yes                    |             310 |          128 |
-| No           | Yes                   | No                     |             112 |           63 |
-| Yes          | No                    | No                     |            1152 |          542 |
-| Yes          | No                    | Yes                    |             771 |          258 |
+| No           | No                    | No                     |              16 |            7 |
+| No           | No                    | Yes                    |             296 |          114 |
+| No           | Yes                   | No                     |             119 |           71 |
+| Yes          | No                    | No                     |            1152 |          549 |
+| Yes          | No                    | Yes                    |             713 |          250 |
 | Yes          | Yes                   | No                     |               0 |            0 |
 +--------------+-----------------------+------------------------+-----------------+--------------+
 
@@ -78,190 +78,187 @@ Table of Contents
 |  u_clk_gen/inst/clk_out2 | u_dac/dac_wr1_n1_out                            | u_ui/sys_rst_n            |                1 |              1 |         1.00 |
 |  u_clk_gen/inst/clk_out2 |                                                 | u_vga/hsync0              |                1 |              1 |         1.00 |
 |  u_clk_gen/inst/clk_out2 | u_analyzer_ch2/duty_cycle[5]_i_1_n_0            | u_ui/sys_rst_n            |                2 |              2 |         1.00 |
+|  u_clk_gen/inst/clk_out2 | u_analyzer_ch1/rise_time_us[4]_i_1_n_0          | u_ui/sys_rst_n            |                4 |              5 |         1.25 |
 |  u_clk_gen/inst/clk_out2 | u_dac/wr_cnt[4]_i_1_n_0                         | u_ui/sys_rst_n            |                2 |              5 |         2.50 |
-|  u_clk_gen/inst/clk_out2 | u_analyzer_ch1/rise_time_us[4]_i_1_n_0          | u_ui/sys_rst_n            |                3 |              5 |         1.67 |
-|  u_clk_gen/inst/clk_out2 | u_ui/btn_action[4]_22                           | u_ui/sys_rst_n            |                2 |              7 |         3.50 |
-|  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[7].sw_dbcnt[7][7]_i_1_n_0  | u_ui/sys_rst_n            |                2 |              8 |         4.00 |
-|  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[0].dip_dbcnt[0][7]_i_1_n_0 | u_ui/sys_rst_n            |                2 |              8 |         4.00 |
-|  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[0].sw_dbcnt[0][7]_i_1_n_0  | u_ui/sys_rst_n            |                3 |              8 |         2.67 |
-|  u_clk_gen/inst/clk_out2 | u_ui/mod_depth[7]_i_1_n_0                       | u_ui/sys_rst_n            |                2 |              8 |         4.00 |
-|  u_clk_gen/inst/clk_out1 | u_osc_acq/u_xadc_n_1                            | u_ui/sys_rst_n            |                2 |              8 |         4.00 |
-|  u_clk_gen/inst/clk_out2 | u_ui/amplitude[7]_i_1_n_0                       | u_ui/sys_rst_n            |                4 |              8 |         2.00 |
-|  u_clk_gen/inst/clk_out2 | u_ui/dac_d0                                     | u_ui/sys_rst_n            |                1 |              8 |         8.00 |
-|  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[1].dip_dbcnt[1][7]_i_1_n_0 | u_ui/sys_rst_n            |                3 |              8 |         2.67 |
+|  u_clk_gen/inst/clk_out1 |                                                 | u_ui/sys_rst_n            |                2 |              6 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_ui/btn_action[4]_23                           | u_ui/sys_rst_n            |                2 |              7 |         3.50 |
+|  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[4].sw_dbcnt[4][7]_i_1_n_0  | u_ui/sys_rst_n            |                3 |              8 |         2.67 |
+|  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[3].dip_dbcnt[3][7]_i_1_n_0 | u_ui/sys_rst_n            |                3 |              8 |         2.67 |
+|  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[2].sw_dbcnt[2][7]_i_1_n_0  | u_ui/sys_rst_n            |                2 |              8 |         4.00 |
+|  u_clk_gen/inst/clk_out2 | u_vga/adc_ch1_vld_25m                           | u_liss/pair_valid_i_2_n_0 |                7 |              8 |         1.14 |
 |  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[1].sw_dbcnt[1][7]_i_1_n_0  | u_ui/sys_rst_n            |                3 |              8 |         2.67 |
 |  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[2].dip_dbcnt[2][7]_i_1_n_0 | u_ui/sys_rst_n            |                3 |              8 |         2.67 |
-|  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[2].sw_dbcnt[2][7]_i_1_n_0  | u_ui/sys_rst_n            |                3 |              8 |         2.67 |
-|  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[4].dip_dbcnt[4][7]_i_1_n_0 | u_ui/sys_rst_n            |                2 |              8 |         4.00 |
+|  u_clk_gen/inst/clk_out2 | u_ui/dac_d0                                     | u_ui/sys_rst_n            |                1 |              8 |         8.00 |
+|  u_clk_gen/inst/clk_out2 | u_ui/amplitude[7]_i_1_n_0                       | u_ui/sys_rst_n            |                4 |              8 |         2.00 |
+|  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[3].sw_dbcnt[3][7]_i_1_n_0  | u_ui/sys_rst_n            |                2 |              8 |         4.00 |
+|  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[0].sw_dbcnt[0][7]_i_1_n_0  | u_ui/sys_rst_n            |                2 |              8 |         4.00 |
+|  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[1].dip_dbcnt[1][7]_i_1_n_0 | u_ui/sys_rst_n            |                3 |              8 |         2.67 |
 |  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[5].sw_dbcnt[5][7]_i_1_n_0  | u_ui/sys_rst_n            |                3 |              8 |         2.67 |
+|  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[5].dip_dbcnt[5][7]_i_1_n_0 | u_ui/sys_rst_n            |                3 |              8 |         2.67 |
+|  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[6].sw_dbcnt[6][7]_i_1_n_0  | u_ui/sys_rst_n            |                3 |              8 |         2.67 |
 |  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[6].dip_dbcnt[6][7]_i_1_n_0 | u_ui/sys_rst_n            |                3 |              8 |         2.67 |
-|  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[5].dip_dbcnt[5][7]_i_1_n_0 | u_ui/sys_rst_n            |                2 |              8 |         4.00 |
-|  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[7].dip_dbcnt[7][7]_i_1_n_0 | u_ui/sys_rst_n            |                3 |              8 |         2.67 |
-|  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[6].sw_dbcnt[6][7]_i_1_n_0  | u_ui/sys_rst_n            |                2 |              8 |         4.00 |
+|  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[7].dip_dbcnt[7][7]_i_1_n_0 | u_ui/sys_rst_n            |                2 |              8 |         4.00 |
+|  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[7].sw_dbcnt[7][7]_i_1_n_0  | u_ui/sys_rst_n            |                3 |              8 |         2.67 |
+|  u_clk_gen/inst/clk_out2 | u_analyzer_ch1/peak_max[7]_i_1__0_n_0           | u_ui/sys_rst_n            |                4 |              8 |         2.00 |
 |  u_clk_gen/inst/clk_out2 | u_analyzer_ch1/peak_min[7]_i_1_n_0              | u_ui/sys_rst_n            |                2 |              8 |         4.00 |
-|  u_clk_gen/inst/clk_out2 | u_analyzer_ch1/peak_max[7]_i_1__0_n_0           | u_ui/sys_rst_n            |                2 |              8 |         4.00 |
-|  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[4].sw_dbcnt[4][7]_i_1_n_0  | u_ui/sys_rst_n            |                3 |              8 |         2.67 |
+|  u_clk_gen/inst/clk_out2 | u_vga/rt_in_rise_reg[0]                         | u_ui/sys_rst_n            |                4 |              8 |         2.00 |
+|  u_clk_gen/inst/clk_out2 | u_vga/v_cnt_reg[9]_2[0]                         | u_ui/sys_rst_n            |                2 |              8 |         4.00 |
+|  u_clk_gen/inst/clk_out2 | u_ui/mod_depth[7]_i_1_n_0                       | u_ui/sys_rst_n            |                2 |              8 |         4.00 |
 |  u_clk_gen/inst/clk_out2 | u_analyzer_ch1/rt_rise_start[7]_i_1_n_0         | u_ui/sys_rst_n            |                2 |              8 |         4.00 |
-|  u_clk_gen/inst/clk_out2 | u_analyzer_ch1/rt_vpp                           | u_ui/sys_rst_n            |                3 |              8 |         2.67 |
-|  u_clk_gen/inst/clk_out2 | u_analyzer_ch1/rt_rise_cnt[7]_i_1_n_0           | u_ui/sys_rst_n            |                2 |              8 |         4.00 |
-|  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[3].sw_dbcnt[3][7]_i_1_n_0  | u_ui/sys_rst_n            |                3 |              8 |         2.67 |
-|  u_clk_gen/inst/clk_out2 | u_analyzer_ch2/adc_ch2_vld_25m                  | u_liss/pair_valid_i_2_n_0 |                6 |              8 |         1.33 |
-|  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[3].dip_dbcnt[3][7]_i_1_n_0 | u_ui/sys_rst_n            |                2 |              8 |         4.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[120][9]_i_1_n_0                  |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[108][9]_i_1_n_0                  |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[102][9]_i_1_n_0                  |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[111][9]_i_1_n_0                  |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[117][9]_i_1_n_0                  |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[11][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[4].dip_dbcnt[4][7]_i_1_n_0 | u_ui/sys_rst_n            |                3 |              8 |         2.67 |
+|  u_clk_gen/inst/clk_out2 | u_ui/switch_debounce[0].dip_dbcnt[0][7]_i_1_n_0 | u_ui/sys_rst_n            |                3 |              8 |         2.67 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[35][9]_i_1_n_0                   |                           |                8 |              9 |         1.12 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[36][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[37][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[38][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[116][9]_i_1_n_0                  |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[126][9]_i_1_n_0                  |                           |                6 |              9 |         1.50 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[125][9]_i_1_n_0                  |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[124][9]_i_1_n_0                  |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[117][9]_i_1_n_0                  |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[118][9]_i_1_n_0                  |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[11][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
 |  u_clk_gen/inst/clk_out2 | u_liss/trail_x[122][9]_i_1_n_0                  |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[113][9]_i_1_n_0                  |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[15][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[106][9]_i_1_n_0                  |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[124][9]_i_1_n_0                  |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[14][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[127][9]_i_1_n_0                  |                           |                3 |              9 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[13][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[15][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[16][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[17][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
 |  u_clk_gen/inst/clk_out2 | u_liss/trail_x[18][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[1][9]_i_1_n_0                    |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[105][9]_i_1_n_0                  |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[12][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[20][9]_i_1_n_0                   |                           |                6 |              9 |         1.50 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[104][9]_i_1_n_0                  |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[17][9]_i_1_n_0                   |                           |                6 |              9 |         1.50 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[127][9]_i_1_n_0                  |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[59][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[43][9]_i_1_n_0                   |                           |                6 |              9 |         1.50 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[29][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[21][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[25][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[31][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[26][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[36][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[37][9]_i_1_n_0                   |                           |                6 |              9 |         1.50 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[45][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[47][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[52][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[40][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[56][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[2][9]_i_1_n_0                    |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[57][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[61][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[35][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[32][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[5][9]_i_1_n_0                    |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[3][9]_i_1_n_0                    |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[28][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[60][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[41][9]_i_1_n_0                   |                           |                6 |              9 |         1.50 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[62][9]_i_1_n_0                   |                           |                2 |              9 |         4.50 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[22][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[38][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[54][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[63][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[64][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[65][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[27][9]_i_1_n_0                   |                           |                6 |              9 |         1.50 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[66][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[67][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[68][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[23][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[46][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[39][9]_i_1_n_0                   |                           |                7 |              9 |         1.29 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[48][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[4][9]_i_1_n_0                    |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[123][9]_i_1_n_0                  |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[69][9]_i_1_n_0                   |                           |                6 |              9 |         1.50 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[121][9]_i_1_n_0                  |                           |                3 |              9 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[20][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[21][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[23][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[19][9]_i_1_n_0                   |                           |                6 |              9 |         1.50 |
 |  u_clk_gen/inst/clk_out2 | u_liss/trail_x[24][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[44][9]_i_1_n_0                   |                           |                7 |              9 |         1.29 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[34][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[42][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[30][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[1][9]_i_1_n_0                    |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[25][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[27][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[119][9]_i_1_n_0                  |                           |                3 |              9 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[120][9]_i_1_n_0                  |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[2][9]_i_1_n_0                    |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[22][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[28][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[12][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[30][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[31][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[14][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[29][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[123][9]_i_1_n_0                  |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[26][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[32][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
 |  u_clk_gen/inst/clk_out2 | u_liss/trail_x[33][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[50][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[51][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[53][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
 |  u_clk_gen/inst/clk_out2 | u_liss/trail_x[49][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[58][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[94][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[84][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[76][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[72][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[77][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[74][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[6][9]_i_1_n_0                    |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[64][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
 |  u_clk_gen/inst/clk_out2 | u_liss/trail_x[80][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[82][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[92][9]_i_1_n_0                   |                           |                6 |              9 |         1.50 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[96][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[73][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[78][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[86][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[97][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[7][9]_i_1_n_0                    |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[99][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[75][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[93][9]_i_1_n_0                   |                           |                6 |              9 |         1.50 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[83][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[88][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[89][9]_i_1_n_0                   |                           |                6 |              9 |         1.50 |
 |  u_clk_gen/inst/clk_out2 | u_liss/trail_x[81][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[87][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[6][9]_i_1_n_0                    |                           |                6 |              9 |         1.50 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[70][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[8][9]_i_1_n_0                    |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[90][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[95][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[9][9]_i_1_n_0                    |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[57][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[82][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[62][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[43][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[83][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[68][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[76][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
 |  u_clk_gen/inst/clk_out2 | u_liss/trail_x[79][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[91][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[98][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[71][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[85][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[107][9]_i_1_n_0                  |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out1 | u_osc_acq/adc_ch1_vld                           | u_ui/sys_rst_n            |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 |                                                 | u_liss/pair_valid_i_2_n_0 |                8 |              9 |         1.12 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[44][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[3][9]_i_1_n_0                    |                           |                6 |              9 |         1.50 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[48][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[45][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[51][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[7][9]_i_1_n_0                    |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[78][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[75][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[65][9]_i_1_n_0                   |                           |                7 |              9 |         1.29 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[70][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[74][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[84][9]_i_1_n_0                   |                           |                6 |              9 |         1.50 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[39][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[52][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[61][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[54][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[59][9]_i_1_n_0                   |                           |                6 |              9 |         1.50 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[63][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[4][9]_i_1_n_0                    |                           |                3 |              9 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[40][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[66][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[55][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[41][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[46][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[53][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[67][9]_i_1_n_0                   |                           |                6 |              9 |         1.50 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[56][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[58][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[47][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[69][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[71][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[72][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[73][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[5][9]_i_1_n_0                    |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[42][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[50][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[77][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[60][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[95][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[9][9]_i_1_n_0                    |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[8][9]_i_1_n_0                    |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[88][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[96][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[91][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[90][9]_i_1_n_0                   |                           |                6 |              9 |         1.50 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[85][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[94][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[86][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[87][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[92][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[98][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[89][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[93][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[99][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[97][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_vga/v_cnt_reg[9]_1                            | u_ui/sys_rst_n            |                3 |              9 |         3.00 |
+|  u_clk_gen/inst/clk_out2 |                                                 | u_liss/pair_valid_i_2_n_0 |                7 |              9 |         1.29 |
 |  u_clk_gen/inst/clk_out2 | u_liss/trail_x                                  |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[100][9]_i_1_n_0                  |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[19][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[10][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[101][9]_i_1_n_0                  |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[110][9]_i_1_n_0                  |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[114][9]_i_1_n_0                  |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[116][9]_i_1_n_0                  |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[121][9]_i_1_n_0                  |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[125][9]_i_1_n_0                  |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[55][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_analyzer_ch1/peak_cnt_reg[9]_0                | u_ui/sys_rst_n            |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[112][9]_i_1_n_0                  |                           |                6 |              9 |         1.50 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[118][9]_i_1_n_0                  |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[119][9]_i_1_n_0                  |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[126][9]_i_1_n_0                  |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[111][9]_i_1_n_0                  |                           |                3 |              9 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[113][9]_i_1_n_0                  |                           |                3 |              9 |         3.00 |
 |  u_clk_gen/inst/clk_out2 | u_liss/trail_x[115][9]_i_1_n_0                  |                           |                5 |              9 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[16][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[103][9]_i_1_n_0                  |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[109][9]_i_1_n_0                  |                           |                3 |              9 |         3.00 |
-|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[13][9]_i_1_n_0                   |                           |                4 |              9 |         2.25 |
-|  u_clk_gen/inst/clk_out2 | u_ui/E[0]                                       | u_ui/sys_rst_n            |                4 |             10 |         2.50 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[105][9]_i_1_n_0                  |                           |                6 |              9 |         1.50 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[114][9]_i_1_n_0                  |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[101][9]_i_1_n_0                  |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[102][9]_i_1_n_0                  |                           |                3 |              9 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[100][9]_i_1_n_0                  |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[103][9]_i_1_n_0                  |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[106][9]_i_1_n_0                  |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[104][9]_i_1_n_0                  |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[107][9]_i_1_n_0                  |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[108][9]_i_1_n_0                  |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[109][9]_i_1_n_0                  |                           |                6 |              9 |         1.50 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[10][9]_i_1_n_0                   |                           |                3 |              9 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[110][9]_i_1_n_0                  |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[112][9]_i_1_n_0                  |                           |                4 |              9 |         2.25 |
+|  u_clk_gen/inst/clk_out2 | u_liss/trail_x[34][9]_i_1_n_0                   |                           |                5 |              9 |         1.80 |
+|  u_clk_gen/inst/clk_out1 | u_osc_acq/bram_write_addr[9]_i_1_n_0            | u_ui/sys_rst_n            |                3 |             10 |         3.33 |
 |  u_clk_gen/inst/clk_out2 | u_vga/v_cnt                                     | u_ui/sys_rst_n            |                3 |             10 |         3.33 |
-|  u_clk_gen/inst/clk_out2 | u_analyzer_ch1/near_mid[9]_i_1__0_n_0           | u_ui/sys_rst_n            |                3 |             10 |         3.33 |
-|  u_clk_gen/inst/clk_out1 | u_osc_acq/drdy_timeout_cnt[9]_i_1_n_0           | u_ui/sys_rst_n            |                3 |             10 |         3.33 |
-|  u_clk_gen/inst/clk_out2 | u_analyzer_ch1/rt_acc                           | u_ui/sys_rst_n            |                5 |             12 |         2.40 |
-|  u_clk_gen/inst/clk_out1 |                                                 | u_ui/sys_rst_n            |                4 |             13 |         3.25 |
-|  u_clk_gen/inst/clk_out2 | u_analyzer_ch1/high_count[13]_i_1_n_0           | u_ui/sys_rst_n            |                2 |             14 |         7.00 |
-|  u_clk_gen/inst/clk_out1 | u_osc_acq/trigger_holdoff_cnt[0]_i_1_n_0        | u_ui/sys_rst_n            |                4 |             16 |         4.00 |
+|  u_clk_gen/inst/clk_out2 | u_vga/E[0]                                      | u_ui/sys_rst_n            |                3 |             10 |         3.33 |
+|  u_clk_gen/inst/clk_out2 | u_analyzer_ch1/rt_acc                           | u_ui/sys_rst_n            |                4 |             12 |         3.00 |
+|  u_clk_gen/inst/clk_out1 | u_osc_acq/ch1_data_reg[11]_i_1_n_0              | u_ui/sys_rst_n            |                4 |             12 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_analyzer_ch1/high_count[13]_i_1_n_0           | u_ui/sys_rst_n            |                3 |             14 |         4.67 |
+|  u_clk_gen/inst/clk_out2 |                                                 |                           |                7 |             16 |         2.29 |
 |  u_clk_gen/inst/clk_out2 | u_analyzer_ch1/zc_rapid[15]_i_1_n_0             | u_ui/sys_rst_n            |                4 |             16 |         4.00 |
-|  u_clk_gen/inst/clk_out2 | u_ui/debounce_block[0].db_cnt[0][0]_i_1_n_0     | u_ui/sys_rst_n            |                5 |             17 |         3.40 |
 |  u_clk_gen/inst/clk_out2 | u_ui/debounce_block[1].db_cnt[1][0]_i_1_n_0     | u_ui/sys_rst_n            |                5 |             17 |         3.40 |
 |  u_clk_gen/inst/clk_out2 | u_ui/debounce_block[2].db_cnt[2][0]_i_1_n_0     | u_ui/sys_rst_n            |                5 |             17 |         3.40 |
 |  u_clk_gen/inst/clk_out2 | u_ui/debounce_block[3].db_cnt[3][0]_i_1_n_0     | u_ui/sys_rst_n            |                5 |             17 |         3.40 |
 |  u_clk_gen/inst/clk_out2 | u_ui/debounce_block[4].db_cnt[4][0]_i_1_n_0     | u_ui/sys_rst_n            |                5 |             17 |         3.40 |
-|  u_clk_gen/inst/clk_out1 | u_osc_acq/p_9_in                                | u_ui/sys_rst_n            |                5 |             19 |         3.80 |
-|  u_clk_gen/inst/clk_out2 | u_analyzer_ch1/frequency_hz[12]_i_1_n_0         | u_ui/sys_rst_n            |               13 |             29 |         2.23 |
-|  u_clk_gen/inst/clk_out2 | u_analyzer_ch2/frequency_hz[12]_i_1__0_n_0      | u_ui/sys_rst_n            |               12 |             29 |         2.42 |
-|  u_clk_gen/inst/clk_out2 | u_analyzer_ch1/zc_count[15]_i_1_n_0             | u_ui/sys_rst_n            |               10 |             30 |         3.00 |
+|  u_clk_gen/inst/clk_out2 | u_ui/debounce_block[0].db_cnt[0][0]_i_1_n_0     | u_ui/sys_rst_n            |                5 |             17 |         3.40 |
+|  u_clk_gen/inst/clk_out2 | u_analyzer_ch2/frequency_hz[12]_i_1__0_n_0      | u_ui/sys_rst_n            |               11 |             29 |         2.64 |
+|  u_clk_gen/inst/clk_out2 | u_analyzer_ch1/frequency_hz[12]_i_1_n_0         | u_ui/sys_rst_n            |               11 |             29 |         2.64 |
+|  u_clk_gen/inst/clk_out2 | u_analyzer_ch1/zc_count[15]_i_1_n_0             | u_ui/sys_rst_n            |               14 |             30 |         2.14 |
 |  u_clk_gen/inst/clk_out2 | u_analyzer_ch2/zc_count[15]_i_1__0_n_0          | u_ui/sys_rst_n            |               12 |             30 |         2.50 |
-|  u_clk_gen/inst/clk_out2 | u_analyzer_ch1/zc_spacing_cnt[15]_i_1_n_0       | u_ui/sys_rst_n            |                6 |             32 |         5.33 |
-|  u_clk_gen/inst/clk_out2 | u_analyzer_ch2/zc_spacing_cnt[15]_i_1__0_n_0    | u_ui/sys_rst_n            |               10 |             32 |         3.20 |
-|  u_clk_gen/inst/clk_out2 |                                                 | u_vga/pixel_x[9]_i_1_n_0  |               61 |            110 |         1.80 |
-|  u_clk_gen/inst/clk_out2 | u_analyzer_ch2/adc_ch2_vld_25m                  | u_ui/sys_rst_n            |               52 |            140 |         2.69 |
-|  u_clk_gen/inst/clk_out2 |                                                 | u_ui/sys_rst_n            |              116 |            288 |         2.48 |
+|  u_clk_gen/inst/clk_out2 | u_analyzer_ch1/zc_spacing_cnt[15]_i_1_n_0       | u_ui/sys_rst_n            |               14 |             32 |         2.29 |
+|  u_clk_gen/inst/clk_out2 | u_analyzer_ch2/zc_spacing_cnt[15]_i_1__0_n_0    | u_ui/sys_rst_n            |                9 |             32 |         3.56 |
+|  u_clk_gen/inst/clk_out2 |                                                 | u_vga/pixel_x[9]_i_1_n_0  |               69 |            117 |         1.70 |
+|  u_clk_gen/inst/clk_out2 | u_vga/adc_ch1_vld_25m                           | u_ui/sys_rst_n            |               43 |            132 |         3.07 |
+|  u_clk_gen/inst/clk_out2 |                                                 | u_ui/sys_rst_n            |              105 |            281 |         2.68 |
 +--------------------------+-------------------------------------------------+---------------------------+------------------+----------------+--------------+
 
 

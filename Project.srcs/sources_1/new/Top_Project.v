@@ -248,191 +248,51 @@ module Top_Project (
     );
 
     //=========================================================================
-    // Oscilloscope Acquisition — Single Channel XADC (from pocketscope_sim2_0)
-    //
-    // XADC on VAUXP[2]/VAUXN[2] (J5 pins 9-10 on EGO1).
-    // CH1 only; CH2 tied to mid-scale for display purposes.
+    // Oscilloscope Acquisition — BRAM-based (single-channel)
+    // Internal inferred BRAM (1024×24bit) inside Oscilloscope_Acq.
+    // CH1 only; CH2 fixed mid-scale. XADC primitive in continuous sequencer mode.
     //=========================================================================
 
-    wire [11:0] adc_ch1_raw;
-    wire        adc_ch1_vld;
-    wire        adc_trigger_fired;
-
-    // Debug signals from XADC DRP FSM
-    wire dbg_drp_drdy, dbg_drp_den, dbg_den_pending, dbg_startup_done;
-
-    Oscilloscope_Acq u_osc_acq (
-        .clk            (clk_100m),
-        .rst_n          (global_rst_n),
-        .ch1_en_n       (ch1_switch_en_n),
-        .vauxp_ch1      (vauxp_ch1),
-        .vauxn_ch1      (vauxn_ch1),
-        .trigger_level  ({scope_trigger_level, 4'd0}),
-        .ch1_data       (adc_ch1_raw),
-        .ch1_valid      (adc_ch1_vld),
-        .trigger_fired  (adc_trigger_fired),
-        .dbg_drp_drdy   (dbg_drp_drdy),
-        .dbg_drp_den    (dbg_drp_den),
-        .dbg_den_pending(dbg_den_pending),
-        .dbg_startup_done(dbg_startup_done)
-    );
-
-    //=========================================================================
-    // CDC Bridge: 100MHz → 25MHz
-    //
-    // XADC valid pulses are 1 cycle wide at 100MHz (10ns) — too narrow for
-    // 25MHz logic (40ns period). Pulse stretching in the source domain +
-    // 2-stage synchronizer in the destination domain ensures safe capture.
-    //=========================================================================
-
-    // --- 100MHz domain: pulse stretching + data hold ---
-    reg [3:0]  ch1_stretch_cnt;
-    reg        ch1_valid_sys;
-    reg [11:0] ch1_data_sys;
-
-    always @(posedge clk_100m or negedge global_rst_n) begin
-        if (!global_rst_n) begin
-            ch1_stretch_cnt <= 0;
-            ch1_valid_sys   <= 0;
-            ch1_data_sys    <= 12'h800;
-        end else begin
-            if (adc_ch1_vld) begin
-                ch1_valid_sys   <= 1'b1;
-                ch1_stretch_cnt <= 0;
-                ch1_data_sys    <= adc_ch1_raw;
-            end else if (ch1_valid_sys) begin
-                if (ch1_stretch_cnt == 4'd7) begin
-                    ch1_valid_sys   <= 1'b0;
-                    ch1_stretch_cnt <= 0;
-                end else begin
-                    ch1_stretch_cnt <= ch1_stretch_cnt + 1'b1;
-                end
-            end
-        end
-    end
-
-    // --- 25MHz domain: 2-stage sync + edge detect + data capture ---
-    reg        ch1_v_s25_1, ch1_v_s25_2, ch1_v_s25_prev;
-    reg [11:0] adc_ch1_synced;
-
-    always @(posedge clk_25m or negedge global_rst_n) begin
-        if (!global_rst_n) begin
-            ch1_v_s25_1    <= 0;
-            ch1_v_s25_2    <= 0;
-            ch1_v_s25_prev <= 0;
-            adc_ch1_synced <= 12'h800;
-        end else begin
-            // 2-stage synchronizer
-            ch1_v_s25_1 <= ch1_valid_sys;
-            ch1_v_s25_2 <= ch1_v_s25_1;
-            ch1_v_s25_prev <= ch1_v_s25_2;
-
-            // Rising-edge detect + data capture
-            if (ch1_v_s25_2 && !ch1_v_s25_prev)
-                adc_ch1_synced <= ch1_data_sys;
-        end
-    end
-
-    // Synchronized valid flag and 8-bit data in 25MHz domain
-    wire       adc_ch1_vld_25m = ch1_v_s25_2 && !ch1_v_s25_prev;
-    wire [7:0] adc_ch1_8b      = adc_ch1_synced[11:4];
-
-    // CDC for trigger_fired (100MHz → 25MHz)
-    reg        trig_fired_stretched;
-    reg [2:0]  trig_stretch_cnt;
-
-    always @(posedge clk_100m or negedge global_rst_n) begin
-        if (!global_rst_n) begin
-            trig_fired_stretched <= 0;
-            trig_stretch_cnt     <= 0;
-        end else begin
-            if (adc_trigger_fired) begin
-                trig_fired_stretched <= 1'b1;
-                trig_stretch_cnt     <= 0;
-            end else if (trig_fired_stretched) begin
-                if (trig_stretch_cnt == 3'd7) begin
-                    trig_fired_stretched <= 1'b0;
-                    trig_stretch_cnt     <= 0;
-                end else begin
-                    trig_stretch_cnt <= trig_stretch_cnt + 1'b1;
-                end
-            end
-        end
-    end
-
-    reg trig_sync1, trig_sync2, trig_sync_prev;
-    reg trigger_fired_25m;
-
-    always @(posedge clk_25m or negedge global_rst_n) begin
-        if (!global_rst_n) begin
-            trig_sync1        <= 0;
-            trig_sync2        <= 0;
-            trig_sync_prev    <= 0;
-            trigger_fired_25m <= 0;
-        end else begin
-            trig_sync1 <= trig_fired_stretched;
-            trig_sync2 <= trig_sync1;
-            trig_sync_prev <= trig_sync2;
-            trigger_fired_25m <= trig_sync2 && !trig_sync_prev;
-        end
-    end
-
-    //=========================================================================
-    // Waveform Storage (Single Channel)
-    //
-    // Trigger resets write address to align trigger point with screen center
-    // (center = 512 pixels into the 1024-sample buffer).
-    //=========================================================================
     wire       de;
     wire [9:0] pixel_x, pixel_y;
 
-    wire trigger_reset;
-    assign trigger_reset = trigger_fired_25m && (device_mode == 2'b01);
+    wire [23:0] bram_dout;
 
-    // Sequential write address: increments on each CH1 valid
-    reg [9:0] sample_wr_addr;
-
-    always @(posedge clk_25m or negedge global_rst_n) begin
-        if (!global_rst_n)
-            sample_wr_addr <= 10'd0;
-        else if (trigger_reset)
-            sample_wr_addr <= 10'd512;  // align trigger point to buffer center
-        else if (adc_ch1_vld_25m)
-            sample_wr_addr <= sample_wr_addr + 1'b1;
-    end
-
-    // Display read address: show the last 640 samples before current write pos.
-    // pixel_x=0 → oldest visible sample; pixel_x=639 → newest visible sample.
-    wire [9:0] display_addr = (sample_wr_addr - 10'd640 + pixel_x);
-
-    wire [7:0] wave_ch1, wave_ch2;
-
-    wave_ram_ch1 u_ram_ch1 (
-        .clk    (clk_25m),
-        .we     (adc_ch1_vld_25m),
-        .wr_addr(sample_wr_addr),
-        .din    (adc_ch1_8b),
-        .rd_addr(display_addr),
-        .dout   (wave_ch1)
+    Oscilloscope_Acq u_osc_acq (
+        .clk_100m       (clk_100m),
+        .rst_n          (global_rst_n),
+        .ch1_en_n       (1'b0),         // CH1 always enabled
+        .ch2_en_n       (1'b1),         // CH2 disabled (single-channel)
+        .vauxp_ch1      (vauxp_ch1),
+        .vauxn_ch1      (vauxn_ch1),
+        .vauxp_ch2      (vauxp_ch2),
+        .vauxn_ch2      (vauxn_ch2),
+        .bram_read_addr (display_addr),
+        .bram_dout      (bram_dout)
     );
 
-    // CH2 tied to mid-scale (single-channel mode)
-    wave_ram_ch2 u_ram_ch2 (
-        .clk    (clk_25m),
-        .we     (adc_ch1_vld_25m),
-        .wr_addr(sample_wr_addr),
-        .din    (8'd128),
-        .rd_addr(display_addr),
-        .dout   (wave_ch2)
-    );
+    // BRAM → 25MHz domain readout (no CDC needed — BRAM read port runs at 100MHz,
+    // display_addr changes at 25MHz, stable > 40ns = 4× 100MHz cycles)
+    // bram_dout[23:0] = {CH2_mid(12'h800), CH1_data[11:0]}
+    reg [23:0] bram_dout_25m;
+    always @(posedge clk_25m)
+        bram_dout_25m <= bram_dout;
 
-    // Legacy dual-channel wires for display modules
-    wire [7:0] adc_ch2_8b      = 8'd128;              // CH2 tied to mid-scale
-    wire       adc_ch2_vld_25m = adc_ch1_vld_25m;     // reuse CH1 valid for CH2 display
+    wire [7:0] wave_ch1 = bram_dout_25m[11:4];    // CH1 12-bit → 8-bit (upper byte)
+    wire [7:0] wave_ch2 = bram_dout_25m[23:16];   // CH2 = mid-scale 0x80
 
-    // Sample rate display (kHz)
-    wire [15:0] sample_rate_disp = 16'd1920;  // ~1.92MSPS at 100MHz DCLK
-    wire        trigger_armed    = 1'b1;      // always armed (trigger handled in Oscilloscope_Acq)
+    // Display read address: pixel_x directly maps to BRAM address (0-639)
+    wire [9:0] display_addr = pixel_x;
+
+    // Legacy wires for display modules and analyzers
+    wire [7:0] adc_ch1_8b      = wave_ch1;
+    wire [7:0] adc_ch2_8b      = 8'd128;           // CH2 fixed mid-scale
+    wire       adc_ch1_vld_25m = de;               // valid during active display
+    wire       adc_ch2_vld_25m = de;
+
+    // Sample rate display (kSPS)
+    wire [15:0] sample_rate_disp = 16'd961;
+    wire        trigger_armed    = 1'b1;           // trigger handled inside Oscilloscope_Acq
 
     //=========================================================================
     // Waveform Analyzers (Frequency, Vpp, Type, RMS, Avg, Max)

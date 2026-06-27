@@ -1,0 +1,4 @@
+xpm_cdc.sv,systemverilog,xpm,D:/FPGA/2025.1/Vivado/data/ip/xpm/xpm_cdc/hdl/xpm_cdc.sv,incdir="D:/FPGA/2025.1/Vivado/data/rsb/busdef"
+xpm_VCOMP.vhd,vhdl,xpm,D:/FPGA/2025.1/Vivado/data/ip/xpm/xpm_VCOMP.vhd,incdir="D:/FPGA/2025.1/Vivado/data/rsb/busdef"
+xadc_wiz_1.v,verilog,xil_defaultlib,../../../../Project.gen/sources_1/ip/xadc_wiz_1/xadc_wiz_1.v,incdir="D:/FPGA/2025.1/Vivado/data/rsb/busdef"
+glbl.v,Verilog,xil_defaultlib,glbl.v

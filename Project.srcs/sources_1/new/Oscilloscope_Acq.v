@@ -1,82 +1,83 @@
 `timescale 1ns / 1ps
 //=============================================================================
-// Oscilloscope_Acq — Single-Channel XADC Acquisition Module
-// Ported from pocketscope_sim2_0 reference design.
+// Oscilloscope_Acq — Dual-Channel XADC via XADC Primitive
 //
-// Single XADC channel on VAUXP[2]/VAUXN[2] (J5 pins 9-10 on EGO1).
-// DRP FSM with startup calibration wait (~5ms), EOC-driven readout,
-// DRDY timeout watchdog, and rising-edge trigger with holdoff.
+// Architecture:
+//   - XADC primitive in continuous sequencer mode, VAUX2+VAUX10
+//   - DRP channel sequencing (EOC-driven)
+//   - 1ms startup delay for auto-calibration
+//   - Inferred BRAM (1024×24bit, simple dual-port) for waveform storage
+//   - Rising-edge trigger on CH1 with fixed level (2048)
 //
-// XADC Timing (XC7A35T, 100MHz DCLK, continuous sequencer mode):
+// XADC Timing (XC7A35T, 100MHz DCLK):
 //   ADCCLK = DCLK/2 = 50MHz (20ns period)
-//   Conversion time ≈ 26 ADCCLK cycles ≈ 520ns
-//   Sample rate ≈ 1.92 MSPS (single channel)
+//   Conversion time ≈ 26 ADCCLK cycles ≈ 520ns per channel
+//   Dual-channel sample rate ≈ 961 kSPS per channel
 //=============================================================================
 
-module Oscilloscope_Acq
-(
-    input  wire        clk,                // 100MHz DCLK
-    input  wire        rst_n,              // Active-low reset
-    input  wire        ch1_en_n,           // CH1 enable (active low, 0=enabled)
+module Oscilloscope_Acq (
+    input  wire        clk_100m,
+    input  wire        rst_n,
+    input  wire        ch1_en_n,
+    input  wire        ch2_en_n,
 
-    // XADC analog inputs — CH1 on VAUXP[2]/VAUXN[2]
     input  wire        vauxp_ch1,
     input  wire        vauxn_ch1,
+    input  wire        vauxp_ch2,
+    input  wire        vauxn_ch2,
 
-    // Trigger threshold (12-bit, runtime-configurable from UI)
-    input  wire [11:0] trigger_level,
-
-    // Data output (12-bit full XADC resolution)
-    output wire [11:0] ch1_data,
-    output wire        ch1_valid,
-
-    // Trigger output
-    output wire        trigger_fired,
-
-    // Debug outputs (for ILA monitoring)
-    output wire        dbg_drp_drdy,
-    output wire        dbg_drp_den,
-    output wire        dbg_den_pending,
-    output wire        dbg_startup_done
+    input  wire [9:0]  bram_read_addr,
+    output wire [23:0] bram_dout
 );
 
     //=========================================================================
-    // XADC bus mapping — CH1 on VAUXP[2]/VAUXN[2]
+    // XADC VAUX bus mapping
+    // VAUXP/VAUXN are 16-bit buses: bit N drives VAUXP[N]/VAUXN[N]
+    //   CH1 → VAUXP[2] / VAUXN[2]   (bit 2)
+    //   CH2 → VAUXP[10] / VAUXN[10] (bit 10)
     //=========================================================================
     wire [15:0] xadc_vauxp, xadc_vauxn;
-    assign xadc_vauxp = {12'd0, 1'b0, vauxp_ch1, 2'b0};
-    assign xadc_vauxn = {12'd0, 1'b0, vauxn_ch1, 2'b0};
+    assign xadc_vauxp = {5'd0, 1'b0, vauxp_ch2, 7'd0, 1'b0, vauxp_ch1, 1'b0};
+    assign xadc_vauxn = {5'd0, 1'b0, vauxn_ch2, 7'd0, 1'b0, vauxn_ch1, 1'b0};
 
     //=========================================================================
     // XADC Primitive Instantiation
+    //
+    // INIT_40 = 16'h1032:
+    //   bit12 (CAL1) = 1 → enable offset calibration
+    //   bit5  (CAL0) = 1 → enable gain calibration
+    //   bit4  (CHSEL) = 1 → sequencer mode (channels read via SEQ bits)
+    //   bits[3:0] (SEQ) = 0010 → continuous sequencer cycling
+    //
+    // INIT_48 = 16'h0404:  VAUXP[2] (bit2) + VAUXP[10] (bit10) enabled
+    // INIT_49 = 16'h0404:  VAUXN[2] (bit2) + VAUXN[10] (bit10) enabled
+    // INIT_4A-4F = 0:      No averaging on any channel (max sample rate)
     //=========================================================================
     wire [15:0] drp_do;
     wire        drp_drdy;
     wire        drp_eoc;
-    wire [6:0]  drp_daddr;
-    wire        drp_den;
+    wire [4:0]  drp_channel;
+    wire        drp_eos;
+    wire        drp_busy;
+
+    // DRP control signals
+    reg  [6:0]  drp_daddr;
+    reg         drp_den;
+    reg         drp_dwe;
 
     XADC #(
-        // INIT_40: Configuration Register #0
-        //   bit12 (CAL1) = 1 → enable offset calibration
-        //   bit5  (CAL0) = 1 → enable gain calibration
-        //   bit4  (CHSEL) = 1 → enable sequencer mode
-        //   bits[3:0] (SEQ) = 0010 → continuous sequencer cycling
-        .INIT_40(16'h1032),
-        .INIT_41(16'h2000),
-        .INIT_42(16'h0000),
-        // INIT_48: VAUXP[7:0] channel enable — bit 2 = VAUXP[2]/VAUXN[2]
-        .INIT_48(16'h0004),
-        // INIT_49-4F: channel sequencer averaging (1=16 samples averaged)
-        .INIT_49(16'h0004),
-        .INIT_4A(16'h0000),
-        .INIT_4B(16'h0000),
-        .INIT_4C(16'h0000),
-        .INIT_4D(16'h0000),
-        .INIT_4E(16'h0000),
-        .INIT_4F(16'h0000),
-        // INIT_50-58: calibration coefficients (from XADC wizard defaults)
-        .INIT_50(16'hB5ED),
+        .INIT_40(16'h1032),      // Continuous sequencer, calibration enabled
+        .INIT_41(16'h4100),      // Default alarm/config
+        .INIT_42(16'h0000),      // Default
+        .INIT_48(16'h0404),      // VAUXP[2] + VAUXP[10] enabled
+        .INIT_49(16'h0404),      // VAUXN[2] + VAUXN[10] enabled
+        .INIT_4A(16'h0000),      // No averaging VAUXP[0]
+        .INIT_4B(16'h0000),      // No averaging VAUXP[1]
+        .INIT_4C(16'h0000),      // No averaging VAUXP[2]
+        .INIT_4D(16'h0000),      // No averaging VAUXP[3]
+        .INIT_4E(16'h0000),      // No averaging VAUXP[4]
+        .INIT_4F(16'h0000),      // No averaging VAUXP[5]
+        .INIT_50(16'hB5ED),      // Calibration coefficients
         .INIT_51(16'h57E4),
         .INIT_52(16'hA147),
         .INIT_53(16'hCA33),
@@ -89,7 +90,7 @@ module Oscilloscope_Acq
         .SIM_DEVICE("7SERIES"),
         .SIM_MONITOR_FILE("xadc_stimulus.txt")
     ) u_xadc (
-        .DCLK       (clk),
+        .DCLK       (clk_100m),
         .RESET      (~rst_n),
         .VAUXP      (xadc_vauxp),
         .VAUXN      (xadc_vauxn),
@@ -97,16 +98,16 @@ module Oscilloscope_Acq
         .VN         (1'b0),
         .CONVST     (1'b0),          // continuous mode, no external trigger
         .CONVSTCLK  (1'b0),
-        .DI         (16'h0000),
+        .DI         (16'd0),
         .DADDR      (drp_daddr),
         .DEN        (drp_den),
-        .DWE        (1'b0),
+        .DWE        (drp_dwe),
         .DO         (drp_do),
         .DRDY       (drp_drdy),
         .EOC        (drp_eoc),
-        .CHANNEL    (),
-        .BUSY       (),
-        .EOS        (),
+        .CHANNEL    (drp_channel),
+        .BUSY       (drp_busy),
+        .EOS        (drp_eos),
         .JTAGBUSY   (),
         .JTAGLOCKED (),
         .JTAGMODIFIED(),
@@ -116,150 +117,169 @@ module Oscilloscope_Acq
     );
 
     //=========================================================================
-    // DRP Control — EOC-driven, Reference-style
-    //
-    // Flow:
-    //   1. Wait for startup calibration (~5ms)
-    //   2. On EOC → assert DEN to read channel data
-    //   3. On DRDY → latch data, deassert DEN, pulse valid
-    //   4. Goto 2
+    // Startup — wait ~1ms at 100MHz for XADC auto-calibration
     //=========================================================================
+    localparam STARTUP_MAX = 17'd100_000;  // 1ms at 100MHz
+    reg [16:0] startup_cnt;
+    wire       startup_done = (startup_cnt == STARTUP_MAX);
 
-    // Fixed DRP address — single channel VAUXP[2]/VAUXN[2] (AD2)
-    localparam SINGLE_CH_ADDR = 7'h12;
-    assign drp_daddr = SINGLE_CH_ADDR;
+    always @(posedge clk_100m or negedge rst_n) begin
+        if (!rst_n)
+            startup_cnt <= 0;
+        else if (!startup_done)
+            startup_cnt <= startup_cnt + 1'b1;
+    end
 
-    // Internal signals
+    //=========================================================================
+    // DRP FSM — EOC-driven, dual-channel sequencing
+    //
+    //   Sequencer order: VAUX2 (CH1) → VAUX10 (CH2) → repeat
+    //   On each EOC, initiate DRP read for the corresponding channel.
+    //   Track with `expecting_ch1` state — toggles each time we latch data.
+    //
+    // States:
+    //   IDLE  → EOC fires → DEN (assert DEN with current daddr)
+    //         → DRDY fires → LATCH (capture data, toggle channel)
+    //         → back to IDLE
+    //=========================================================================
+    localparam ADDR_CH1 = 7'h12;   // VAUXP[2] / VAUXN[2] result register
+    localparam ADDR_CH2 = 7'h1A;   // VAUXP[10] / VAUXN[10] result register
+
+    reg         expecting_ch1;      // 1 = next EOC is CH1, 0 = CH2
     reg         den_pending;
-    reg         den_sent;
-    reg [11:0]  ch1_hold;
-    reg         ch1_vld;
+    reg [1:0]   fsm_state;
 
-    // Startup delay: XADC needs ~4ms after reset for auto-calibration
-    // (UG480: calibration completes ~4ms after DCLK stable).
-    // 500,000 cycles = 5ms at 100MHz — safe margin.
-    localparam STARTUP_MAX = 19'd500_000;
-    reg [18:0]  startup_cnt;
-    wire        startup_done = (startup_cnt == STARTUP_MAX);
+    localparam [1:0] ST_IDLE  = 2'd0;
+    localparam [1:0] ST_DEN   = 2'd1;   // DEN asserted, waiting for DRDY
+    localparam [1:0] ST_LATCH = 2'd2;   // DRDY received, latching data
 
-    // DRDY timeout watchdog: if DRDY doesn't arrive within ~10µs after DEN,
-    // re-trigger DEN. Prevents FSM hang.
-    localparam DRDY_TIMEOUT = 10'd1000;
-    reg [9:0]   drdy_timeout_cnt;
+    // DRP DADDR: always set to the channel we're expecting next
+    always @(*) begin
+        drp_daddr = expecting_ch1 ? ADDR_CH1 : ADDR_CH2;
+    end
 
-    // DEN is asserted when: pending AND startup done
-    assign drp_den = den_pending && startup_done;
+    always @(*) begin
+        drp_dwe  = 1'b0;
+        // Assert DEN when: FSM in DEN state AND startup done AND EOC was seen
+        drp_den  = (fsm_state == ST_DEN) && startup_done;
+    end
 
-    assign ch1_data  = ch1_hold;
-    assign ch1_valid = ch1_vld;
+    // Data capture registers
+    reg [11:0] ch1_data_reg;
+    reg [11:0] ch2_data_reg;
+    reg        data_pair_ready;
 
-    always @(posedge clk or negedge rst_n) begin
+    // FSM
+    always @(posedge clk_100m or negedge rst_n) begin
         if (!rst_n) begin
-            ch1_hold         <= 12'h800;
-            ch1_vld          <= 1'b0;
-            den_pending      <= 1'b0;
-            den_sent         <= 1'b0;
-            startup_cnt      <= 0;
-            drdy_timeout_cnt <= 0;
+            fsm_state       <= ST_IDLE;
+            expecting_ch1   <= 1'b1;     // sequencer starts with VAUX2 (CH1)
+            ch1_data_reg    <= 12'h800;
+            ch2_data_reg    <= 12'h800;
+            data_pair_ready <= 1'b0;
         end else begin
-            ch1_vld <= 1'b0;
+            data_pair_ready <= 1'b0;
 
-            // --- Startup delay ---
             if (!startup_done) begin
-                startup_cnt <= startup_cnt + 1'b1;
-                if (startup_cnt == STARTUP_MAX - 1) begin
-                    den_pending <= 1'b1;  // kick off first conversion
-                    den_sent    <= 1'b0;
-                end
-            end
+                fsm_state     <= ST_IDLE;
+                expecting_ch1 <= 1'b1;
+            end else begin
+                case (fsm_state)
+                    ST_IDLE: begin
+                        // EOC means a conversion just finished
+                        if (drp_eoc)
+                            fsm_state <= ST_DEN;
+                    end
 
-            // --- DEN: assert pending, track when sent ---
-            if (den_pending && drp_den) begin
-                den_pending      <= 1'b0;
-                den_sent         <= 1'b1;
-                drdy_timeout_cnt <= 0;
-            end
+                    ST_DEN: begin
+                        // DEN is asserted combinationally; wait one cycle then
+                        // move to latch-waiting. The XADC takes a few cycles
+                        // to respond with DRDY.
+                        fsm_state <= ST_LATCH;
+                    end
 
-            // --- DRDY timeout watchdog ---
-            if (den_sent && !drp_drdy) begin
-                if (drdy_timeout_cnt == DRDY_TIMEOUT - 1) begin
-                    den_pending      <= 1'b1;
-                    den_sent         <= 1'b0;
-                    drdy_timeout_cnt <= 0;
-                end else begin
-                    drdy_timeout_cnt <= drdy_timeout_cnt + 1'b1;
-                end
-            end
+                    ST_LATCH: begin
+                        if (drp_drdy) begin
+                            // Data is valid — latch into the correct channel
+                            if (expecting_ch1) begin
+                                ch1_data_reg <= drp_do[15:4];
+                                expecting_ch1 <= 1'b0;   // next EOC will be CH2
+                            end else begin
+                                ch2_data_reg <= drp_do[15:4];
+                                expecting_ch1 <= 1'b1;   // next EOC will be CH1
+                                data_pair_ready <= 1'b1; // both channels updated
+                            end
+                            fsm_state <= ST_IDLE;
+                        end
+                    end
 
-            // --- EOC: start next conversion ---
-            if (drp_eoc && startup_done) begin
-                den_pending <= 1'b1;
-                den_sent    <= 1'b0;
-            end
-
-            // --- DRDY: latch data ---
-            if (drp_drdy) begin
-                den_sent  <= 1'b0;
-                ch1_hold  <= drp_do[15:4];  // upper 12 bits of 16-bit XADC DO
-                ch1_vld   <= 1'b1;
+                    default: fsm_state <= ST_IDLE;
+                endcase
             end
         end
     end
 
     //=========================================================================
-    // Trigger Logic — Rising Edge on CH1
+    // Trigger + BRAM write control (single-channel: CH1 only)
     //=========================================================================
-    reg [11:0] ch1_data_d1;
+    reg [9:0]  bram_write_addr;
+    reg        bram_write_en;
     reg        trigger_armed;
-    reg        trigger_fired_reg;
-    reg [15:0] trigger_holdoff_cnt;
+    reg [11:0] ch1_data_d1;
 
-    localparam TRIGGER_HOLDOFF = 16'd50000;  // ~0.5ms at 100MHz
+    localparam TRIGGER_LEVEL = 12'd2048;   // mid-scale
 
-    assign trigger_fired = trigger_fired_reg;
-
-    always @(posedge clk or negedge rst_n) begin
+    always @(posedge clk_100m or negedge rst_n) begin
         if (!rst_n) begin
-            ch1_data_d1        <= 12'd0;
-            trigger_armed      <= 1'b1;
-            trigger_fired_reg  <= 1'b0;
-            trigger_holdoff_cnt <= 0;
-        end else begin
-            trigger_fired_reg <= 1'b0;
+            bram_write_addr <= 10'd0;
+            bram_write_en   <= 1'b0;
+            trigger_armed   <= 1'b1;
+            ch1_data_d1     <= 12'd0;
+        end else if (!ch1_en_n) begin
+            if (data_pair_ready) begin
+                ch1_data_d1 <= ch1_data_reg;
 
-            if (ch1_vld)
-                ch1_data_d1 <= ch1_data;
+                // Rising-edge trigger: was below, now above threshold
+                if (trigger_armed &&
+                    (ch1_data_d1 < TRIGGER_LEVEL) &&
+                    (ch1_data_reg >= TRIGGER_LEVEL)) begin
+                    trigger_armed   <= 1'b0;
+                    bram_write_addr <= 10'd0;
+                end
 
-            // Hold-off countdown
-            if (trigger_holdoff_cnt > 0)
-                trigger_holdoff_cnt <= trigger_holdoff_cnt - 1'b1;
-
-            if (!ch1_en_n) begin  // channel enabled
                 if (!trigger_armed) begin
-                    // Re-arm when signal goes below trigger level
-                    if (ch1_vld && ch1_data < trigger_level[11:0])
+                    bram_write_en <= 1'b1;
+                    if (bram_write_addr == 10'd1023) begin
                         trigger_armed <= 1'b1;
-                end else begin
-                    // Fire on rising edge crossing + hold-off expired
-                    if (ch1_vld &&
-                        ch1_data_d1 < trigger_level[11:0] &&
-                        ch1_data >= trigger_level[11:0] &&
-                        trigger_holdoff_cnt == 0) begin
-                        trigger_fired_reg  <= 1'b1;
-                        trigger_armed      <= 1'b0;
-                        trigger_holdoff_cnt <= TRIGGER_HOLDOFF;
+                    end else begin
+                        bram_write_addr <= bram_write_addr + 1'b1;
                     end
+                end else begin
+                    bram_write_en <= 1'b0;
                 end
             end else begin
-                trigger_armed <= 1'b0;
+                bram_write_en <= 1'b0;
             end
+        end else begin
+            bram_write_en <= 1'b0;
+            trigger_armed <= 1'b1;
         end
     end
 
-    // Debug outputs
-    assign dbg_drp_drdy    = drp_drdy;
-    assign dbg_drp_den     = drp_den;
-    assign dbg_den_pending = den_pending;
-    assign dbg_startup_done = startup_done;
+    //=========================================================================
+    // Inferred BRAM — 1024×24bit simple dual-port
+    // Write: {CH2(12'h800 fixed), CH1(12-bit)}
+    // Read:  bram_dout[11:0]=CH1, [23:12]=CH2
+    //=========================================================================
+    (* ram_style = "block" *) reg [23:0] bram [0:1023];
+    reg [23:0] bram_dout_r;
+
+    always @(posedge clk_100m) begin
+        if (bram_write_en)
+            bram[bram_write_addr] <= {12'h800, ch1_data_reg};
+        bram_dout_r <= bram[bram_read_addr];
+    end
+
+    assign bram_dout = bram_dout_r;
 
 endmodule
