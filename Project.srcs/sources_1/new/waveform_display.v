@@ -80,45 +80,51 @@ module waveform_display
     //=========================================================================
     // Grid parameters — 8×10 divisions
     // Waveform area: 640×432 (y=0..431). V_div=54px, H_div=80px.
-    // Center: (320, 216)
+    // Center: (320, 216) for full-screen; per-channel centers for split mode.
     //=========================================================================
     localparam WAVEFORM_TOP    = 10'd0;
     localparam WAVEFORM_BOTTOM = 10'd431;
     localparam WAVEFORM_HEIGHT = 10'd432;  // 0..431 inclusive
+
+    // Full-screen center (grid crosshair)
     localparam CENTER_X = 10'd320;
     localparam CENTER_Y = 10'd216;
+
+    // Per-channel split-screen centers: each channel gets 4 vertical divisions
+    localparam CH1_CENTER_Y = 10'd108;   // upper 4 divs (Y=0..215)
+    localparam CH2_CENTER_Y = 10'd324;   // lower 4 divs (Y=216..431)
+    localparam CH_HEIGHT    = 10'd216;   // 4 divisions × 54px each
 
     localparam H_DIV = 10'd80;   // pixels per horizontal division
     localparam V_DIV = 10'd54;   // pixels per vertical division (432/8=54)
 
     //=========================================================================
-    // ADC value -> Y coordinate
+    // ADC value -> Y coordinate — split-screen dual-channel
     //
-    // Reference Wave_Data_Mapper approach:
-    //   ch1_target_y = 240 - adc_value   (centers waveform in its area)
+    // Each channel gets 4 vertical divisions (216 pixels) with independent
+    // vertical center and per-channel trigger offset.
     //
-    // Our approach:
-    //   Use trigger_level as vertical offset (default 128 = midscale).
-    //   With offset=128: adc=128 → Y=216 (center), adc=0 → Y=431 (bottom),
-    //   adc=255 → Y=1 (top). Full 0-1V fills full screen.
-    //   For DC 0V signal: set offset=0 to see it at bottom,
-    //   or offset=128 to center it (as if AC coupled).
+    // CH1: upper half, center Y=108. 0.5V → Y=108, 0V→Y=216(top of upper half),
+    //      1V→Y=0(bottom of upper half). Range roughly 0..216.
+    // CH2: lower half, center Y=324. 0.5V → Y=324, 0V→Y=432, 1V→Y=216.
+    //      Range roughly 216..432.
+    //
+    // With offset=128 (midscale): adc=128 → centered=0 → Y=center.
+    // The signed multiply+shift maps the 8-bit input to the split region.
     //=========================================================================
     wire [7:0] vert_offset = trigger_level;   // reuse trigger_level as position
 
-    // Compute signed offset from midscale, then scale by height
+    // Compute signed offset from midscale, then scale by channel height
     wire signed [9:0] ch1_centered = $signed({2'b0, wave_ch1}) - $signed({2'b0, vert_offset});
     wire signed [9:0] ch2_centered = $signed({2'b0, wave_ch2}) - $signed({2'b0, vert_offset});
 
-    // Y = CENTER - (centered * HEIGHT / 256)
-    // offset=128, adc=0:   centered=-128, Y=216-(-128*432/256)=216+216=432→bottom
-    // offset=128, adc=128: centered=0,    Y=216
-    // offset=128, adc=255: centered=127,  Y=216-(127*432/256)=216-214=2→top
-    wire signed [19:0] ch1_scaled = ch1_centered * $signed({10'b0, WAVEFORM_HEIGHT});
-    wire signed [19:0] ch2_scaled = ch2_centered * $signed({10'b0, WAVEFORM_HEIGHT});
+    // Each channel scales to 4 divisions (216px) instead of full 8 divisions
+    wire signed [19:0] ch1_scaled = ch1_centered * $signed({10'b0, CH_HEIGHT});
+    wire signed [19:0] ch2_scaled = ch2_centered * $signed({10'b0, CH_HEIGHT});
 
-    wire signed [10:0] ch1_offset = $signed({1'b0, CENTER_Y}) - $signed(ch1_scaled[19:8]);
-    wire signed [10:0] ch2_offset = $signed({1'b0, CENTER_Y}) - $signed(ch2_scaled[19:8]);
+    // Separate vertical centers for split-screen
+    wire signed [10:0] ch1_offset = $signed({1'b0, CH1_CENTER_Y}) - $signed(ch1_scaled[19:8]);
+    wire signed [10:0] ch2_offset = $signed({1'b0, CH2_CENTER_Y}) - $signed(ch2_scaled[19:8]);
 
     // Clamp to waveform area
     wire [9:0] wave_y_ch1 = ch1_offset[10] ? 10'd0 :
